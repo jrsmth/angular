@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* @import "~bootstrap/dist/css/bootstrap.css"; */ /* now redundant for this exericse, bootstrap 5 doesn't contain glyphicons... */
+/* @import "~bootstrap/dist/css/bootstrap-icons"; */ /* no CSS files associated with this, all SVG's... */
+@import "~font-awesome/css/font-awesome.css"; /* PRO required for regular (far, non-fas non-solid) icons */
+
+@import "~bootstrap/dist/css/bootstrap.css";
+
+body {
+    padding: 50px;
+}
+
+.glyphicon {
+    font-size: 24px;
+    cursor: pointer;
+}
