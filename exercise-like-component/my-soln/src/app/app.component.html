@@ -1,0 +1,22 @@
+<like 
+  [likes-count]="tweet.likesCount"
+  [is-active]="tweet.isLiked"
+  (like)="onLike()"
+></like>
+
+<br><br><br>
+<!-- Directives -->
+
+<!-- ngIf-->
+<div *ngIf="courses.length > 0; then coursesList else noCourses"></div>
+<ng-template #coursesList>
+  List of Courses
+</ng-template>
+<ng-template #noCourses>
+  No Courses Yet
+</ng-template>
+
+<!-- hidden -->
+<br>
+<div [hidden]="courses.length == 0"> List of Courses </div>
+<div [hidden]="courses.length > 0"> No Courses Yet </div>
