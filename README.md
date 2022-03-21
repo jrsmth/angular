@@ -962,7 +962,24 @@
             <input type="text" placeholder="Enter name" appInputFormat [format]="'uppercase'">
 
             // input-format.directive.ts
-            
+            @Directive({
+                selector: '[appInputFormat]'
+            })
+            export class InputFormatDirective {
+
+                constructor(private el: ElementRef) { }
+
+                @Input('format') format = 'lowercase';
+
+                @HostListener('blur') onBlur() {
+                    let value: string = this.el.nativeElement.value;
+
+                    if(this.format == 'lowercase') 
+                    this.el.nativeElement.value = value.toLowerCase();
+                    else if(this.format == 'uppercase')
+                    this.el.nativeElement.value = value.toUpperCase();
+                }
+            }
             ```
 
 
