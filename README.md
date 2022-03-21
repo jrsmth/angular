@@ -38,7 +38,7 @@
     * Angular 4 - technically Angular 2.4 but the version naming convention was changed
         * Then the developers dropped the version number - now we just have "Angular"
 * In VS Code, it is very useful to use the ```Auto-Import``` plugin for TypeScript.
-* Generate some HTML quickly
+* Generate some HTML quickly (Zen Coding, Emmet)
     * example:
         * ```div.panel.panel-default>div.panel-heading+div.panel-body``` + ```'tab```
             * gives:
@@ -48,6 +48,12 @@
                         <div class="panel-body"></div>
                     </div>
                 ```
+* Using double vs single quotes (```" "``` vs ```' '```)
+    * Stack Overflow [debate](https://stackoverflow.com/questions/242813/when-should-i-use-double-or-single-quotes-in-javascript)
+    * My preference:
+        * use single (```' '```) for javascript
+        * use double (```" "```) for HTML
+    * Don't worry about it too much, be flexible but maintain consistency as much as possible.
 
 <br>
 
@@ -772,6 +778,8 @@
                 // this will render
                 List of Courses
 
+                // for example, see ./exercise-like-component/my-soln
+
             ```
     * We can also use the ```hidden``` attribute to hide elements on a screen; this can be made dynamic by using Property Binding.
         * The main difference between using ```hidden``` and ```ngIf``` is that with ```hidden```, the element is still added to the DOM - it is just not rendered on the screen for the user. With ```ngIf```, the actual DOM's structure is altered (```ngIf``` is a structural directive) - elements that have ```ngIf``` evaluated as ```falsy``` are removed from the DOMs.
@@ -786,6 +794,86 @@
                 <div [hidden]="courses.length == 0"> List of Courses </div>
                 <div [hidden]="courses.length > 0"> No Courses Yet </div>
             ```
+* ngSwitchCase
+    * ```ngSwitchCase``` is much like ```ngIf``` and the two can be used interchangeably in a lot of cases - however, with ```ngIf``` you can only have two conditions (```truthy``` and ```falsy```), ```ngSwitchCase``` is required when we have more to consider.
+    * We use property binding to bind ```ngSwitch``` to a field in our class. Then we use the ```*ngSwitchCase="'<CASE>'"``` structural directive on the elements when want to conditionally show/hide. Beware the single inside double quotes here (```"' '"```) - we are taking the name as a string of the ```<CASE>```.
+    * example
+        ```javascript
+            // app.component.html
+            <ul class="nav nav-pills">
+                <li [class.active]="viewMode == 'map'"><a (click)="viewMode = 'map'">Map View</a></li>
+                <li [class.active]="viewMode == 'list'"><a (click)="viewMode = 'list'">List View</a></li>
+            </ul>
+            <div [ngSwitch]="viewMode">
+                <div *ngSwitchCase="'map'">Map View Content</div>
+                <div *ngSwitchCase="'list'">List View Content</div>
+                <div *ngSwitchDefault>Default View Content</div>
+            </div>
+
+            // app.component.ts
+            viewMode = '';
+        ```
+* ngFor
+    * ```ngFor``` is used to render a list of objects
+        * the actual name is ```ngForOf``` by we reference it with ```ngFor```
+    * It also exports a few values that can help you add certain features - such as adding a index or highlighting rows in a table.
+        * These 'local variables' are in the [docs](https://angular.io/api/common/NgForOf#local-variables)
+    * Change Detection
+        * ```ngFor``` will react to changes in the component state by automatically updating the state of the DOM - if we add or remove objects from the list that we are iterating over, the changes will be automatically applied to the screen.
+            * This is Angular's Change Detection Mechanism and applies for DOM events, timers and AJAX requests.
+            
+            <br>
+            <img src='./resources/change_detection.png' alt='Change Detection' width='500'>
+            
+            <br>
+    * Track By
+        * There is a mechanism in Angular that tracks objects that have been added to the DOM. This is done to optimise performance and prevent reloading the same objects multiple times.
+        * To do this with ```ngFor``` we supply a method name to the ```trackBy``` attribute; note that we don't call the method (using ```methodName()```), this is just a reference to a method in our controller (not a invocation of it).
+        * There is no need to use ```trackBy``` by default, as there is likely to be no performance difference between rendering the list again. However, if you have a large list of objects or complex markup, use it to optimise performance.
+    * example
+        ```javascript
+            // app.component.html
+            <h2> Courses2</h2>
+            <button (click)="loadCourses()">Load Courses</button>
+            <ul>
+            <li 
+                *ngFor="let course of courses2; index as i; even as isEven; trackBy trackCourse" 
+                [style.backgroundColor]="isEven ? '#ddd' : '#ccc'"
+            >
+                {{ i + 1 }}: {{ course.name }}
+                <button (click)="onRemove(course)">Remove</button>
+            </li>
+            </ul>
+            <button (click)="onAdd()">Add</button>
+
+            // app.component.ts
+            courses2: any;
+
+            onAdd() {
+                this.courses2.push(
+                { id: this.courses2.length, name: "course" + (this.courses2.length + 1) }
+                );
+            }
+
+            onRemove(course: any) {
+                let index = this.courses2.indexOf(course);
+                this.courses2.splice(index, 1);
+            }
+
+            loadCourses() {
+                this.courses2 = [
+                { id: 1, name: "course1"},
+                { id: 2, name: "course2"},
+                { id: 3, name: "course3"},
+                ]
+            }
+
+            trackCourse(index: number, course: any) { 
+                return course ? course.id : undefined;
+            } 
+            // now instead of tracking objects by their angular ID
+                // we track them by the course.id field
+        ```
 
 
 
