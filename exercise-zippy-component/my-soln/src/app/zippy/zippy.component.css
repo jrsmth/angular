@@ -1,0 +1,23 @@
+
+.panel {
+    margin: 0;
+}
+
+.panel-heading {
+    background-color: white;
+    font-weight: bold;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.panel-heading:hover, .active {
+    background-color: #eee;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+.glyphicon{
+    float: right;
+}

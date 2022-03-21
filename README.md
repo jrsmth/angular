@@ -989,11 +989,18 @@
                 }
             }
             ```
+* Zippy Component Exercise
+    * see ```./exercise-zippy-component/my-soln``` for my initial solution
+    * see ~~```./exercise-zippy-component/mosh-soln```~~ for Mosh's better solution
+        * our solutions were too similar to warrant creating a separate project
+        * notes:
+            * the only notable difference was Mosh named his classes a bit better than mine - use of a ```zippy``` hierachy with ```zippy-heading``` and ```zippy-body```; apart from that my solution matched his.
 
+<br>
 
-
-
-
+## Template-Driven Forms
+* this and that 
+            
 
 
 
