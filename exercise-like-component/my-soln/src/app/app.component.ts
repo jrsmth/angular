@@ -17,6 +17,12 @@ export class AppComponent {
   viewMode = '';
   courses2: any;
   canSave = true;
+  task = {
+    title: 'Review applications',
+    assignee: {
+      name: "John Smith"
+    }
+  }
 
   onLike() {
     this.tweet.likesCount += (this.tweet.isLiked) ? -1 : +1;

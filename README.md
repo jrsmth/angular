@@ -902,6 +902,7 @@
     * The ```ngStyle``` directive is used to clean up our code when we have multiple style bindings.
         * Like with ```ngClass```, we can condense mutliple bindings into a single key-value mapping.
     * Note, however, it is best practise to encapsulate multiple CSS properties inside a CSS class and vary that class - instead of relying on inline CSS.
+    * example
         ```javascript
             // app.component.html
             <button
@@ -928,7 +929,26 @@
 
             // see ./exercise-like-component/my-sol
         ```
-* Safe Traversal Operator?
+* Safe Traversal Operator
+    * Sometimes, when working with complex objects, a property may be undefined or null for a period of time; we use the Safe Traversal Operator (```?```) to ensure Angular expects this possibility and avoid errors being thrown in the console.
+        * This is more likely when we are fetching object data from a backend service.
+    * If ```?``` is used and the value is ```null```/```undefined```, Angular will render an empty HTML element.
+    * example
+        ```javascript
+            // app.component.html
+            <span>{{ task.assignee?.name }}</span>
+
+            // app.component.ts
+            task = {
+                title: 'Review applications',
+                assignee: {
+                name: "John Smith"
+                }
+            }
+
+            // see ./exercise-like-component/my-sol
+        ```
+        * if ```this.task.assignee``` becomes ```null```/```undefined```, an empty ```<span>``` 
 
 
 
