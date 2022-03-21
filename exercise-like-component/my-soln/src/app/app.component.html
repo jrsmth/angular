@@ -74,3 +74,9 @@
 <!-- Safe Traversal Operator -->
 <br><br>
 <span>{{ task.assignee?.name }}</span>
+
+<!-- Custom Directives -->
+<br><br>
+<input type="text" placeholder="Enter name" appInputFormat [format]="'lowercase'">
+<br>
+<input type="text" placeholder="Enter name" appInputFormat [format]="'uppercase'">

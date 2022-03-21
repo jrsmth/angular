@@ -948,7 +948,23 @@
 
             // see ./exercise-like-component/my-sol
         ```
-        * if ```this.task.assignee``` becomes ```null```/```undefined```, an empty ```<span>``` 
+        * if ```this.task.assignee``` becomes ```null```/```undefined```, an empty ```<span>```
+* Creating Custom Directives
+    * We can create our own custom directives using the Angular CLI:
+        * ```ng g directive <DIRECTIVE_NAME>```
+    * example: 
+        * see ```./exercise-like-component/my-sol```
+            * ```ng g directive input-format```
+            ```javascript
+            // app.component.html
+            <input type="text" placeholder="Enter name" appInputFormat [format]="'lowercase'">
+            <br>
+            <input type="text" placeholder="Enter name" appInputFormat [format]="'uppercase'">
+
+            // input-format.directive.ts
+            
+            ```
+
 
 
 
