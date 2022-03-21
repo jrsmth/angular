@@ -16,6 +16,7 @@ export class AppComponent {
   courses = ['courses1', 'courses2'];
   viewMode = '';
   courses2: any;
+  canSave = true;
 
   onLike() {
     this.tweet.likesCount += (this.tweet.isLiked) ? -1 : +1;

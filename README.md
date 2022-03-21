@@ -758,7 +758,17 @@
 * Directives are used to modify the DOM
     * There are two types:
         * Structural: modify the structure of the DOM
+            * ```ngIf``` - conditionally adds / removes elements from template
+            * ```ngSwitch``` - used to switch between alternate views
+            * ```ngFor``` - renders a list of objects
         * Attribute: modify attributes of a DOM element
+            * ```ngClass``` - adds / removes a set of CSS classes
+            * ```ngStyle``` - adds / removes a set of HTML styles
+            * ```ngModel``` - adds two way binding to an HTML form element
+    * In-built Directives in the [docs](https://angular.io/guide/built-in-directives)
+    * The Leading Asterisk
+        * The ```*directiveName``` syntax is used to instruct Angular to wrap our markup inside ```<ng-template>``` tags. In essense the '```*```' is HTML shorthand that defines our structural directives in a condensed format; at compile time, Angular expands them and finishes it off for us.
+            * See this part of the [docs](https://angular.io/guide/structural-directives#asterisk) for more info.
 * ngIf
     * ```ngIf``` is used to show or hide elements based on a certain condition.
         * example:
@@ -794,9 +804,9 @@
                 <div [hidden]="courses.length == 0"> List of Courses </div>
                 <div [hidden]="courses.length > 0"> No Courses Yet </div>
             ```
-* ngSwitchCase
-    * ```ngSwitchCase``` is much like ```ngIf``` and the two can be used interchangeably in a lot of cases - however, with ```ngIf``` you can only have two conditions (```truthy``` and ```falsy```), ```ngSwitchCase``` is required when we have more to consider.
-    * We use property binding to bind ```ngSwitch``` to a field in our class. Then we use the ```*ngSwitchCase="'<CASE>'"``` structural directive on the elements when want to conditionally show/hide. Beware the single inside double quotes here (```"' '"```) - we are taking the name as a string of the ```<CASE>```.
+* ngSwitch
+    * ```ngSwitch``` is much like ```ngIf``` and the two can be used interchangeably in a lot of cases - however, with ```ngIf``` you can only have two conditions (```truthy``` and ```falsy```), ```ngSwitchCase``` is required when we have more to consider.
+    * We use property binding to bind ```ngSwitch``` to a field in our class. Then we use the ```*ngSwitchCase="'<CASE>'"``` structural directive on the elements when want to conditionally show/hide. Beware the single quote inside double quotes here (```"' '"```) - we are taking the variable name as a string for the ```<CASE>``` variable.
     * example
         ```javascript
             // app.component.html
@@ -874,6 +884,51 @@
             // now instead of tracking objects by their angular ID
                 // we track them by the course.id field
         ```
+* ngClass
+    * We can use class binding to bind properties of our component to classes in our template. If we have multiple classes available for the same component property we have to repeat the class binding multiple times - ```ngClass``` helps to solve this problem by using key-value pairs:
+        * ```[ngClass]="{'className0': componentPropery0, 'className1': componentPropery1}"```
+    * ```ngClass``` is an attribute direction (not structural) - it is used to modify the attributes of an existing DOM element; not to affect the structure of the DOM itself.
+    * example
+        ```javascript
+            <span
+                class="glyphicon"
+                [ngClass]="{'glyphicon-star': isFavorite, 'glyphicon-star-empty': !isFavorite}"
+                (click)="onClick()"
+            ></span>
+
+            // see ./exercise-favourite-component/mosh-sol
+        ```
+* ngStyle
+    * The ```ngStyle``` directive is used to clean up our code when we have multiple style bindings.
+        * Like with ```ngClass```, we can condense mutliple bindings into a single key-value mapping.
+    * Note, however, it is best practise to encapsulate multiple CSS properties inside a CSS class and vary that class - instead of relying on inline CSS.
+        ```javascript
+            // app.component.html
+            <button
+                [style.backgroundColor]="canSave ? 'blue' : 'grey'"
+                [style.color]="canSave ? 'white' : 'black'"
+                [style.fontWeight]="canSave ? 'bold' : 'normal'"
+                (click)="canSave = !canSave"
+            >
+                Save
+            </button> <!-- without ngStyle -->
+            <button
+                [ngStyle]="{
+                    'backgroundColor': canSave ? 'blue' : 'grey',
+                    'color': canSave ? 'white' : 'black',
+                    'fontWeight': canSave ? 'bold' : 'normal'
+                }"
+                (click)="canSave = !canSave"
+            >
+            Save
+            </button> <!-- with ngStyle -->
+
+            // app.component.ts
+            canSave = true;
+
+            // see ./exercise-like-component/my-sol
+        ```
+* Safe Traversal Operator?
 
 
 

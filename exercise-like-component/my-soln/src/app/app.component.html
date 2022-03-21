@@ -47,3 +47,26 @@
   </li>
 </ul>
 <button (click)="onAdd()">Add</button>
+
+<!-- ngClass: see ./exercise-favourite-component/mosh-sol -->
+
+<!-- ngStyle -->
+<br><br>
+<button
+  [style.backgroundColor]="canSave ? 'blue' : 'grey'"
+  [style.color]="canSave ? 'white' : 'black'"
+  [style.fontWeight]="canSave ? 'bold' : 'normal'"
+  (click)="canSave = !canSave"
+>
+  Save
+</button> <!-- without ngStyle -->
+<button
+  [ngStyle]="{
+    'backgroundColor': canSave ? 'blue' : 'grey',
+    'color': canSave ? 'white' : 'black',
+    'fontWeight': canSave ? 'bold' : 'normal'
+  }"
+  (click)="canSave = !canSave"
+>
+  Save
+</button> <!-- with ngStyle -->
