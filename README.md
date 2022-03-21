@@ -17,6 +17,14 @@
 
 <br>
 
+## Further Learning
+* Continue doing Angular tutorials (YouTube?)
+* Get familiar with the Angular [docs](https://angular.io/docs)
+* Use Angular on personal projects
+* Get some project experience using Angular
+
+<br>
+
 ## Overview
 * Angular is a framework for building frontend applications using HTML, CSS, JS / TypeScript.
 * We use JS-frameworks, like Angular and React, because they make our lives easier: provides reusable utility code, easier to test and allows us to build more complex applications.
