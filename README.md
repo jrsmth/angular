@@ -1110,6 +1110,7 @@
             * example: when the input field is touched and invalid, it will receive ```class="ng-invalid ng-dirty ng-touched"```
                 * We can then apply the following CSS:
                     ```css
+                        /* src/styles.css */
                         .form-control.ng-touched.ng-invalid { border: 1px solid crimson; }
                     ```
                     * note, we should always give input fields the className ```.form-control```
@@ -1127,10 +1128,73 @@
                 class="form-control">
             <!-- note this is the preferred order of attr's in an input field -->
         ```
-* 
+* ngForm
+    * As a reminder: ```ngModel```, when applied to an input field, creates a ```FormControl``` object under the hood and binds it to that input field.
+        * The other use for ```ngModel``` is for two-way binding: ```[( )]```
+    * ```ngForm``` is automatically applied to ```<form>``` elements to create a ```FormGroup``` object under the hood.
+    * ```ngForm``` has an output property called ```ngSubmit``` which is used to raise a custom event when the form is submit - with this, we can retrieve the input field values from the ```FormGroup``` object in our component.
+    * example:
+        ```javascript
+            // contact-form.component.html
+            <form #form="ngForm" (ngSubmit)="submit(form)">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input 
+                        required
+                        minlength="3"
+                        maxlength="10" 
+                        pattern="^[a-zA-Z]*$"
+                        ngModel 
+                        name="firstName" 
+                        #firstName="ngModel" 
+                        (change)="log(firstName)" 
+                        id="firstName" 
+                        type="text" 
+                        class="form-control">
+                    <div 
+                        class="alert alert-danger" 
+                        *ngIf="firstName.touched && !firstName.valid">
+                        <div *ngIf="firstName.errors?.['required']">
+                            First name is required.
+                        </div>
+                        <div *ngIf="firstName.errors?.['minlength']">
+                            First name must be atleast {{ firstName.errors?.['minlength'].requiredLength }} characters.
+                        </div>
+                        <!-- Input prevents any more characters than <maxlength> for us -->
+                        <div *ngIf="firstName.errors?.['pattern']">
+                            First Name must be alphabetical.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <textarea 
+                        ngModel 
+                        name="comment" 
+                        id="comment" 
+                        cols="30" rows="10" 
+                        class="form-control">
+                    </textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">
+                    Submit
+                </button>
+            </form>
+
+            // contact-form.component.ts
+            submit(form: NgForm) {
+                console.log(form.value);
+                console.log(form);
+            }
+        ``` 
+        * This is the ```ngForm``` object result in the console - it contains the ```FormGroup``` object for this ```<form>``` and can be use to retrieve the input values for the whole form.
+            <br>
+            <br>
+            <img src='./resources/form_group_obj.png' alt='Change Detection' width='500'>
+            <br>
+            <br>
 
 
-        
 
 
 
