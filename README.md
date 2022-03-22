@@ -8,6 +8,7 @@
 * [Build Reuseable Components](./content/components.md)
 * [Directives](./content/directives.md)
 * [Template-Driven Forms](./content/template-driven-forms.md)
+* [Reactive Forms](./content/reactive-forms.md)
 
 <br>
 

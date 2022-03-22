@@ -176,7 +176,10 @@
                         class="form-control">
                     </textarea>
                 </div>
-                <button class="btn btn-primary" type="submit">
+                <button 
+                    [disabled]="!form.valid"
+                    class="btn btn-primary" 
+                    type="submit">
                     Submit
                 </button>
             </form>
@@ -337,3 +340,5 @@
     * see ~~```../exercises/exercise-course-form/mosh-soln```~~ for Mosh's better solution
         * our solutions were too similar to warrant creating a separate project
         * notes:
+            * The only difference between our solutions was on variable naming. I chose to you ```courseName``` but Mosh went with ```name``` to represent the 'Course Name' field - this makes more sense because we want the ```course``` JSOn strutcture to use ```name``` not ```courseName```.
+            * I also forgot to add validation to the 'Category' input field but it would follow the same principles that I used for the 'Course Name' one.
