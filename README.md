@@ -1001,6 +1001,64 @@
 ## Template-Driven Forms
 * Building a Bootstrap Form
     * see example in ```./exercise-zippy-component/my-soln```
+* Types of Forms
+    * In Angular there is a class called ```FormControl``` that is used to manage input fields in our application.
+        * Every input field requires an instance of the ```FormControl``` class and has the following properties:
+            * value
+            * touched / untouched - mouse click or not
+            * dirty / pristine - value changed or not
+            * valid
+            * errors
+        * We use a ```FormControl``` object to track the state changes and validity of the input field that the object is bound to.
+    * Similarly, there is a class called ```FormGroup``` - which contains one or more ```FormControl```'s.
+        * In a simple application, we probably would only need a single ```FormGroup```
+        * In a larger one, we may have multiple distinct forms (such as Billing and Shipping), and so we would encapsulate each one in its own separate ```FormGroup```.
+        * ```FormGroup``` has all of the same properties as ```FormControl``` - this makes it easier to gather together validation errors and values, as we don't have it iterate over each ```FormControl``` input field to get its status.    
+        <br>
+        <img src='./resources/form_group.png' alt='Change Detection' width='500'>
+        
+        <br>
+    * There are two ways to create these form objects:
+        * Template-driven: using directives
+            * good for simple forms
+            * simple validation
+            * easier to create
+            * less code
+        * Reactive: using explicit code
+            * more control over validation logic
+            * good for complex forms
+            * unit testable
+* Building Template Driven Forms
+    * When we apply the ```ngModel``` directive to an input field, an associated ```FormControl``` object is created under the hood.
+        * example: 
+            * ```<input ngModel name="firstName" id="firstName" type="text" class="form-control">```
+                * ```ngModel name="<NAME>"``` is required to create the ```FormControl``` object. 
+                * remember to import ```FormsModule``` into ```app.module.ts```
+        * extended example:
+            ```javascript
+                // contact-form.component.html
+                <form>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
+                    </div>
+                    ...
+                </form>
+
+                // contact-form.component.ts
+                log(obj: Object){
+                    console.log(obj);
+                }
+            ``` 
+            * This is the ```ngModel``` object result in the console - it contains the ```FormControl``` object for this input field and can be used to track the state changes and validity.
+                <br>
+                <br>
+                <img src='./resources/form_control_obj.png' alt='Change Detection' width='500'>
+                <br>
+                <br>
+* Validation
+
+
             
 
 

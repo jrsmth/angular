@@ -2,11 +2,11 @@
 <form>
     <div class="form-group">
         <label for="firstName">First Name</label>
-        <input id="firstName" type="text" class="form-control">
+        <input ngModel name="firstName" #firstName="ngModel" (change)="log(firstName)" id="firstName" type="text" class="form-control">
     </div>
     <div class="form-group">
         <label for="comment">Comment</label>
-        <textarea name="" id="comment" cols="30" rows="10" class="form-control"></textarea>
+        <textarea ngModel name="comment" id="comment" cols="30" rows="10" class="form-control"></textarea>
     </div>
     <button class="btn btn-primary">Submit</button>
 </form>
