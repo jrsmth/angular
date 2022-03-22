@@ -1,4 +1,4 @@
-import { AuthorsService } from './../../../../my-soln/src/app/authors.service';
+import { AuthorsService } from '../authors.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

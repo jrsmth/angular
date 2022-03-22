@@ -95,7 +95,7 @@
                         First name is required.
                     </div>
                     <div *ngIf="firstName.errors?.['minlength']">
-                        First name must be atleast {{ firstName.errors?.['minlength'].requiredLength }} characters.
+                        First name must be at least {{ firstName.errors?.['minlength'].requiredLength }} characters.
                     </div>
                     <!-- Input prevents any more characters than <maxlength> for us -->
                     <div *ngIf="firstName.errors?.['pattern']">
@@ -158,7 +158,7 @@
                             First name is required.
                         </div>
                         <div *ngIf="firstName.errors?.['minlength']">
-                            First name must be atleast {{ firstName.errors?.['minlength'].requiredLength }} characters.
+                            First name must be at least {{ firstName.errors?.['minlength'].requiredLength }} characters.
                         </div>
                         <!-- Input prevents any more characters than <maxlength> for us -->
                         <div *ngIf="firstName.errors?.['pattern']">
@@ -193,3 +193,147 @@
             <img src='../resources/form_group_obj.png' alt='Form Group Object' width='500'>
             <br>
             <br>
+* ngModelGroup
+    * Sometimes we want to build complex forms that contain multiple groups. Perhaps our form needs to build a response to a backend API, which is a complex object. We can represent this complex object using ```ngModelGroup```.
+        * ```ngModelGroup``` allows our forms to build complex nested objects as their response.
+    * example:
+        ```html
+            <form #form="ngForm" (ngSubmit)="submit(form)">
+                <div 
+                    ngModelGroup="contact"
+                    #contact="ngModelGroup"
+                    >
+                    <div *ngIf="contact.touched && !contact.valid">
+                        ...contact group validation errors...
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input 
+                            ... 
+                            id="firstName" 
+                            type="text" 
+                            class="form-control">
+                        <div 
+                            class="alert alert-danger" 
+                            *ngIf="firstName.touched && !firstName.valid">
+                            ...first name validation errors...
+                        </div>
+                    </div>
+                </div>
+                ...
+            </form>
+        ```
+        * We can see in the console below, that ```contact``` is now a complex object due to the use of ```ngModelGroup```; we could have additional properties of ```contact``` by adding extra ```.form-control div>input```'s inside this ```ngModelGroup <div>``` 
+            <br>
+            <br>
+            <img src='../resources/ng_model.png' alt='Form Group Object' width='500'>
+            <br>
+            <br>
+* Control Classes and Directives
+    * To recap:
+        * In Angular, we have two classes to keep track of input fields and their validity.
+            * ```FormControl```: represents a single ```<input>``` field
+                * The ```ngModel``` directive (plus a ```name``` attribute) must be applied to an ```<input>``` field to create an associated ```FormControl``` instance/object under the hood. 
+                * Representing ```ngModel``` as a template variable, we can track the state change of this single ```<input>``` and check its validity.
+            * ```FormGroup```: represents a group of ```<input>``` fields
+                * It represents an entire form or, optionally, groups within a form. Automatically, the ```ngForm``` directive is applied by Angular to the ```<form>``` - this internally creates a ```FormGroup``` object and associates it with the HTML ```<form>```.
+                * Representing ```ngForm``` as a template variable, we can track the state change of this entire group of ```<input>```'s and check their overall validity.
+                * ```ngModelGroup``` is used to represent a sub-group within our form - where the ```<input>``` fields each represent a property of a complex object (the ```ngModelGroup``` represent this complex object).
+                    * Representing ```ngModel``` as a template variable, we can track the state change of this group/model/object and track its validity independently of the overall form.
+                    * Using ```ngModelGroup``` applies a new ```FormGroup``` object to the set of ```<input>``` fields. In this way, it is very similiar to ```ngForm``` - the difference being that ```ngForm``` has an ```@Output``` output property (```ngSubmit```) and ```ngModelGroup``` does not - this makes sense, as you cannot submit part of a form.
+        
+        <br>
+        <img src='../resources/form_classes.png' alt='Form Classes' width='500'>
+        <br>
+        <br>
+* Disabling the Submit Button
+    * Using the template variable that represents ```ngForm```, we can disable our button when the form is not in a valid state.
+    * example:
+        ```html
+            <button 
+                [disabled]="!form.valid"
+                class="btn btn-primary" 
+                type="submit">
+                Submit
+            </button>
+        ```
+* Check Boxes
+    * example:        
+        ```html
+            <div class="form-group checkbox">
+                <label>
+                    <input 
+                        ngModel 
+                        name="isSubscribed" 
+                        type="checkbox"> 
+                        Subscribe to mailing list
+                </label>
+            </div>
+            <p> {{ form.value | json }} </p>
+        ```
+        * using ```<p> {{ form.value | json }} </p>``` is a great trick to view your form contents, whilst you are building your form.
+        * also note, as a rule, forms in HTML follow this convention:
+            * ```<div class="form-group"> <input class="form-control"> </div>```
+* Drop Down List
+    * example:
+        ```html
+        <!-- contact-form.component.ts -->
+          contactMethods = [
+            { id: 1, name: 'Email'},
+            { id: 2, name: 'Phone'},
+            { id: 3, name: 'SMS'},
+            { id: 4, name: 'Post'}
+        ]
+
+        <!-- contact-form.component.html -->
+        <div class="form-group">
+            <label for="contactMethod">Contact Method</label>
+            <select 
+                ngModel
+                name="contactMethod" 
+                id="contactMethod" 
+                class="form-control">
+                <option value=""></option> <!-- empty option improves usability -->
+                <option 
+                    *ngFor="let method of contactMethods"
+                    [value]="method.id">
+                    {{ method.name }}
+                </option>
+            </select>
+        </div>
+        ```
+    * Note: 
+        * In some cases, you may want to bind the value of an input field to a complex object - to do this, you need to use the ```[ngValue]``` directive. This is becuase the ```value``` HTML attribute can only take in a string.
+            * This is not best practise and should only be used when you specifically need to store a complex object in ```value```.
+        * You can apply the ```multiple``` HTML attribute to a ```<select>``` field, if you want to be able to select more than one ```<option>``` - look a bit dodgey though...
+            * This returns you an array of selected options
+* Radio Buttons
+    * Radio buttons, by their very nature, can only have one selected option.
+    * example:
+        ```html
+        <!-- contact-form.component.ts -->
+          contactMethods = [
+            { id: 1, name: 'Email'},
+            { id: 2, name: 'Phone'},
+            { id: 3, name: 'SMS'},
+            { id: 4, name: 'Post'}
+        ]
+
+        <!-- contact-form.component.html -->
+        <div *ngFor="let method of contactMethods" class="radio">
+            <label for="">
+                <input 
+                    ngModel
+                    name="contactMethod"
+                    type="radio" 
+                    [value]="method.id">
+                    {{ method.name }}
+            </label>
+        </div>
+        <p> {{ form.value | json }} </p>
+        ```
+* Course Form Exercise
+    * see ```../exercises/exercise-course-form/my-soln``` for my initial solution
+    * see ~~```../exercises/exercise-course-form/mosh-soln```~~ for Mosh's better solution
+        * our solutions were too similar to warrant creating a separate project
+        * notes:

@@ -7,6 +7,12 @@ import { NgForm, NgModel } from '@angular/forms';
   styleUrls: ['./contact-form.component.css']
 })
 export class ContactFormComponent {
+  contactMethods = [
+    { id: 1, name: 'Email'},
+    { id: 2, name: 'Phone'},
+    { id: 3, name: 'SMS'},
+    { id: 4, name: 'Post'}
+  ]
 
   log(model: NgModel){
     console.log(model);
