@@ -1057,12 +1057,80 @@
                 <br>
                 <br>
 * Validation
+    * One piece of validation that we can implement is to make a field be ```required``` - we do this using the inbuilt HTML5 ```required``` attribute on the desired input form. Then we can use ```ngIf``` to render an error message if ```templateVarForNgModel.touched && !templateVarForNgModel.valid```
+        * example:
+            ```javascript
+            // app.component.html
+            <form>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input 
+                        required 
+                        ngModel 
+                        name="firstName" 
+                        #firstName="ngModel" 
+                        (change)="log(firstName)" 
+                        id="firstName" 
+                        type="text" 
+                        class="form-control"
+                    >
+                    <div class="alert alert-danger" *ngIf="firstName.touched && !firstName.valid">First name is required</div>
+                </div>
+                ...
+            </form>
+            ```
+    * In Angular, there are a few validators that build upon the HTML5 validation attributes (as we have seen with ```required```).
+        * example:
+            ```html
+                <input 
+                    required
+                    minlength="3"
+                    maxlength="10" 
+                    pattern="^[a-zA-Z]*$"
+                    ...>
+                <div 
+                    class="alert alert-danger" 
+                    *ngIf="firstName.touched && !firstName.valid">
+                    <div *ngIf="firstName.errors?.['required']">
+                        First name is required.
+                    </div>
+                    <div *ngIf="firstName.errors?.['minlength']">
+                        First name must be atleast {{ firstName.errors?.['minlength'].requiredLength }} characters.
+                    </div>
+                    <!-- Input prevents any more characters than <maxlength> for us -->
+                    <div *ngIf="firstName.errors?.['pattern']">
+                        First Name must be alphabetical.
+                    </div>
+                </div>
+            ```
+            * See [this](https://stackoverflow.com/questions/70106472/property-fname-comes-from-an-index-signature-so-it-must-be-accessed-with-fn) Stack Overflow question about ```.minlength``` vs ```.['minlength']```
+            * See [this](https://stackoverflow.com/questions/336210/regular-expression-for-alphanumeric-and-underscores) for more info on Regex
+    * Styling Invalid Input Fields
+        * There are ```ng-``` class names applied to an input field when we bind it to a ```FormControl``` - these include ```ng-touched```, ```ng-invalid```, etc. We can use these class names to apply CSS to input field when the state changes.
+            * example: when the input field is touched and invalid, it will receive ```class="ng-invalid ng-dirty ng-touched"```
+                * We can then apply the following CSS:
+                    ```css
+                        .form-control.ng-touched.ng-invalid { border: 1px solid crimson; }
+                    ```
+                    * note, we should always give input fields the className ```.form-control```
+* Cleaner Templates
+    * Code should be written to be read easily by yourself and by fellow developers; there is a way to structure your templates to improve readability. As a general rule, you should have to scroll horizontally to read long lines of code - better to separate long lines into multiple shorter lines.
+    * example:
+        ```html
+            <input 
+                required // all validation attr
+                ngModel 
+                name="firstName" 
+                #firstName="ngModel" // template var
+                id="firstName" 
+                type="text" 
+                class="form-control">
+            <!-- note this is the preferred order of attr's in an input field -->
+        ```
+* 
 
 
-            
-
-
-
+        
 
 
 

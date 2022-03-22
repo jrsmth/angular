@@ -6,3 +6,8 @@ body {
     padding: 50px;
     width: 66%;
 }
+
+/* Template Driven Forms */
+.form-control.ng-touched.ng-invalid {
+    border: 1px solid crimson;
+}
