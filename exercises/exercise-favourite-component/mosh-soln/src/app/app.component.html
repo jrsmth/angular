@@ -1,0 +1,20 @@
+<favorite></favorite>
+
+<br>
+<!-- Input Properties (Property Binding With Custom Components) -->
+<favorite [is-favorite]="post.isFavorite" (change)="onFavoriteChanged($event)"></favorite>
+
+<!-- [isFavorite]="isFavorite": Property Binding requires Input Property --> 
+<!-- (change)="onFavoriteChange()": Event Binding requires Output Property -->
+
+<br>
+<br>
+<br>
+<!-- ngContent & ngContainer -->
+<bootstrap-panel>
+    <ng-container class="heading"> Heading </ng-container>
+    <ng-container class="body">
+        <h3> Body </h3>
+        <p> Lorem ipsum dolor set </p>
+    </ng-container>
+</bootstrap-panel>

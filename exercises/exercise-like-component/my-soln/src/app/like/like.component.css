@@ -1,0 +1,9 @@
+
+.glyphicon {
+    cursor: pointer;
+    color: #ccc;
+}
+
+.active {
+    color: deeppink;
+}

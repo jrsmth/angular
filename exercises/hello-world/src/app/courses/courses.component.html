@@ -1,0 +1,35 @@
+<h2>{{ title }}</h2>
+<ul>
+    <li *ngFor="let course of courses">
+        {{ course }}
+    </li>
+</ul>
+
+<!-- Class Binding -->
+<button class="btn btn-primary" [class.active]="isActive"> Save </button> <!-- bootstrap example -->
+
+<!-- Style Binding -->
+<button class="btn" [style.backgroundColor]="isActive ? 'pink' : 'white'"> Click Me </button>
+
+<!-- Event Handling -->
+<div (click)="onDivClick($event)">
+    <button class="btn btn-secondary" (click)="save($event)"> No, Click Me </button>
+</div>
+
+<!-- Template Variables -->
+<input #email placeholder="Enter Email" />
+<button (click)="submitEmail(email.value)">Submit Email</button> <!-- you can use template variables across the DOM -->
+
+<!-- Two-Way Binding & Event Filtering -->
+<input [(ngModel)]="address" (keyup.enter)="submitAddress()" placeholder="Enter Address & Press Enter" />
+
+<!-- Pipes -->
+<p> {{ 190.95 | currency:'AUD':true:'1.1-1' }} </p>
+<p> {{ dummyCourse.title | uppercase | lowercase }} </p>
+<p> {{ dummyCourse.students | number }} </p>
+<p> {{ dummyCourse.rating | number:'1.2-2' }} </p>
+<p> {{ dummyCourse.price | currency:'GBP':true:'3.2-2' }} </p>
+<p> {{ dummyCourse.releaseDate | date:'longDate' }} </p>
+<!-- Custom Pipe -->
+<p> {{ dummyCourse.description | summary:100 }} </p>
+
