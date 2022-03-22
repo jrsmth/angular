@@ -5,7 +5,7 @@
 ## Content
 * [TypeScript](./content/typescript.md)
 * [Angular Fundamentals](./content/angular-fundamentals.md)
-* [Displaying Data and Handling Events](data-and-events.md)
+* [Displaying Data and Handling Events](./content/data-and-events.md)
 * [Build Reuseable Components](./content/components.md)
 * [Directives](./content/directives.md)
 * [Template-Driven Forms](./content/template-driven-forms.md)
