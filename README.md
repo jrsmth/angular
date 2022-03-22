@@ -1,6 +1,5 @@
 <img src="./resources/angular_logo.png" alt="Angular Logo" width=500>
 <br>
-<br>
 
 ## Content
 * [TypeScript](./content/typescript.md)
