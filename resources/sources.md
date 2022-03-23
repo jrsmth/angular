@@ -12,3 +12,4 @@
 * https://stackabuse.com/npm-install-specific-version-of-a-package/
 * https://stackoverflow.com/questions/43034758/what-is-the-difference-between-ngif-and-hidden
 * https://www.concretepage.com/angular-2/angular-2-4-minlength-and-maxlength-validation-example
+* https://techfunda.com/howto/932/glyphicons-wait-icon

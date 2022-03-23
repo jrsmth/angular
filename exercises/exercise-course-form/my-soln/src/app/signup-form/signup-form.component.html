@@ -1,4 +1,9 @@
-<form [formGroup]="form">
+<form [formGroup]="form" (ngSubmit)="login()">
+    <div 
+        *ngIf="form.errors"
+        class="alert alert-danger">
+        Username or password is invalid.
+    </div>
     <div class="form-group">
         <label for="username">Username</label>
         <input 
@@ -6,8 +11,12 @@
             id="username" 
             type="text" 
             class="form-control">
+        <span 
+            *ngIf="username?.pending" 
+            class="glyphicon glyphicon-refresh glyphicon-refresh-animate">
+        </span>
         <div 
-            *ngIf="username?.touched && username?.invalid"
+            *ngIf="username?.dirty && username?.invalid"
             class="alert alert-danger">
             <div *ngIf="username?.errors?.['required']">
                 Username is required.
@@ -17,6 +26,9 @@
             </div>
             <div *ngIf="username?.errors?.['cannotContainSpace']">
                 {{ username?.errors?.['cannotContainSpace'].message }}
+            </div>
+            <div *ngIf="username?.errors?.['shouldBeUnique']">
+                {{ username?.errors?.['shouldBeUnique'].message }}
             </div>
         </div>
     </div>
@@ -31,6 +43,16 @@
             *ngIf="password?.touched && password?.invalid"
             class="alert alert-danger">
             Password is required.
+        </div>
+    </div>
+    <div formGroupName="account">
+        <div class="form-group">
+            <label for="accountUsername">Account Username</label>
+            <input 
+                formControlName="accountUsername"
+                id="accountUsername" 
+                type="text" 
+                class="form-control">
         </div>
     </div>
     <button class="btn btn-primary" type="submit">Sign Up</button>
