@@ -54,6 +54,22 @@
                 type="text" 
                 class="form-control">
         </div>
+        <div class="form-group">
+            <label for="topics">Add Topics</label>
+            <input 
+                type="text" 
+                class="form-control"
+                #topic
+                (keyup.enter)="addTopic(topic)">
+            <ul class="list-group">
+                <li 
+                    *ngFor="let topic of topics.controls"
+                    (click)="removeTopic(topic)"
+                    class="list-group-item">
+                    {{ topic.value }}
+                </li>
+            </ul>
+        </div>
     </div>
     <button class="btn btn-primary" type="submit">Sign Up</button>
 </form>

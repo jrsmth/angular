@@ -1,10 +1,18 @@
 ## Reactive Forms
 * With Reactive Forms, form objects are explicitly created by the developer in the component; unlike Template-driven Forms, where we use directives in the template to enable Angular to create ```FormControls/Group``` objects for us.
+    * In other words - with Reactive Forms, we define the ```AbstractControl``` objects that make up our form in the component; rather than relying on directives (in our template) to automatically create these instances under the hood (Template-driven Forms).
+* Why use Reactive Forms?
     * We create Reactive forms when we want finer control over the structure and behaviour of the forms.
     * They are also easier to unit test.
 * Reactive Forms are required when we want to dynamically render a form, based on an object structure that we retrieve from a backend service. 
 * Creating Controls Programmatically
     * The class ```AbstractControl``` is the base class for ```FormControl``` and ```FormGroup``` - they both extend it.
+        * ```FormArray``` also extends ```AbstractControl```.
+                    
+        <br>
+        <img src='../resources/abstract_control.png' alt='Abstract Control' width='500'>
+        
+        <br>
     * steps:    
         1. import ```FormsModule``` and ```ReactiveFormsModule``` into ```app.module.ts```
         2. Create the ```FormGroup``` and nested ```FormControl``` objects, programmatically (```form = new FormGroup(...)```), in your form component
@@ -405,11 +413,114 @@
                         acccountUsername: new FormControl()
                     })
                 })
-                
+
                 ...
                 get accountUsername() {
                     return this.form.get('account.accountUsername');
                 }
             ```
 * FormArray
+    * Sometimes we need to work with an array of objects in a form.
+    * example:
+        ```html
+            <!-- signup-form.component.html -->
+            ...
+            <div class="form-group">
+                <label for="topics">Add Topics</label>
+                <input 
+                    type="text" 
+                    class="form-control"
+                    #topic
+                    (keyup.enter)="addTopic(topic)">
+                <ul class="list-group">
+                    <li 
+                        *ngFor="let topic of topics.controls"
+                        (click)="removeTopic(topic)"
+                        class="list-group-item">
+                        {{ topic.value }}
+                    </li>
+                </ul>
+            </div>
+            ...
+        ```
+        ```typescript
+            // signup-form.component.ts
+            form = new FormGroup({
+                username: new FormControl(...),
+                password: new FormControl(...),
+                account: new FormGroup({
+                acccountUsername: new FormControl(),
+                topics: new FormArray([ ])
+                })
+            })
+            
+            ... 
+
+            get topics() {
+                return this.form.get('account.topics') as FormArray;
+            }
+
+            addTopic(topic: HTMLInputElement) {
+                this.topics.push(new FormControl(topic.value));
+                topic.value = '';
+            }
+
+            removeTopic(topic: AbstractControl) {
+                let index = this.topics.controls.indexOf(topic);
+                this.topics.removeAt(index);
+            }
+        ```
+* FormBuilder
+    * Using the ```FormBuilder``` class is another method to create forms; arguably this syntax is slightly cleaner. Be comfortable working with both methods.
+    * example:
+        ```typescript
+            // new-course-form.component.ts
+            export class NewCourseFormComponent {
+
+                formOriginal = new FormGroup({
+                    name: new FormControl('', Validators.required),
+                    contact: new FormGroup({
+                    email: new FormControl(),
+                    phone: new FormControl()
+                    }),
+                    topics: new FormArray([])
+                });
+
+                form: FormGroup;
+
+                constructor(fb: FormBuilder) { 
+                    this.form = fb.group({
+                    name: ['', Validators.required],
+                    contact: fb.group({
+                        email: [],
+                        phone: []
+                    }),
+                    topics: fb.array([])
+                    })
+                }
+
+            }
+        ```
+* Recap
+    * With Reactive Forms, we define the ```AbstractControl``` objects that make up our form in the component; rather than relying on directives (in our template) to automatically create these instances under the hood (Template-driven Forms).
+    * We can create our form object using one of two methods
+        1. manually building an object as a component field
+        2. using ```FormBuilder``` in the constructor
+    * Once we have created our form object in the component, we use directives to associate each ```AbstractControl``` object to an element in our template.
+        * The directives are:
+            * ```formGroup```: which we property bind on the ```<form>``` tag to the form object in our component
+                * example: ```<form [formGroup]="form">```
+            * ```formControlName```: which acts as an attribute on an ```<input>``` tag to associate the element with a ```FormControl``` object.
+                * example: ```<input formControlName="username">```
+            * ```formGroupName```: which acts as an attribute on an ```<div>``` tag to associate the element with a ```FormGroup``` object (which is a nested sub-group of related controls).
+                * example: ```<div formGroupName="contact">```
+    * If we have a ```FormArray``` in our form, we can use the ```*ngFor``` directive to iterate over the controls in that array and render them on the form.
+* Change Password Form Exercise
+    * see ```../exercises/exercise-change-password-form/my-soln``` for my initial solution
+    * see ~~```../exercises/exercise-change-password-form/mosh-soln```~~ for Mosh's better solution
+        * ~~our solutions were too similar to warrant creating a separate project~~
+        * notes:
+ 
+
+
 

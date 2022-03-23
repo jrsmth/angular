@@ -1,6 +1,7 @@
+import { AbstractControl } from '@angular/forms';
 import { UsernameValidator } from './../common/validators/username.validators';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'signup-form',
@@ -19,7 +20,8 @@ export class SignupFormComponent {
       '', 
       Validators.required),
     account: new FormGroup({
-      acccountUsername: new FormControl()
+      acccountUsername: new FormControl(),
+      topics: new FormArray([ ])
     })
   })
   authService = new AuthService();
@@ -36,6 +38,10 @@ export class SignupFormComponent {
     return this.form.get('account.accountUsername');
   }
 
+  get topics() {
+    return this.form.get('account.topics') as FormArray;
+  }
+
   login() {
     let isValid = this.authService.login(this.form.value);
 
@@ -44,6 +50,16 @@ export class SignupFormComponent {
         invalidLogin: true
       })
     }
+  }
+
+  addTopic(topic: HTMLInputElement) {
+    this.topics.push(new FormControl(topic.value));
+    topic.value = '';
+  }
+
+  removeTopic(topic: AbstractControl) {
+    let index = this.topics.controls.indexOf(topic);
+    this.topics.removeAt(index);
   }
 
 }
