@@ -20,7 +20,7 @@ export class SignupFormComponent {
       '', 
       Validators.required),
     account: new FormGroup({
-      acccountUsername: new FormControl(),
+      accountUsername: new FormControl(),
       topics: new FormArray([ ])
     })
   })

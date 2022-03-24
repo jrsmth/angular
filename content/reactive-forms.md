@@ -516,10 +516,46 @@
                 * example: ```<div formGroupName="contact">```
     * If we have a ```FormArray``` in our form, we can use the ```*ngFor``` directive to iterate over the controls in that array and render them on the form.
 * Change Password Form Exercise
-    * see ```../exercises/exercise-change-password-form/my-soln``` for my initial solution
-    * see ~~```../exercises/exercise-change-password-form/mosh-soln```~~ for Mosh's better solution
-        * ~~our solutions were too similar to warrant creating a separate project~~
+    * see ```../exercises/exercise-change-password-form/my-soln``` for my solution
         * notes:
+            * We need a reactive form in this exercise, rather than a template-driven one, to give us finer control over the form behaviour - for example, for the async validation on the 'current password'.
+            * Remember to import ```FormsModule``` and ```ReactiveFormsModule``` into ```src/app/app.module.ts```.
+            * Also import bootstrap (older version): 
+                * terminal: 
+                    * ```npm i bootstrap@3.3.7 --save```
+                * src/styles.css: 
+                    * ```@import "~bootstrap/dist/css/bootstrap.css";```
+            * Custom validation for an input field, based on the value of another input field (in this example, comparing new and confirm password for equality)
+                * Stack Overflow [post 1](https://stackoverflow.com/questions/43366741/angular-2-validation-based-on-other-field-value) and [post2](https://stackoverflow.com/questions/51605737/confirm-password-validation-in-angular-6)
+                    * I used a combo of both
+            * ```null``` evaluates to ```falsy``` in JS-land ([docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null))
+            * Clearing a form object's values: ```this.form.reset()```
+                * Stack overflow [post](https://stackoverflow.com/questions/34742023/how-to-clear-form-after-submit-in-angular-2)
+            * Nice shorthand to generate a form with 3 form controls:
+                * ```(div.form-group>label+input[type="password"].form-control)*3+button.btn.btn-primary```
+            * Associating Typescript Component form objects & HTML Template form elements
+                ```html
+                    <!-- HTML Template -->
+                    <form [formGroupName]="form"> // in TS: this is your FormGroup()
+                        <div class="form-group"> // in TS: this is N/A
+                            // it is a 'form-group' in HTML but is closer to a FormControl() in TS 
+                                // it wraps a single FormControl()
+                            <label for="username"></label>
+                            <input 
+                                [formControlName]="username"
+                                type="text"
+                                class="form-control"> // in TS: this is your FormControl()
+                        </div>
+                    </form>
+                ```
+                ```typescript
+                    // <COMPONENT_NAME>.component.ts
+                    form = new FormGroup({ // In HTML: this is a <form>
+                        // a subgroup in our form obj also uses FormGroup() and is a <div> in HTML
+                        username: new FormControl({}); // In HTML: this is an <input>
+                    });
+                ```
+                    
  
 
 
