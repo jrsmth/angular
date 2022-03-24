@@ -9,6 +9,7 @@
 * [Directives](./content/directives.md)
 * [Template-Driven Forms](./content/template-driven-forms.md)
 * [Reactive Forms](./content/reactive-forms.md)
+* [Consuming HTTP Services](./content/consuming-http.md)
 
 <br>
 
