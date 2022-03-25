@@ -242,7 +242,8 @@
             }
 
             }
-
+        ```
+        ```typescript
             // src/app/services/posts.service.ts
             export class PostService {
                 private url = 'https://jsonplaceholder.typicode.com/posts';
@@ -266,8 +267,44 @@
                 }
 
             }
-
         ```
+* Handling Errors
+    * We can separate errors into two categories:
+        * Unexpected
+            * server is offline
+            * network is down
+            * unhandled exceptions on the server-side
+        * Expected
+            * ```404 Not Found``` error messages    
+                * example: two users are viewing the same page and one deletes a resource that the other is viewing; if the a viewing user then tries to modify that resource, they will get a ```404 Not Found``` as the resource doesn't exist.
+            * ```400 Bad Request``` error messages
+                * example: if a user tries to create a new user, using a username that already exists, they will normally get a ```400 Bad Request```.
+    * Handling Unexpected Errors
+        * We can handle unexpected error by using the second parameter in the ```.subscribe()``` method; it allows us to define a function that deals with the error.
+            * Note, the overloaded version of ```.subscribe()``` has been deprecated - I've used a newer version in the example below.
+                * Stack Overflow [post](https://stackoverflow.com/questions/55472124/subscribe-is-deprecated-use-an-observer-instead-of-an-error-callback)
+        * In a real world application, we would want to notify the user that was a problem - the best practise is to use a 'toast' notification. Also we would want to error to be logged and stored in a database for analysis, retrospectively.
+        * example:
+            ```typescript
+                // post.component.ts
+                ...
+                ngOnInit(): void {
+                    this.service.getPosts()
+                    .subscribe({
+                        next: (response) => {
+                            this.posts = response; 
+                        }, 
+                        error: (error) => {
+                            alert('An unexpected error occurred.'); // simulated toast notification
+                            console.log(error); // simulated log to database
+                        } 
+                    });
+                }
+                ...
+            ```
+    * Handling Expected Errors
+        *  
+
 
 
 
