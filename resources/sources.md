@@ -1,5 +1,5 @@
 ## Sources
-* [```The Complete Angular Master Class``` Udemy course](https://www.udemy.com/course/the-complete-angular-master-class/learn/lecture/7251988#learning-tools)
+* [```"The Complete Angular Master Class"``` Udemy course](https://www.udemy.com/course/the-complete-angular-master-class/learn/lecture/7251988#learning-tools)
 * Angular [docs](https://angular.io/docs)
 * https://www.typescriptlang.org/docs/handbook/
 * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
@@ -13,3 +13,5 @@
 * https://stackoverflow.com/questions/43034758/what-is-the-difference-between-ngif-and-hidden
 * https://www.concretepage.com/angular-2/angular-2-4-minlength-and-maxlength-validation-example
 * https://techfunda.com/howto/932/glyphicons-wait-icon
+* https://angular.io/guide/observables
+* https://jsonplaceholder.typicode.com/guide/

@@ -1,0 +1,35 @@
+
+li {
+    width: 100%;
+}
+
+.btn-default {
+    float: right;
+    margin-right: -15px;
+    margin-top: -10px;
+    height: 40px;
+    border-radius: 0;
+    border: none;
+}
+
+.btn-edit {
+    margin-left: 10px;
+    color: cadetblue;
+}
+
+.btn-edit:hover {
+    color: whitesmoke;
+    background-color: cadetblue;
+}
+
+
+.btn-delete {
+    color: crimson;
+    padding-left: 15px;
+}
+
+.btn-delete:hover {
+    color: whitesmoke;
+    background-color: crimson;
+}
+
