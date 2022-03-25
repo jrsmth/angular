@@ -200,6 +200,74 @@
             * For some reason, the ```ng``` CLI doesn't this for you.
         * Register the new service in ```src/app/app.module.ts```, in the ```providers: []``` section.
             * For some reason, the ```ng``` CLI doesn't this for you.
+    * example:
+        ```typescript
+            // post.component.ts
+            export class PostsComponent implements OnInit {
+            posts: any;
+
+            constructor(private service: PostService) { }
+
+            ngOnInit(): void {
+                this.service.getPosts()
+                .subscribe(response => {
+                    console.log(response);
+                    this.posts = response;
+                });
+            }
+
+            createPost(input: HTMLInputElement) {
+                let post: any = { title: input.value };
+                input.value = '';
+
+                this.service.createPost(post)
+                .subscribe(response => {
+                    ...
+                });
+            }
+
+            updatePost(post: any){
+                post.isRead = true;
+                this.service.updatePost(post)
+                .subscribe(response => {
+                    ...
+                });
+            }
+
+            deletePost(post: any) {
+                this.service.deletePost(post.id)
+                .subscribe(response => {
+                    ..
+                })
+            }
+
+            }
+
+            // src/app/services/posts.service.ts
+            export class PostService {
+                private url = 'https://jsonplaceholder.typicode.com/posts';
+
+                constructor(private http: HttpClient) { }
+
+                getPosts() {
+                    return this.http.get(this.url);
+                }
+
+                createPost(post: any) {
+                    return this.http.post(this.url, JSON.stringify(post));
+                }
+
+                updatePost(post: any) {
+                    return this.http.put(this.url + '/' + post.id, JSON.stringify(post));
+                }
+
+                deletePost(id: number) {
+                    return this.http.get(this.url + '/' + id);
+                }
+
+            }
+
+        ```
 
 
 
