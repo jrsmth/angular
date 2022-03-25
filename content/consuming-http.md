@@ -155,7 +155,51 @@
             }
         ```
 * OnInit Interface
+    * As best practise, constructors should be small and lightweight; therefore, we should avoid making HTTP requests in the constructor.
+    * Components in Angular have life cycle hooks and so there exists methods that we can call when a component has reached a particular state in its lifecycle. 
+        * These lifecycle hooks are: [docs](https://angular.io/guide/lifecycle-hooks)
+            * ```ngOnChanges```: When an input binding value changes.
+            * ```ngOnInit```: After the first ngOnChanges.
+            * ```ngDoCheck```: Developer's custom change detection.
+            * ```ngAfterContentInit```: After component content initialized.
+            * ```ngAfterContentChecked```: After every check of component content.
+            * ```ngAfterViewInit```: After a component's views are initialized.
+            * ```ngAfterViewChecked```: After every check of a component's views.
+            *  ```ngOnDestroy```: Just before the directive is destroyed.
+        * If we define these methods in our component, Angular will call them when the lifecycle stage has occurred.
+            * ```ngOnInit()``` is one of these methods.
+    * ```ngOnInit()``` is a lifecyle method that gets called automatically by Angular when the component is initialised.
+        * The ```OnInit``` interface is used to enforce that your component implements the ```ngOnInit()``` method, via compile-time checking.
+    * If you need to make a HTTP request in order to build your view, you should do so in ```ngOnInit()```.
+    * example:
+        ```typescript
+            // posts.component.ts
+            export class PostsComponent implements OnInit {
+                ...
+                constructor(private http: HttpClient) { }
 
+                ngOnInit(): void {
+                    this.http.get(this.url)
+                        .subscribe(response => {
+                            console.log(response);
+                            this.posts = response;
+                        });
+                }
+            }
+        ```
+* Separations of Concern (Service Layer)
+    * Following the ***S.O.L.I.D*** principles of Object-Oriented design, our classes should have a ***S***ingle responsibility.
+        * Else they are harder to extend, maintain, reuse and test.
+    * We should not be making HTTP requests directly from our component class, it should just focus on the presentation logic.
+        * We should delegate the request logic to a service layer and then inject a service object as a dependency into our component.
+    * Service Layer
+        * Generate a service using the ```ng``` CLI
+            * ```ng c service <NAME>```
+                * We drop the word ```service``` from the ```<NAME>```, as Angular adds it for us.
+        * It is good practise to group your service classes in a ```src/app/services``` directory
+            * For some reason, the ```ng``` CLI doesn't this for you.
+        * Register the new service in ```src/app/app.module.ts```, in the ```providers: []``` section.
+            * For some reason, the ```ng``` CLI doesn't this for you.
 
 
 
