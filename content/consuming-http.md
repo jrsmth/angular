@@ -522,5 +522,55 @@
             ```
             * error: ``` Consider using the @Inject decorator to specify an injection token. This type is not supported as injection token. ```
                 * Stack Overflow [post](https://stackoverflow.com/questions/60801513/angular-9-error-ng2003-no-suitable-injection-token-for-parameter-url-of-cla)
+* Optimistic vs Pessimistic Updates
+    * Pessimistic updates
+        * Up to now, our HTTP requests have been pessimistic; that is, we wait for the server to respond before we make any changes to the screen. This is incase the request fails. As a result, there is about a half second delay between pressing enter on a new post (CREATE, POST request) and it being rendered to the screen.
+    * Optimistic updates
+        * Large-scale, modern web apps take an optimistic approach; this means that they assume the request is going to be successful and instead of waiting till after the server responds, they would render the new post immeadiately. Then if the request did fail, they would roll back the change on-screen.
+            * This approach makes the application appear faster and smoother.
+    * example:
+        ```typescript
+            // post.component.ts
+            ...
+            createPost(input: HTMLInputElement) {
+                let post: any = { title: input.value };
+                this.posts.splice(0, 0, post); // insert 'new post' at pos. 0
+                // ^optimistic updates (assume http req is successful)
+                    // render screen immeadiately, roll back if necessary
+
+                input.value = ''; // clear field
+
+                this.service.create(post)
+                .subscribe({
+                    next: (response) => {
+                    post.id = (response as any).id;
+                    console.log(this.posts);
+                    }, 
+                    error: (error: AppError) => {
+                    this.posts.splice(0, 1); // roll back optimistc update
+
+                    if (error instanceof BadInputError)
+                        alert('An error occured with the input data');
+                        // this.form.setErrors(error.originalError);
+                        // if this was tied to a form, we could set err programmatically
+                    else throw error; // propagate the error to the global error handler
+                    }
+                });
+            }
+            ...
+        ```
+* Promises vs Observables
+    * Observables
+        * Observables are lazy.
+        * With an Observable, the request isn't made until you ```.subcribe()``` to them.
+    * Promises
+        * Promises are eager.
+        * With a Promise, as soon as it is created, the request is executed. You can convert Obserables to Promises in Angular but this is not recommended and should only be done under very particular circumstances. The reason that the Angular developers sided with Observables was due to the power operators that come with them - such as:
+            * ```retry()```
+            * ```throw()```
+            * ```catch()```
+                * Using the Observable operators is referred to as ```Reactive Programming```.
+                * It appears some of the Observable content has been deprecated so watch out.
+* exercise....
 
 

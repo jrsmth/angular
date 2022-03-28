@@ -25,16 +25,21 @@ export class PostsComponent implements OnInit {
 
   createPost(input: HTMLInputElement) {
     let post: any = { title: input.value };
+    this.posts.splice(0, 0, post); // insert 'new post' at pos. 0
+      // ^optimistic updates (assume http req is successful)
+        // render screen immeadiately, roll back if necessary
+
     input.value = ''; // clear field
 
     this.service.create(post)
       .subscribe({
         next: (response) => {
           post.id = (response as any).id;
-          this.posts.splice(0, 0, post); // insert 'new post' at pos. 0
           console.log(this.posts);
         }, 
         error: (error: AppError) => {
+          this.posts.splice(0, 1); // roll back optimistc update
+
           if (error instanceof BadInputError)
             alert('An error occured with the input data');
             // this.form.setErrors(error.originalError);
@@ -55,14 +60,18 @@ export class PostsComponent implements OnInit {
   }
 
   deletePost(post: any) {
+    let index = this.posts.indexOf(post);
+    this.posts.splice(index, 1);
+    // ^optimistic update
+
     this.service.delete(345) // post.id // simulates 404 err
       .subscribe({
         next: (response) => {
           console.log(response);
-          let index = this.posts.indexOf(post);
-          this.posts.splice(index, 1);
         }, 
         error: (error: AppError) => {
+          this.posts.splice(index, 0, post); // ^optimistic update rollback
+
           if (error instanceof NotFoundError) 
             alert('This post has already been deleted'); // simulated toast notification
           else throw error; // propagate the error to the global error handler
