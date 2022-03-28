@@ -1,8 +1,8 @@
-import { BadInputError } from './../common/errors/bad-input-error';
-import { AppError } from './../common/errors/app-error';
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
 import { NotFoundError } from '../common/errors/not-found-error';
+import { BadInputError } from './../common/errors/bad-input-error';
+import { AppError } from './../common/errors/app-error';
 
 @Component({
   selector: 'posts',
@@ -15,14 +15,11 @@ export class PostsComponent implements OnInit {
   constructor(private service: PostService) { }
 
   ngOnInit(): void {
-    this.service.getPosts()
+    this.service.getAll()
       .subscribe({
         next: (response) => {
           this.posts = response;
-        }, 
-        error: (error) => {
-          alert('An unexpected error occurred.'); // simulated toast notification
-          console.log(error); } // simulated log to database
+        }
       });
   }
 
@@ -30,7 +27,7 @@ export class PostsComponent implements OnInit {
     let post: any = { title: input.value };
     input.value = ''; // clear field
 
-    this.service.createPost(post)
+    this.service.create(post)
       .subscribe({
         next: (response) => {
           post.id = (response as any).id;
@@ -42,29 +39,23 @@ export class PostsComponent implements OnInit {
             alert('An error occured with the input data');
             // this.form.setErrors(error.originalError);
               // if this was tied to a form, we could set err programmatically
-          else 
-            alert('An unexpected error occurred.'); // simulated toast notification
-          console.log(error); // simulated log to database
+          else throw error; // propagate the error to the global error handler
         }
       });
   }
 
   updatePost(post: any){
     post.isRead = true;
-    this.service.updatePost(post)
+    this.service.update(post)
       .subscribe({
         next: (response) => {
           console.log(response);
-        }, 
-        error: (error) => {
-          alert('An unexpected error occurred.'); // simulated toast notification
-          console.log(error); // simulated log to database
         }
       });
   }
 
   deletePost(post: any) {
-    this.service.deletePost(post.id)
+    this.service.delete(345) // post.id // simulates 404 err
       .subscribe({
         next: (response) => {
           console.log(response);
@@ -74,9 +65,7 @@ export class PostsComponent implements OnInit {
         error: (error: AppError) => {
           if (error instanceof NotFoundError) 
             alert('This post has already been deleted'); // simulated toast notification
-          else
-            alert('An unexpected error occurred.'); // simulated toast notification
-          console.log(error); // simulated log to database
+          else throw error; // propagate the error to the global error handler
         }
       });
   }

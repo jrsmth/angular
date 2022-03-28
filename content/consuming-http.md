@@ -327,7 +327,6 @@
                             }
                     ```
         * We should handle errors in the service layer and can throw application specific errors by using a ```src/app/commmon/errors/app-error.ts``` class.
-            * Note, in Spring, we use ```/repository``` (singular) for package names; in Angular, we use ```/validators``` (plural).
             * example:
                 ```typescript
                     // post.component.ts
@@ -381,6 +380,147 @@
                 ```
                 * Note, in the Udemy course, much of the ```rxjs``` content has been deprecated and replaced with newer syntax.
                     * helpful Stack Overflow [post](https://stackoverflow.com/questions/50291570/module-not-found-error-cant-resolve-rxjs-add-operator-catch-in-f-angular )
-    * Observable Operators and Factory Methods
+    * Global Error Handling
+        * We can handle unexpected errors globall across our application by using a ```src/app/common/errors/app-error-handler.ts``` class.
+            * In this class, we implement the built-in ```ErrorHandler``` interface's ```handleError()``` method to typically provide a message to the user and record the unexpected error in the logs.
+            * We then register this class as a provider in ```src/app/app.module.ts```, using the format that replaces every instance of ```ErrorHandler``` with our custom implementation at runtime.
+                * ```providers: [{provide: ErrorHandler, useClass: AppErrorHandler}]```
+                * [ErrorHandler docs](https://angular.io/api/core/ErrorHandler#description)
+            * example:
+                ```typescript
+                    // post.component.ts
+                    ...
+                    updatePost(post: any){
+                        post.isRead = true;
+                        this.service.updatePost(post)
+                        .subscribe({
+                            next: (response) => {
+                            console.log(response);
+                            }
+                        });
+                    }
+
+                    deletePost(post: any) {
+                        this.service.deletePost(345) // post.id // simulates 404 err
+                        .subscribe({
+                            next: (response) => {
+                                console.log(response);
+                                let index = this.posts.indexOf(post);
+                                this.posts.splice(index, 1);
+                            }, 
+                            error: (error: AppError) => {
+                            if (error instanceof NotFoundError) 
+                                alert('This post has already been deleted'); // simulated toast notification
+                            else throw error; // propagate the error to the global error handler
+                            }
+                        });
+                    }
+                    ...
+
+                    // src/app/common/errors/app-error-handler.ts
+                    export class AppErrorHandler implements ErrorHandler {
+                        handleError(error: any): void {
+                            alert('An unexpected error occurred.'); // simulated toast notification
+                            console.log(error); // simulated log to database
+                        }
+                    }
+                ```
+    * Extracting a Reusable Error Handling Method
+        * We can refactor the code in ```post.service.ts``` and create a ```private``` eror handling method:
+            * example:
+                ```typescript
+                    // post.service.ts
+                    ...
+                    updatePost(post: any) {
+                        return this.http.put(this.url + '/' + post.id, JSON.stringify(post)).pipe(
+                        catchError(this.handleError)); // method reference, not method call;
+                    }
+
+                    deletePost(id: number){
+                        // return this.http.delete(this.url + '/' + id ).pipe(
+                        // DELETE of this URL isn't working as expected
+                            // GET simulates better
+                        return this.http.get(this.url + '/' + id ).pipe(
+                        catchError(this.handleError)); // method reference, not method call
+                    }
+
+                    private handleError(error: Response) {
+                        if (error.status === 400) 
+                        return throwError(new BadInputError())
+                        else if (error.status === 404) 
+                        return throwError(new NotFoundError())
+                        else
+                        return throwError(new AppError(error)); 
+                    }
+                    ...
+                ```
+    * Extracting a Reusable Data Service
+        * Our ```post.service.ts``` contains a lot of reusable code that we can extract to a generic service class; should we need to create mutliple services in our application, we can extend this base service class (```data.service.ts```).
+        * example:
+            ```typescript
+                // src/app/services/data.service.ts
+                ...
+                export class DataService {
+
+                    constructor(@Inject(String) private url: string, private http: HttpClient) { }
+
+                    getAll() {
+                        return this.http.get(this.url).pipe(
+                        catchError(this.handleError)); // method reference, not method call;
+                    }
+
+                    create(resource: any) {
+                        return this.http.post(this.url, JSON.stringify(resource)).pipe(
+                        catchError(this.handleError)); // method reference, not method call
+                    }
+
+                    update(resource: any) {
+                        return this.http.put(this.url + '/' + resource.id, JSON.stringify(resource)).pipe(
+                        catchError(this.handleError)); // method reference, not method call;
+                    }
+
+                    delete(id: number){
+                        // return this.http.delete(this.url + '/' + id ).pipe(
+                        // DELETE of this URL isn't working as expected
+                            // GET simulates better
+                        return this.http.get(this.url + '/' + id ).pipe(
+                        catchError(this.handleError)); // method reference, not method call
+                    }
+
+                    private handleError(error: Response) {
+                        if (error.status === 400) 
+                        return throwError(new BadInputError())
+                        else if (error.status === 404) 
+                        return throwError(new NotFoundError())
+                        else
+                        return throwError(new AppError(error)); 
+                    }
+
+                }
+
+                // post.service.ts
+                export class PostService extends DataService {
+                    constructor(http: HttpClient) { 
+                        super('https://jsonplaceholder.typicode.com/posts', http);
+                        // super() is required bc to create an instance of a derrived class
+                            // we need to create an instance of the base class
+                    }
+                }
+
+                // post.component.ts
+                ...
+                updatePost(post: any){
+                    post.isRead = true;
+                    this.service.update(post)
+                    .subscribe({
+                        next: (response) => {
+                        console.log(response);
+                        }
+                    });
+                }
+                ...
+            ```
+            * error: ``` Consider using the @Inject decorator to specify an injection token. This type is not supported as injection token. ```
+                * Stack Overflow [post](https://stackoverflow.com/questions/60801513/angular-9-error-ng2003-no-suitable-injection-token-for-parameter-url-of-cla)
 
 
