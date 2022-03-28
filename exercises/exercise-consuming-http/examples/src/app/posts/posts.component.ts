@@ -1,5 +1,8 @@
+import { BadInputError } from './../common/errors/bad-input-error';
+import { AppError } from './../common/errors/app-error';
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
+import { NotFoundError } from '../common/errors/not-found-error';
 
 @Component({
   selector: 'posts',
@@ -34,8 +37,13 @@ export class PostsComponent implements OnInit {
           this.posts.splice(0, 0, post); // insert 'new post' at pos. 0
           console.log(this.posts);
         }, 
-        error: (error) => {
-          alert('An unexpected error occurred.'); // simulated toast notification
+        error: (error: AppError) => {
+          if (error instanceof BadInputError)
+            alert('An error occured with the input data');
+            // this.form.setErrors(error.originalError);
+              // if this was tied to a form, we could set err programmatically
+          else 
+            alert('An unexpected error occurred.'); // simulated toast notification
           console.log(error); // simulated log to database
         }
       });
@@ -59,11 +67,15 @@ export class PostsComponent implements OnInit {
     this.service.deletePost(post.id)
       .subscribe({
         next: (response) => {
+          console.log(response);
           let index = this.posts.indexOf(post);
           this.posts.splice(index, 1);
         }, 
-        error: (error) => {
-          alert('An unexpected error occurred.'); // simulated toast notification
+        error: (error: AppError) => {
+          if (error instanceof NotFoundError) 
+            alert('This post has already been deleted'); // simulated toast notification
+          else
+            alert('An unexpected error occurred.'); // simulated toast notification
           console.log(error); // simulated log to database
         }
       });

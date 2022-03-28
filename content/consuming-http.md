@@ -263,7 +263,7 @@
                 }
 
                 deletePost(id: number) {
-                    return this.http.get(this.url + '/' + id);
+                    return this.http.delete(this.url + '/' + id);
                 }
 
             }
@@ -281,7 +281,7 @@
                 * example: if a user tries to create a new user, using a username that already exists, they will normally get a ```400 Bad Request```.
     * Handling Unexpected Errors
         * We can handle unexpected error by using the second parameter in the ```.subscribe()``` method; it allows us to define a function that deals with the error.
-            * Note, the overloaded version of ```.subscribe()``` has been deprecated - I've used a newer version in the example below.
+            * Note, the overloaded version of ```.subscribe()``` in Mosh's videos has been deprecated - I've used a newer version in the example below.
                 * Stack Overflow [post](https://stackoverflow.com/questions/55472124/subscribe-is-deprecated-use-an-observer-instead-of-an-error-callback)
         * In a real world application, we would want to notify the user that was a problem - the best practise is to use a 'toast' notification. Also we would want to error to be logged and stored in a database for analysis, retrospectively.
         * example:
@@ -303,9 +303,84 @@
                 ...
             ```
     * Handling Expected Errors
-        *  
+        *  It is best practise to separate the concerns of error handling from the presentation logic in the component. 
+            * Whilst it is possible to handle errors in the component, using the technique below, we shouldn't do it.
+                * example:
+                    ```typescript
+                        // post.component.ts
+                          deletePost(post: any) {
+                                this.service.deletePost(post.id)
+                                .subscribe({
+                                    next: (response) => {
+                                    console.log(response);
+                                    let index = this.posts.indexOf(post);
+                                    this.posts.splice(index, 1);
+                                    }, 
+                                    error: (error: Response) => {
+                                    if (error.status === 404) 
+                                        alert('This post has already been deleted'); // simulated toast notification
+                                    else
+                                        alert('An unexpected error occurred.'); // simulated toast notification
+                                    console.log(error); // simulated log to database
+                                    }
+                                });
+                            }
+                    ```
+        * We should handle errors in the service layer and can throw application specific errors by using a ```src/app/commmon/errors/app-error.ts``` class.
+            * Note, in Spring, we use ```/repository``` (singular) for package names; in Angular, we use ```/validators``` (plural).
+            * example:
+                ```typescript
+                    // post.component.ts
+                    ...
+                    createPost(input: HTMLInputElement) {
+                        let post: any = { title: input.value };
+                        input.value = ''; // clear field
 
+                        this.service.createPost(post)
+                        .subscribe({
+                            next: (response) => {
+                            post.id = (response as any).id;
+                            this.posts.splice(0, 0, post); // insert 'new post' at pos. 0
+                            console.log(this.posts);
+                            }, 
+                            error: (error: AppError) => {
+                            if (error instanceof BadInputError)
+                                alert('An error occured with the input data');
+                                // this.form.setErrors(error.originalError);
+                                // if this was tied to a form, we could set err programmatically
+                            else 
+                                alert('An unexpected error occurred.'); // simulated toast notification
+                            console.log(error); // simulated log to database
+                            }
+                        });
+                    }
+                    ...
 
+                    // post.service.ts
+                    ...
+                    createPost(post: any) {
+                        return this.http.post(this.url, JSON.stringify(post)).pipe(
+                        catchError( (error: Response) => {
+                            if (error.status === 400) 
+                            return throwError(new BadInputError(error))
 
+                            return throwError(new AppError(error));        
+                        }));
+                    }
+                    ...
+
+                    // src/app/common/errors/app-error.ts
+                    export class AppError {
+                        constructor(public originalError?: any) {}
+                    }
+
+                    // src/app/common/errors/bad-input-error.ts
+                    import { AppError } from "./app-error";
+
+                    export class BadInputError extends AppError {}
+                ```
+                * Note, in the Udemy course, much of the ```rxjs``` content has been deprecated and replaced with newer syntax.
+                    * helpful Stack Overflow [post](https://stackoverflow.com/questions/50291570/module-not-found-error-cant-resolve-rxjs-add-operator-catch-in-f-angular )
+    * Observable Operators and Factory Methods
 
 

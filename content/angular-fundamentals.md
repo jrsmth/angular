@@ -35,6 +35,7 @@
         * use single (```' '```) for javascript
         * use double (```" "```) for HTML
     * Don't worry about it too much, be flexible but maintain consistency as much as possible.
+* Treat your code like a book or a newspaper, with regards to formatting; writting code is an art form.
 
 <br>
 
