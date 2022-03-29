@@ -1,0 +1,19 @@
+<h2 class="panel panel-body">{{ user }} Followers</h2>
+
+<div *ngFor="let follower of followers" class="media">
+    <a class="pull-left" href="#">
+      <img 
+        class="media-object" 
+        [src]="follower.avatar_url">
+    </a>
+    <div class="media-body">
+        <h4 
+            class="media-heading"> 
+            {{ follower.login }} 
+        </h4>
+        <a 
+            href="follower.html_url">
+            {{ follower.html_url }}
+        </a>
+    </div>
+</div>

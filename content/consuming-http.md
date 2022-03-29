@@ -571,6 +571,15 @@
             * ```catch()```
                 * Using the Observable operators is referred to as ```Reactive Programming```.
                 * It appears some of the Observable content has been deprecated so watch out.
-* exercise....
+* GitHub Followers Page Exercise
+    * see ```../exercises/exercise-github-followers-page/my-soln``` for my solution
+        * notes:
+            * There are some really good bootstrap components, such as
+                * ```.panel```
+                * ```.btn```
+                * ```.list-group-item```
+                * ```.media```
+            * Look up the Bootstrap docs for inspiration
+                * example: https://getbootstrap.com/2.3.2/components.html#media
 
 

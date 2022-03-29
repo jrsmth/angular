@@ -1,0 +1,27 @@
+
+.panel {
+    width: 50%;
+}
+
+.media {
+    border: none;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    width: 50%;
+    margin-bottom: 15px;
+    position: relative;
+    top: 0;
+    transition: top ease 0.25s;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.media:hover {
+    top: -5px;
+    cursor: pointer;
+    background-color: #fafafa;
+}
+
+.media-object {
+    height: 50px;
+    border-radius: 100%;
+}
