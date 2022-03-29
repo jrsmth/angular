@@ -10,6 +10,7 @@
 * [Template-Driven Forms](./content/template-driven-forms.md)
 * [Reactive Forms](./content/reactive-forms.md)
 * [Consuming HTTP Services](./content/consuming-http.md)
+* [Routing and Navigation](./content/routing-navigation.md)
 
 <br>
 
