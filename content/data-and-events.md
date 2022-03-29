@@ -26,7 +26,7 @@
                         <td [attr.colspan]="colspan"> </td>
                     </tr>
                 </table>
-              ```
+                ```
                 * not simply: ```[colspan]="colspan"```
 * Bootstrap:
     * A CSS library that can be used to rapidly create web apps with a modern look and feel

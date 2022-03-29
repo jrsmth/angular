@@ -54,7 +54,7 @@
 * RouterLink
     * We don't use the ```href``` attribute with Angular routing because every time we click on a link, the entire page is downloaded and the Angular app is re-initialised.
         * This causes the page to flicker unnecessarily, reducing the user experience.
-    * When we click on a link, we only want the content on the new page to be downloaded -  to do this, we replace the ```href=""``` attribute with the ```routerLink=""``` directive.
+    * When we click on a link, we only want the content on the new page to be downloaded -  to do this, we replace the ```href=""``` attribute with the ```routerLink="<PATH_NAME>"``` directive.
     * example:
         ```html
             <!-- navbar.component.html -->
@@ -85,8 +85,23 @@
                     </div>
                 </div>
             ```
-    * Router Link Syntax     
+    * ```routerLink``` Syntax     
         <br>
         <img src='../resources/router_link.png' alt='Router Link' width='500'>
         
         <br>
+    * Router Link Active
+        * The standard Bootstrap ```li.active>``` syntax will highlight an element for us. However, we have to manually handle moving this class between the active list elements.
+            * We use the ```routerLinkActive="<CLASS_NAME>"``` directive to handle this for us dynamically.
+        * example: 
+            ```html
+                <!-- github-followers.component.html -->
+                <ul class="nav navbar-nav">
+                    <li><a routerLink="/">Home</a></li>
+                    <li routerLinkActive="active"><a routerLink="/followers">Followers</a></li>
+                    <li routerLinkActive="active"><a routerLink="/posts">Posts</a></li>
+                </ul>
+            ```
+* Getting Route Parameters
+    * In order to get access to a route parameter in our component, we need to provide an ```ActivatedRoute``` parameter in our constructor.
+        * Recap: remember that we can only have a single constructor in our component.
