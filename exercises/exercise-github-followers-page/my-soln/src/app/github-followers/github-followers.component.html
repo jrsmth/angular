@@ -1,4 +1,4 @@
-<h2 class="panel panel-body">{{ user }} Followers</h2>
+<h3 class="panel panel-body">{{ user }} Followers</h3>
 
 <div *ngFor="let follower of followers" class="media">
     <a class="pull-left" href="#">
@@ -12,7 +12,8 @@
             {{ follower.login }} 
         </h4>
         <a 
-            href="follower.html_url">
+            [href]="follower.html_url" 
+            target="_blank">
             {{ follower.html_url }}
         </a>
     </div>
