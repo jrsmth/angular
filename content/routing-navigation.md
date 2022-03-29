@@ -256,3 +256,9 @@
                 Submit
             </button>
         ```
+* Blog Archives Exercise
+    * see ```../exercises/exercise-blog-archives/my-soln``` for my solution
+        * notes:
+            * ...
+
+have this complete before 0900 tomorrow...
