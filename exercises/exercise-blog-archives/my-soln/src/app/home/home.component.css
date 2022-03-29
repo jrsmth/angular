@@ -1,0 +1,16 @@
+
+.archive {
+    position: relative;
+    top: 0;
+    width: 33%;
+    transition: top ease 0.25s;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.archive:hover {
+    top: -5px;
+    cursor: pointer;
+    background-color: #fafafa;
+}

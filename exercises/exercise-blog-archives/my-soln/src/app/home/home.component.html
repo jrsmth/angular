@@ -1,0 +1,12 @@
+
+<h3> Home Page </h3>
+
+<br>
+
+<ul class="list-group">
+    <li
+        *ngFor="let archive of archives"
+        class="archive list-group-item">
+        {{ archive.event }}: {{ archive.month }}/{{ archive.year }}
+    </li>
+</ul>
