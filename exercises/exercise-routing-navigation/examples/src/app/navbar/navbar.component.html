@@ -2,9 +2,23 @@
     <div class="container-fluid">
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
-            <li><a routerLink="/">Home</a></li>
-            <li routerLinkActive="active"><a routerLink="/followers">Followers</a></li>
-            <li routerLinkActive="active"><a routerLink="/posts">Posts</a></li>
+            <li>
+                <a routerLink="/">
+                    Home
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a 
+                    routerLink="/followers"
+                    [queryParams]="{ page: 1, order: 'newest'}">
+                    Followers
+                </a>
+            </li>
+            <li routerLinkActive="active">
+                <a routerLink="/posts">
+                    Posts
+                </a>
+            </li>
         </ul>
       </div>
     </div>

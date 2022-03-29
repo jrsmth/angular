@@ -2,7 +2,7 @@
 
 <div 
     *ngFor="let follower of followers" 
-    [routerLink]="['/profile', follower.login]"
+    [routerLink]="['/profile', follower.login, follower.id]"
     class="media">
     <a class="pull-left">
       <img 
