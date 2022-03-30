@@ -17,7 +17,7 @@
 
 ## Further Learning Ideas
 * Complete further Angular tutorials (Medium, YouTube, etc)
-    * particularly on parts of the course that have changed
+    * particularly on parts of the course that have changed:
         * rxjs, Observables, HTTP best practise
 * Get familiar with the Angular [docs](https://angular.io/docs)
 * Use Angular on personal projects

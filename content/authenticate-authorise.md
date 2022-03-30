@@ -66,4 +66,10 @@
 
 * Implementing Login
     * For this section, my example code can be found in ```../exercises/exercise-authenticate-authorise/examples```
-        * Mosh' code did not work for me, so I took to building my own version. I pinched bits of his code from the starter demo that he provided.
+        * Mosh' starter code did not work for me, so I had to build my own version.
+    * We implement login by having a ```.signIn()``` method in our ```LoginComponent```. This method calls a ```.login()``` method in our ```AuthService``` - this makes a HTTP request to the backend and gets a JWT in the response body if successful. We should handle this JWT in the ```AuthService``` and store it in ```localStorage.setItem()```. We should separate layers of concern by returning a simple ```true```/```false``` to the ```LoginComponent```, rather than passing along the response.
+    * example
+        ```html
+        ```
+        ```typescript
+        ```
