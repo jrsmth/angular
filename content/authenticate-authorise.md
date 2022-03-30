@@ -22,19 +22,21 @@
                         "alg": "HS256",
                         "typ": "JWT"
                     }
-                    .
+                ```
+                ```json
                     {
                         "sub": "1234567890",
                         "name": "John Doe",
                         "admin": true
                     }
-                    .
+                ```
+                ```html
                     HMACSHA256(
                         base64UrlEncode(header) + 
                         "." +
                         base64UrlEncode(payload),
-                        your-256-bit-secret
-                    ) 
+                        <YOUR-256-BIT-SECRET>
+                    )
                 ```
     * The example JWT above is base64 encoded. This means that it is easier to send across the network but it isn't encrypted. Therefore we must avoid putting sensitive information in it.
     * A JWT is comprised of 3 parts, each seperated by a dot (```.```).
@@ -65,4 +67,4 @@
 * Implementing Login
     * In this section my example code can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-jrs```
         * Mosh's complete example can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-complete```
-        * His starter example can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-starter```
+        * Mosh' starter example can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-starter```
