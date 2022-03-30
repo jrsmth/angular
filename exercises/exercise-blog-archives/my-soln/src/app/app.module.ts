@@ -24,7 +24,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
         component: HomeComponent 
       },
       { 
-        path: 'archive/:year/:month', 
+        path: 'archive/:event/:year/:month', 
         component: ArchiveComponent 
       },
       { 

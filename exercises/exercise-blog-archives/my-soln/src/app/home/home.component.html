@@ -6,7 +6,8 @@
 <ul class="list-group">
     <li
         *ngFor="let archive of archives"
+        [routerLink]="['/archive', archive.event, archive.year, archive.month]"
         class="archive list-group-item">
-        {{ archive.event }}: {{ archive.month }}/{{ archive.year }}
+        {{ archive.event + ': ' + archive.month + '/' + archive.year }}
     </li>
 </ul>

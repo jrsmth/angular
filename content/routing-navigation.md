@@ -258,7 +258,11 @@
         ```
 * Blog Archives Exercise
     * see ```../exercises/exercise-blog-archives/my-soln``` for my solution
+    * see ```../exercises/exercise-blog-archives/mosh-soln``` for mosh' solution
         * notes:
-            * ...
-
-have this complete before 0900 tomorrow...
+            * String interpolation:
+                * To avoid extra noise in your HTML template, you can combine individual instances of string interpolation and add supporting strings inside the ```{{ }}```
+                    * example:
+                        * before: ```{{ archive.event }}: {{ archive.month }}/{{ archive.year }}```
+                        * after: ```{{ archive.event + ': ' + archive.month + '/' + archive.year }}```
+            * Mosh chose to use a snapshot for retrieving the request parameters, whereas I went with the standard Observable route. I'm not sure which one would have been best practise in this case.
