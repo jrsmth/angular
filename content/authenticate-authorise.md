@@ -65,5 +65,5 @@
     <br>
 
 * Implementing Login
-    * In this section my example code can be found in ```../exercises/exercise-authenticate-authorise/examples```
-    * just come up with your own...
+    * For this section, my example code can be found in ```../exercises/exercise-authenticate-authorise/examples```
+        * Mosh' code did not work for me, so I took to building my own version. I pinched bits of his code from the starter demo that he provided.
