@@ -66,3 +66,4 @@
 
 * Implementing Login
     * In this section my example code can be found in ```../exercises/exercise-authenticate-authorise/examples```
+    * just come up with your own...
