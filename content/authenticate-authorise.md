@@ -65,6 +65,4 @@
     <br>
 
 * Implementing Login
-    * In this section my example code can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-jrs```
-        * Mosh's complete example can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-complete```
-        * Mosh' starter example can be found in ```../exercises/exercise-authenticate-authorise/auth-demo-starter```
+    * In this section my example code can be found in ```../exercises/exercise-authenticate-authorise/examples```
