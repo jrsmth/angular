@@ -1,3 +1,4 @@
+import { HttpHeaders } from '@angular/common/http';
 import { of } from 'rxjs';
 
 export class FakeBackendProvider {
@@ -19,13 +20,32 @@ export class FakeBackendProvider {
                 body: {
                     token: token
                 }
-            }
+            };
         } else {
             result = {
                 status: 400
-            }
+            };
         }
 
         return of(result);
-    } 
+    }
+
+    static mockOrdersHttpRequest(url: string, options: any){
+        console.log("mockOrdersHttpRequest: " + url);
+
+        let result;
+        let headers = options.headers;
+        if (headers && headers.get('Authorization') === 'Bearer ' + this.token_admin) {
+            result = {
+                status: 200,
+                body: ['order1', 'order2', 'order3']
+            };
+        } else {
+            result = {
+                status: 401
+            };
+        }
+
+        return of(result);
+    }
 }

@@ -147,11 +147,11 @@
                         body: {
                             token: this.token
                         }
-                    }
+                    };
                 } else {
                     result = {
                         status: 400
-                    }
+                    };
                 }
 
                 return of(result);
@@ -407,5 +407,105 @@
                 ],
                 ...
         ```
+* Accessing Protected API Resources
+    * In the real-world, our server-side API's will be protected - just like the routes in our client-side application. This means that certain backend endpoints will be restricted to non-anonymous (logged-in) users, who have the correct level of access (role/permissions), so that maliscious users cannot access the API resources.
+    * To call such protected API resources from the frontend, we must supply the token in the header of the request. The backend then verifies that we have the correct permissions and grants our request; else a ```401 Unauthorised``` status is returned.
+        * this and that...
+    * example:
+        ```html
+            <!-- admin.component.html -->
+            ...
+            <h3>Orders</h3>
+            <ul class="list-group">
+                <li 
+                    *ngFor="let order of orders"
+                    class="list-group-item">
+                    {{ order }}
+                </li>
+            </ul>
+            ...
+        ```
+        ```typescript
+            // admin.component.ts
+            export class AdminComponent implements OnInit {
+                orders: any;
+
+                constructor(private router: Router, private ordersService: OrdersService) {}
+
+                ngOnInit() {
+                    this.ordersService.getOrders()
+                    .subscribe(orders => this.orders = orders);
+
+                    console.log(this.orders);
+                }
+
+                navigateHome() {
+                    this.router.navigate(['/']);
+                }
+            }
+
+            // orders.service.ts
+            export class OrdersService {
+
+                constructor(private http: HttpClient) { }
+
+                getOrders() {
+                    let token = localStorage.getItem('token');
+
+                    // Set HttpHeaders - Method 1
+                    // let headers = new HttpHeaders();
+                    // headers = headers.append('Authorization', 'Bearer ' + token);
+                    
+                    // Set HttpHeaders - Method 2
+                    const headers = new HttpHeaders().
+                    set('Authorization', 'Bearer ' + token);
+
+                    // return this.http.get('/api/orders', { headers: headers })
+
+                    // Fake implementation of /api/orders
+                    return FakeBackendProvider.
+                    mockOrdersHttpRequest('/api/orders', { headers: headers }).pipe(
+                        map(response => {
+                        console.log(response);
+                        if (response && response.body)
+                            return response.body;
+                        else
+                            return [];
+                        })
+                    );
+                }
+            }
+
+            // fake-backend-provider.ts
+            static mockOrdersHttpRequest(url: string, options: any){
+                console.log("mockOrdersHttpRequest: " + url);
+
+                let result;
+                let headers = options.headers;
+                if (headers && headers.get('Authorization') === 'Bearer ' + this.token_admin) {
+                    result = {
+                        status: 200,
+                        body: ['order1', 'order2', 'order3']
+                    };
+                } else {
+                    result = {
+                        status: 401
+                    };
+                }
+
+                return of(result);
+            }
+        ```
+* Recap
+    * JSON Web Tokens (JWT's) are used to implement authentication and authorisation in our Angular apps.
+    * A JWT is base64 encoded and is comprised of a header, payload and a digital signature 
+        * The digital signature is generated using the header, payload and a secret known only by the server.
+    * https://jwt.io has a JWT debugger; plus libraries for working with JWT across a wide spectrum of programming languages.
+    * Authorisation
+        * Client-side
+            * When it comes to authorisation, we need to consider what parts of the page should be made visible to anonymous vs logged-in users (this can be done with the ```*ngIf=""``` directive). As well as what permissions/roles this particular user has (admin, etc).
+                * We also need to consider what routes are available to the user in our client-side application. We use 'Route Guards' to protect certain routes of application from anonymous users.
+        * Server-side
+            * On the backend, we want to protect all or a subset of our API resources from unauthorised access. To access these protected API resources from the frontend, we provide the token under the ```Authorization``` property for the header of the request.
                 
 

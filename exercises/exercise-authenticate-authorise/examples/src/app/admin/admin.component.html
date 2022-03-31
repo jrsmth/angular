@@ -1,4 +1,16 @@
-<p>admin works!</p>
+<h2>Admin</h2>
+
+<br>
+<h3>Orders</h3>
+
+<br>
+<ul class="list-group">
+  <li 
+    *ngFor="let order of orders"
+    class="list-group-item">
+    {{ order }}
+  </li>
+</ul>
 
 <br>
 <button 
