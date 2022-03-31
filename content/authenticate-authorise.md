@@ -410,7 +410,6 @@
 * Accessing Protected API Resources
     * In the real-world, our server-side API's will be protected - just like the routes in our client-side application. This means that certain backend endpoints will be restricted to non-anonymous (logged-in) users, who have the correct level of access (role/permissions), so that maliscious users cannot access the API resources.
     * To call such protected API resources from the frontend, we must supply the token in the header of the request. The backend then verifies that we have the correct permissions and grants our request; else a ```401 Unauthorised``` status is returned.
-        * this and that...
     * example:
         ```html
             <!-- admin.component.html -->
@@ -477,6 +476,7 @@
             }
 
             // fake-backend-provider.ts
+            ...
             static mockOrdersHttpRequest(url: string, options: any){
                 console.log("mockOrdersHttpRequest: " + url);
 
