@@ -1,0 +1,22 @@
+<h2>Admin</h2>
+
+<br>
+<h3>Orders</h3>
+
+<br>
+<ul class="list-group">
+  <li 
+    *ngFor="let order of orders"
+    class="list-group-item">
+    {{ order }}
+  </li>
+</ul>
+
+<br>
+<button 
+    (click)="navigateHome()"
+    class="btn btn-primary">
+    <span
+        class="glyphicon glyphicon-home">
+    </span>
+</button>
