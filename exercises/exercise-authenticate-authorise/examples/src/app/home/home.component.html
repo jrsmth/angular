@@ -1,7 +1,9 @@
 <h1>Home Page</h1>
+<br>
 <p *ngIf="authService.isLoggedIn()">
   Welcome {{ authService.currentUser.name }}
 </p>
+<br>
 <ul class="list-group">
     <li
         *ngIf="authService.isLoggedIn() && authService.currentUser.admin"

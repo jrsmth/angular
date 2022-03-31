@@ -275,4 +275,137 @@
         ```
 * CanActive Interface
     * At the moment, there is a vulnerability in our application. On the 'home' page, before logging in, we do not display the link to the admin page on the screen but the user could still navigate there by going to ```/admin``` in the browser search bar.
-        * In Angular, we have the concept of 'Route Guards' - these are interfaces that we use to control accessibility to routes in our application.
+    * In Angular, we have the concept of 'Route Guards' - these are interfaces that we use to control accessibility to routes in our application. We can apply a Route Guard to any route to protect it from anonymous users.
+        * Implementing a route guard:
+            1. Create the ```AuthGuard``` service
+                * We can create an ```AuthGuard``` service by using ```ng g s services/auth-guard```
+                    * Remember to register it as a 'provider' in ```app.module.ts```.
+                * By convention, we manually rename this class to ```AuthGuard``` by dropping the ```*Service``` suffix.
+                * We then implement the ```CanActivate``` interface's ```canActivate()``` method - checking if the user is logged in or not; if so, we return true; else, we navigate the user back to the ```/login``` page and return false.
+            2. Apply the route guard to the desired route
+                * In ```app.module.ts```, we can set a route guard on a route using the ```canActivate:``` property of the objects that we supply to ```RouterModule.forRoot([])```.
+    * Note, we use Route Guards to protect our routes from anonymous users.
+        * So far in this example, we are not protecting the route based on roles. Therefore if the user is logged-in, but not an admin, the application is still vulnerable to them going to ```/admin``` in the browser - this will be fixed in the coming sections.
+    * example
+        ```typescript
+            // auth-guard.service.ts
+            export class AuthGuard implements CanActivate {
+
+                constructor(private router: Router, private authService: AuthService) { }
+
+                canActivate() {
+                    if (this.authService.isLoggedIn()) 
+                    return true;
+                    
+                    this.router.navigate(['/login']);
+                    return false;
+                }
+            }
+
+            // app.module.ts
+            ...
+            imports: [
+                ...,
+                RouterModule.forRoot([
+                { 
+                    path: '', 
+                    component: HomeComponent 
+                },
+                { 
+                    path: 'admin', 
+                    component: AdminComponent, 
+                    canActivate: [AuthGuard] 
+                },
+                ...
+                ])
+            ],
+            providers: [
+                AuthService,
+                AuthGuard
+            ],
+            ...
+        ```
+* Redirecting Users After Login
+    * At present, when an anonymous user tries to access the ```/admin``` page, they are redirected to ```/login```; if they successfully login, they are then taken to ```/``` ('home'). It is better for user experience to take the user back to the page they orignally tried to access - in this case, ```/admin```.
+    * We implement this functionality by suppling a ```returnUrl``` as a query parameter duing the Route Guard ```canActivate()``` navigation.
+    * We access this ```returnUrl``` in ```LoginComponent``` when we ```.signIn()```. If the login is successful and the ```returnUrl``` exists, we navigate to the path specified; else, we just navigate to ```/``` ('home') - as we did previously.
+    * example:
+        ```typescript
+            // auth-guard.service.ts
+            canActivate(state: ActivatedRouteSnapshot) {
+                if (this.authService.isLoggedIn()) 
+                    return true;
+                
+                this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }} );
+                return false;
+            }
+
+            // login.component.ts
+            ...
+            constructor(
+                private route: ActivatedRoute, ...) { }
+
+            signIn(credentials: any) {
+                this.authService.login(credentials)
+                .subscribe(result => { 
+                    if (result) {
+                        let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+                        this.router.navigate([returnUrl || '/']);
+                    } else {
+                        this.invalidLogin = true; 
+                    }
+                });
+            }
+            ...
+        ```
+* Protecting Routes Based On User Roles
+    * As previously discussed, the ```/admin``` route should only be accessible to user's with the 'admin' role.
+    * To implement this we create a specific Route Guard that checks if the user is an admin (based on their token). We then add this guard to the ```canActivate:``` property in the ```app.module.ts >> imports >> RootModule.forRoot([])``` array.
+        * We can apply muliple guards per route, which will be evaluated in sequence.
+        * ```ng g s services/admin-auth-guard```
+            * Remember to manually register this service as a 'provider' in ```app.module.ts```.
+    * example:
+        ```typescript
+            // admin-auth-guard.service.ts
+            export class AdminAuthGuard implements CanActivate {
+
+                constructor(private router: Router, private authService: AuthService) { }
+
+                canActivate() {
+                    let user = this.authService.currentUser;
+                    if (user && user.admin) return true;
+                    // we use 'user' as a condition to check if the value is not-null
+                        // if 'user' was null, 'user.admin' would break our application at runtime 
+
+                    this.router.navigate(['/no-access']);
+                    return false;
+                }
+            }
+
+            // app.module.ts
+            ...
+                imports: [
+                    ...,
+                    RouterModule.forRoot([
+                    { 
+                        path: '', 
+                        component: 
+                        HomeComponent 
+                    },
+                    { 
+                        path: 'admin', 
+                        component: AdminComponent, 
+                        canActivate: [AuthGuard, AdminAuthGuard] 
+                    },
+                    ...
+                    ])
+                ],
+                providers: [
+                    AuthService,
+                    AuthGuard,
+                    AdminAuthGuard
+                ],
+                ...
+        ```
+                
+
