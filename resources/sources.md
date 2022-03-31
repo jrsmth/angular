@@ -15,3 +15,4 @@
 * https://techfunda.com/howto/932/glyphicons-wait-icon
 * https://angular.io/guide/observables
 * https://jsonplaceholder.typicode.com/guide/
+* https://blog.angular-university.io/

@@ -67,9 +67,212 @@
 * Implementing Login
     * For this section, my example code can be found in ```../exercises/exercise-authenticate-authorise/examples```
         * Mosh' starter code did not work for me, so I had to build my own version.
-    * We implement login by having a ```.signIn()``` method in our ```LoginComponent```. This method calls a ```.login()``` method in our ```AuthService``` - this makes a HTTP request to the backend and gets a JWT in the response body if successful. We should handle this JWT in the ```AuthService``` and store it in ```localStorage.setItem()```. We should separate layers of concern by returning a simple ```true```/```false``` to the ```LoginComponent```, rather than passing along the response.
+    * We implement login by having a ```signIn()``` method in our ```LoginComponent``` (this is triggered by a ```(click)``` event in our template). This method calls a ```login()``` method in our ```AuthService``` - which makes a HTTP request to the backend and gets a JWT in the response body, if successful. We should handle this JWT in the ```AuthService``` and store it in ```localStorage.setItem()```. We should separate layers of concern by returning a simple ```true```/```false``` to the ```LoginComponent```, rather than passing along the response.
     * example
         ```html
+            <!-- login.component.html -->
+            <form 
+                class="form-signin" 
+                #form="ngForm" 
+                (ngSubmit)="signIn(form.value)">
+                ...
+                <input 
+                    type="email" 
+                    id="inputEmail" 
+                    name="email" 
+                    ngModel 
+                    class="form-control" 
+                    placeholder="Email address" 
+                    required 
+                    autofocus>
+                ...
+                <input 
+                    type="password" 
+                    id="inputPassword" 
+                    name="password" 
+                    ngModel 
+                    class="form-control" 
+                    placeholder="Password" 
+                    required>
+                ...
+                <button 
+                    class="btn btn-lg btn-primary btn-block" 
+                    type="submit">
+                    Sign in
+                </button>
+            </form>
         ```
         ```typescript
+            // login.component.ts
+            signIn(credentials: any) {
+                this.authService.login(credentials)
+                .subscribe(result => { 
+                    if (result)
+                    this.router.navigate(['/']);
+                    else  
+                    this.invalidLogin = true; 
+                });
+            }
+
+            // auth.service.ts
+            login(credentials: any) {
+                // return this.http.post('/api/authenticate', 
+                // JSON.stringify(credentials));
+
+                // Fake implementation of /api/authenticate
+                return FakeBackendProvider.mockAuthenticateHttpRequest('/api/authenticate',
+                JSON.stringify(credentials)).pipe( 
+                map(response => { // use map to convert response to simple truthy/falsy for component (separation of concern)
+                    console.log(response);
+                    if (response && response.body) {
+                    localStorage.setItem('token', response.body.token);
+                    return true;
+                    }
+                    return false;
+                }));
+            }
+
+            // fake-backend-provider.ts
+            private static token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDciLCJuYW1lIjoiSlJTbWlmZnkiLCJhZG1pbiI6dHJ1ZX0.CG6ky6D4OgwFHdEDRh_WkEKCsqE07a8uBsnG5FiEOUU';
+
+            static mockAuthenticateHttpRequest(url: string, body: any){
+                console.log("mockAuthenticateHttpRequest: " + url);
+
+                let credentials = JSON.parse(body);
+                let result: any;
+
+                if (credentials.email === 'james@smith.com' && credentials.password === 'joker') {
+                    result = {
+                        status: 200,
+                        body: {
+                            token: this.token
+                        }
+                    }
+                } else {
+                    result = {
+                        status: 400
+                    }
+                }
+
+                return of(result);
+            } 
         ```
+* Implementing Logout
+    * All that is required to log the user out is a removal of the token from ```localStorage``` and a redirect to the appropriate publicly accessible page (login, home, etc). In this example app, the 'home' page is publicly accessible and so we don't need a redirect here. 
+        * All we need is a 'logout' link element/button on the screen (```home.component.html```) with a ```(click)``` event. When this is raised, the ```authService.logout()``` method is called; here, we simply remove the token from local storage. Now the user is no longer logged-in.
+    * example
+        ```html
+            <!-- home.component.html -->
+            <h1>Home Page</h1>
+            <p>
+            Welcome [NAME]
+            </p>
+            <ul class="list-group">
+                <li class="list-group-item"><a routerLink="/admin">Admin</a></li>
+                <li class="list-group-item"><a routerLink="/login">Login</a></li>
+                <li class="list-group-item"><a (click)="authService.logout()">Logout</a></li>
+            </ul>
+        ```
+        ```typescript
+            // home.component.ts
+            export class HomeComponent {
+                constructor(private _authService: AuthService) { }
+
+                get authService() {
+                    return this._authService;
+                }
+            }
+
+            // auth.service.ts
+            ...
+            logout() { 
+                localStorage.removeItem('token');
+            }
+            ...
+        ```
+* Showing / Hiding Elements 
+    * To determine if a user is logged-in, we check to see if there is a token in ```localStorage``` that is valid - meaning that the token's expiration date is still valid.
+    * In ```auth.service.ts```, we have an ```isLoggedIn()``` method - here, we want to check the token exists in ```localStorage```; if so, we decode it and confirm that the expiration date is valid. If this is true, the user is logged-in; else they are not.
+        * We use the boolean value returned by ```isLoggedIn()``` in the ```HomeComponent``` template. By leveraging the ```*ngIf=""``` directive, we can show/hide elements based on this condition.
+    * To work with JWT's in Angular, we use the ```@auth0/angular-jwt``` library.
+        * https://www.npmjs.com/package/@auth0/angular-jwt
+        * ```npm i @auth0/angular-jwt --save```
+    * example
+        ```html
+            <!-- home.component.html -->
+            ...
+            <ul class="list-group">
+                <li
+                    *ngIf="authService.isLoggedIn()"
+                    class="list-group-item">
+                    <a routerLink="/admin">
+                    Admin
+                    </a>
+                </li>
+                <li 
+                    *ngIf="!authService.isLoggedIn()"
+                    class="list-group-item">
+                    <a routerLink="/login">
+                    Login
+                    </a>
+                </li>
+                <li 
+                    *ngIf="authService.isLoggedIn()"
+                    class="list-group-item">
+                    <a (click)="authService.logout()">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        ```
+        ```typescript
+            // auth.service.ts
+            isLoggedIn() { 
+                let jwtHelper = new JwtHelperService();
+                let token = localStorage.getItem('token');
+
+                if (!token)
+                return false;
+
+                let expirationDate = jwtHelper.getTokenExpirationDate(token);
+                let isExpired = jwtHelper.isTokenExpired(token);
+
+                console.log("expirationDate: " + expirationDate);
+                console.log("isExpired: " + isExpired);
+
+                return !isExpired;
+            }
+        ```
+* Showing / Hiding Elements Based On User Roles
+    * Perhaps we want to show the 'admin' link on the home page to users who have the 'admin' role only; hiding it for users that aren't admins. To do this we use the role property that we have included in our token payload.
+    * example
+        ```html
+        <!-- home.component.html -->
+        <ul class="list-group">
+            <li
+                *ngIf="authService.isLoggedIn() && authService.currentUser.admin"
+                class="list-group-item">
+                <a routerLink="/admin">
+                Admin
+                </a>
+            </li>
+            ...
+        </ul>
+        ```
+        ```typescript
+            // auth.service.ts
+            ...
+            get currentUser() {
+                let token = localStorage.getItem('token');
+                if (!token) return null;
+
+                let decodedToken = new JwtHelperService().decodeToken(token);
+                
+                console.log(decodedToken);
+                return decodedToken;
+            }
+            ...
+        ```
+* CanActive Interface
+    * At the moment, there is a vulnerability in our application. On the 'home' page, before logging in, we do not display the link to the admin page on the screen but the user could still navigate there by going to ```/admin``` in the browser search bar.
+        * In Angular, we have the concept of 'Route Guards' - these are interfaces that we use to control accessibility to routes in our application.

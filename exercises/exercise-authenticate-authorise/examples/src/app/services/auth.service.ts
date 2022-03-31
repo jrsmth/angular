@@ -2,6 +2,7 @@ import { FakeBackendProvider } from './../helpers/fake-backend-provider';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthService {
@@ -27,10 +28,33 @@ export class AuthService {
   }
 
   logout() { 
+    localStorage.removeItem('token');
   }
 
   isLoggedIn() { 
-    return false;
+    let jwtHelper = new JwtHelperService();
+    let token = localStorage.getItem('token');
+
+    if (!token)
+      return false;
+
+    let expirationDate = jwtHelper.getTokenExpirationDate(token);
+    let isExpired = jwtHelper.isTokenExpired(token);
+
+    console.log("expirationDate: " + expirationDate);
+    console.log("isExpired: " + isExpired);
+
+    return !isExpired;
+  }
+
+  get currentUser() {
+    let token = localStorage.getItem('token');
+    if (!token) return null;
+
+    let decodedToken = new JwtHelperService().decodeToken(token);
+    
+    console.log(decodedToken);
+    return decodedToken;
   }
 
 }

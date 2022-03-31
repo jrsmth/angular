@@ -16,7 +16,7 @@
 <br>
 
 ## Further Learning Ideas
-* Complete further Angular tutorials (Medium, YouTube, etc)
+* Complete further Angular tutorials ([blog.angular-university.io](https://blog.angular-university.io/), etc)
     * particularly on parts of the course that have changed:
         * rxjs, Observables, HTTP best practise
 * Get familiar with the Angular [docs](https://angular.io/docs)

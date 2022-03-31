@@ -1,1 +1,27 @@
-<p>home works!</p>
+<h1>Home Page</h1>
+<p *ngIf="authService.isLoggedIn()">
+  Welcome {{ authService.currentUser.name }}
+</p>
+<ul class="list-group">
+    <li
+        *ngIf="authService.isLoggedIn() && authService.currentUser.admin"
+        class="list-group-item">
+        <a routerLink="/admin">
+           Admin
+        </a>
+    </li>
+    <li 
+        *ngIf="!authService.isLoggedIn()"
+        class="list-group-item">
+        <a routerLink="/login">
+           Login
+        </a>
+    </li>
+    <li 
+        *ngIf="authService.isLoggedIn()"
+        class="list-group-item">
+        <a (click)="authService.logout()">
+            Logout
+        </a>
+    </li>
+</ul>
