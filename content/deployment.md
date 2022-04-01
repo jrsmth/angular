@@ -78,7 +78,7 @@
             };
         ```
         ```json
-            // angular.json
+            /* angular.json */
             "architect": {
                 "build": {
                 "builder": "...",
