@@ -40,6 +40,8 @@
             * see the example below
         * The Angular docs refer to the 'staging' environment file using ```environment.stage.ts``` - not 'environment.staging.ts'.
             * It appears the file names use shorthand, instead of the full environment name - like ```environment.prod.ts``` vs 'production'.
+        * When using a non-'development' environment, we lose 'hot-module-replacement' (HMR); therefore, if we make changes to our code, we have to manually restart the server.
+            * I think HMR has actually been implemented in non-'development' environments in more recent versions of Angular - it certainly worked when I tested it with ```-c production```.
     * example:
         ```html
             <!-- home.component.html -->
@@ -156,6 +158,33 @@
             ng serve -c production 
             ng build 
         ```
-* 
+* Linting with Angular CLI
+    * A Linter is a tool that performs a static analysis of your code to see if it breaks any of the rule that have been configured.
+        * This is done to ensure that code is clean and consistent; which is essential when working in a development team, where maintainability could be affected by contrasting programming styles.
+    * In Angular with use 'ESLint' (ECMAScript) to lint our code base - ESLint replaced TSLint a few years ago.
+        * ```ng add @angular-eslint/schematics```
+        * ```ng lint```
+            * note: there are VS Code linting plugins: the ESLint plugin seemed buggy to me (have a play around in the future).
+            * TSLint seemed better; ```--fix``` flag not present in ESLint? (for auto-correcting basic issues).
+    * We should lint our code before each pull request; it is a good habit to lint often (before each commit?).
+* Deployment Options
+    * Copy the ```/dist``` folder to a non-development machine and run ```ng serve```
+    * GitHub pages
+        * free web hosting, suitable if there is no backend; perhaps you consume public API's or a different team completely manages the backend for you separately and you simply consume the API.
+            * Steps.... DEPLOY GHP EXAMPLE
+    * Firebase
+        * Google-managed cloud service for building backends easily and quickly. Offers a database and a library to work with that database, so we don't have to write API's from scratch.
+    * Heroku / Cloud Foundry (PaaS, Platform as a Service)
+    * Docker / Kubernetes? - There are tutorials out there.
+
+    <br>
+    <img src="../resources/deploy_opt.png" width="500" alt="Deployment Options">
+
+    <br>
+
+* ...
+
+    
+
 
 

@@ -1,5 +1,5 @@
 export const environment = {
-    production: false,
-    textColor: 'green'
-  };
+  production: false,
+  textColor: 'green'
+};
   
