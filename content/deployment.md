@@ -35,10 +35,11 @@
     * Note:
         * ```ng build``` selects the 'production' environment by default
         * ```ng serve``` selects the 'development' environment by default
-        * To use a custom ```environment.<ENVIRONMENT_NAME>.ts``` file, you must register it in ```/angular.json```; this is under both the '```configuration```' (```ng build```) and '```serve```' (```ng serve```) sections.
-            * See the example below.
+        * To use a custom ```environment.<ENVIRONMENT_NAME>.ts``` file, you must register it in ```/angular.json```; this is under both the ```'configurations:'``` (```ng build```) and ```'serve:'``` (```ng serve```) sections.
+            * [useful article](https://www.freakyjolly.com/how-to-add-create-new-environments-in-angular-12-application/)
+            * see the example below
         * The Angular docs refer to the 'staging' environment file using ```environment.stage.ts``` - not 'environment.staging.ts'.
-            * It appears the file names use a shorthand of the full environment name - like ```environment.prod.ts``` vs 'production'.
+            * It appears the file names use shorthand, instead of the full environment name - like ```environment.prod.ts``` vs 'production'.
     * example:
         ```html
             <!-- home.component.html -->
@@ -64,18 +65,17 @@
                 textColor: 'blue'
             };
 
-            // environment.prod.ts
-            export const environment = {
-                production: true,
-                textColor: 'red'
-            };
-
             // environment.stage.ts
             export const environment = {
                 production: false,
                 textColor: 'green'
             };
 
+            // environment.prod.ts
+            export const environment = {
+                production: true,
+                textColor: 'red'
+            };
         ```
         ```json
             // angular.json
@@ -141,6 +141,19 @@
                 },
                 "defaultConfiguration": "development"
                 }
+        ```
+        ```bash
+            # environment.ts
+            ng serve 
+            ng build --configuration development
+
+            # environment.stage.ts
+            ng serve -c staging 
+            ng build -c staging 
+
+            # environment.prod.ts
+            ng serve -c production 
+            ng build 
         ```
 * 
 
