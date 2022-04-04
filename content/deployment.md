@@ -171,7 +171,15 @@
     * Copy the ```/dist``` folder to a non-development machine and run ```ng serve```
     * GitHub pages
         * free web hosting, suitable if there is no backend; perhaps you consume public API's or a different team completely manages the backend for you separately and you simply consume the API.
-            * Steps.... DEPLOY GHP EXAMPLE
+            * Note, the repo must be public for standard accounts; you may use a private repo if the account is 'PRO'.
+            * Steps
+                * create a new repo and clone to your development machine
+                * create a new app using ```ng``` cli
+                * ```ng add angular-cli-ghpages```
+                * ```ng deploy --base-href=/<REPOSITORY_NAME>/```
+                    * remember to include the trailing ```/``` after ```<REPOSITORY_NAME>```
+                    * see my example: https://github.com/JRSmiffy/angular-ghp-example
+                    * good tutorial: https://github.com/angular-schule/angular-cli-ghpages 
     * Firebase
         * Google-managed cloud service for building backends easily and quickly. Offers a database and a library to work with that database, so we don't have to write API's from scratch.
     * Heroku / Cloud Foundry (PaaS, Platform as a Service)
@@ -183,8 +191,3 @@
     <br>
 
 * ...
-
-    
-
-
-
