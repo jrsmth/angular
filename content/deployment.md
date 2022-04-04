@@ -212,7 +212,7 @@
 * We can create custom commands in ```package.json```, under the 'scripts' section.
     * example:
         ```json
-            ...
+            // package.json
             "scripts": {
                 "ng": "ng",
                 "start": "ng serve",
