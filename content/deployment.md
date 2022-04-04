@@ -172,7 +172,7 @@
     * GitHub pages
         * free web hosting, suitable if there is no backend; perhaps you consume public API's or a different team completely manages the backend for you separately and you simply consume the API.
             * Note, the repo must be public for standard accounts; you may use a private repo if the account is 'PRO'.
-            * Steps
+            * Steps:
                 * create a new repo and clone to your development machine
                 * create a new app using ```ng``` cli
                 * ```ng add angular-cli-ghpages```
@@ -182,7 +182,26 @@
                     * good tutorial: https://github.com/angular-schule/angular-cli-ghpages 
     * Firebase
         * Google-managed cloud service for building backends easily and quickly. Offers a database and a library to work with that database, so we don't have to write API's from scratch.
+        * Steps:
+            * Create a project at https://console.firebase.google.com/
+            * in your project folder, locally:
+                *  ```npm i -g firebase-tools```
+                * ```firebase login```
+                * ```firebase init```
+                    * I selected 'Hosting: Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys', using ```space-bar```
+                    * Then, I selected the project that I created on the firebase-console; selecting ```y``` on the 'Configure as a single-page app (rewrite all urls to /index.html)?' option and setting the 'public directory' as ```dist/examples```.
+                * ```ng build```
+                * ```firebase deploy```
+                    * gives us a 'Hosting URL'
+            * Good Stack Overflow [post](https://stackoverflow.com/questions/51842885/firebase-deploy-complete-but-website-not-shown)
     * Heroku / Cloud Foundry (PaaS, Platform as a Service)
+        * Mosh uses Heroku - I prefer Pivotal Cloud Foundry, as it is what I have used before.
+            * Notes for deploying to Heroku (consider that this approach may be deprecated - I skipped this exercise)
+                * install heroku cli
+                * move the ```typescript```, ```@angular/cli``` and ```@angular/compiler-cli``` dependencies from 'devDependencies' to 'dependencies' in ```package.json```.
+                * add a 'server.js' file that uses 'express' - I've included this in the ```/examples``` directory.
+                * in the 'scripts' sections of ```package.json```, add: ```"postinstall": "ng build"``` and replace ```"start": "ng serve``` with ```"start": "node server.js"```
+            
     * Docker / Kubernetes? - There are tutorials out there.
 
     <br>
@@ -190,4 +209,18 @@
 
     <br>
 
-* ...
+* We can create custom commands in ```package.json```, under the 'scripts' section.
+    * example:
+        ```json
+            ...
+            "scripts": {
+                "ng": "ng",
+                "start": "ng serve",
+                "build": "ng build",
+                "watch": "ng build --watch --configuration development",
+                "test": "ng test",
+                "lint": "ng lint",
+                "deploy:firebase": "ng build && firebase deploy"
+            }
+        ```
+        * run using: ```npm run deploy:firebase```
