@@ -184,4 +184,204 @@
                 * ```"void => *"```: ```:enter```
                 * ```"* => void"```: ```:leave```
 * Creating Reusable Triggers
-    * We can create a ```src/app/animations.ts``` file to define our animations so that we can access them globally across the application.
+    * We can create a ```src/app/animations.ts``` file to define our animations so that we can access them globally across the application. If we have lots of animations, we might consider creating a directory to store mutliple (```*.animations.ts```?) files.
+    * I would argue this is syntactically neater and probably is best practise, even when you don't need to reuse an animation mutliple times - it reduces noise in the component and separates concerns even further.
+    * example:
+        ```typescript
+            // src/app/animations.ts
+            export let fade = trigger('fade', [
+                state('void', style({ opacity: 0 })),
+                
+                // fade in
+                transition(":enter", [
+                animate(1000) 
+                ]),
+                // fade out
+                transition(":leave", [
+                animate(250) 
+                ])
+            ])
+
+            // todos.component.ts
+            import { fade } from '../animations';
+
+            @Component({
+                selector: 'todos',
+                templateUrl: './todos.component.html',
+                styleUrls: ['./todos.component.css'],
+                animations: [
+                    fade
+                ]
+            })
+        ```
+        * recap: creating a reusable component
+            1. import the ```BrowserAnimationsModule``` into ```app.module.ts```
+            2. define the trigger in ```animations.ts```
+            3. include the trigger in the ```animations``` field for the desired component
+            4. reference the trigger in the template
+* Easing
+    * In order to better represent the varying speed of real-world objects, we can use easing to accelerate and deceleration our animations. Easing improves the realism of our animations.
+    * When providing the period that we want to ```animate()```, instead of using a :number of miliseconds, we can supply a string in the form: ```"<PERIOD IN ms/s> <DELAY IN ms/s> <EASING>"```. The delay and easing are optional, only the period is required (as a string or a number).
+        * example: ```"500ms 1s ease-in"```
+        * there is a list of in-built easings:
+            * ```linear``` (default) - constant speed
+            * ```ease-in``` - starts slow, ends fast (used for moving OUT)
+            * ```ease-out``` - starts fast, ends slow (used for moving IN)
+            * ```ease-in-out``` - starts slow, ends slow
+            * ```cubic-bezier(x1, y1, x2, y2)``` - custom velocity graph based on the 2 coordinates you provide
+                * useful tool: https://cubic-bezier.com/
+    
+    <br>
+    <img src="../resources/easing_types.png" alt="Easing Types" width="500">
+
+    * note: the direction of travel (in/out) should be the opposite of (```ease-out/in```): when something 'moves out'; we should use ```ease-in``` - when something 'moves in', we should ```ease-out```.
+
+    <br>
+    <img src="../resources/cubic_bezier.png" alt="Cubic Bezier" width="500">
+
+    <br>
+
+* Keyframes
+    * We can define intermediate steps in our CSS animations by using Keyframes.
+        * See the [MDN docs](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes)
+    * There is a ```keyframes()``` function that we use in our 'trigger' and intakes an array of ```style()``` functions - one for each keyframe in our animation. Each of these ```style()``` functions needs an ```offset``` property to define its keyframe position.
+        * example:
+            ```typescript
+                // animations.ts
+                export let bounceInLeft = trigger('bounceInLeft', [
+                    transition(':enter', [
+                        animate('0.5s ease-out', keyframes([
+                            style({
+                                offset: .2,
+                                opacity: 0,
+                                transform: 'translateX(-100%)'
+                            }),
+                            style({
+                                offset: 0.8,
+                                opacity: 1,
+                                transform: 'translateX(20px)'
+                            })
+                        ]))
+                    ])
+                ]);
+            ```
+* Creating Reusable Animations with ```animation()```
+    * If you have complex animations, with multiple steps, that you wish to reuse across your application, we can call the ```animation()``` function to create such a reusable animation.
+        * We can then use that animation in our triggers, by using ```useAnimation(<ANIMATION_NAME>)```.
+        * Using this method, we can keep our triggers separated and therefore more reusable too; we can build custom animations by combining these together.
+        * example:
+            ```html
+                <!-- todos.component.html -->
+                <div *ngIf="items" class="list-group" >
+                    <button type="button"
+                        @todoAnimation
+                        ...>
+                        {{ item }}
+                    </button>
+                </div> 
+            ```
+            ```typescript
+                // todos.component.ts
+                @Component({
+                    ...
+                    animations: [
+                        trigger('todoAnimation', [
+                            transition(':enter', [
+                                style({ opacity: 0, backgroundColor: 'lightgreen' }),
+                                animate(1000)
+                            ]),
+                            transition(':leave', [
+                                style({ backgroundColor: 'crimson' }),
+                                animate(1000),
+                                useAnimation(bounceOutLeftAnimation)
+                            ])
+                        ])
+                    ]
+                })
+
+                // animations.ts
+                export let bounceOutLeftAnimation = animation(
+                    animate('0.5s ease-out', keyframes([
+                        style({
+                            offset: .2,
+                            opacity: 1,
+                            transform: 'translateX(20px)'
+                        }),
+                        style({
+                            offset: 1,
+                            opacity: 0,
+                            transform: 'translateX(-100%)'
+                        })
+                    ]))
+                );
+
+                export let slide = trigger('slide', [
+                    state('void', style({ transform: 'translateX(-10px)' })),
+                    
+                    // slide in
+                    transition(":enter", [
+                        style({ backgroundColor: 'lightgreen' }),
+                        animate("500ms cubic-bezier(.88,.34,.13,.7)")
+                    ]),
+                    // slide out
+                    transition(":leave",
+                        useAnimation(bounceOutLeftAnimation)
+                    )
+                ]);
+            ```
+            * recall, the ```animate()``` function is used to apply a bunch of styles over a period of time; the ```animation()``` function, which would be better described as 'createAnimation()', creates a resuable animation.
+* Parameterised Reusable Components
+    * When we define custom animation, using ```animation()```, we can parameterise the ```animate()``` values, provide default values in the ```animation()``` function and then override these in the component where we define the trigger.
+    * example:
+        ```typescript
+            // animations.ts
+            export let fadeInAnimation = animation([
+                style({ opacity: 0, backgroundColor: 'lightgreen' }),
+                animate('{{ duration }} {{ easing }}')
+            ], {
+                params: {
+                    duration: '2s',
+                    easing: 'ease-out'
+                }
+            })
+
+            export let fadeOutAnimation = animation([
+                style({ opacity: 1 }),
+                animate(500)
+            ])
+
+            export let fade = trigger('fade', [
+                transition(":enter", [
+                    seAnimation(fadeInAnimation)
+                ]),
+                transition(":leave", [
+                    useAnimation(fadeOutAnimation)
+                ])
+            ]);
+
+            // todos.component.ts
+            @Component({
+                selector: 'todos',
+                templateUrl: './todos.component.html',
+                styleUrls: ['./todos.component.css'],
+                animations: [
+                    // fade,
+                    // slide,
+                    trigger('todoAnimation', [
+                        transition(':enter', [
+                            useAnimation(fadeInAnimation, {
+                            params: {
+                                duration: '500ms'
+                            }
+                            })
+                        ]),
+                        transition(':leave', [
+                            style({ backgroundColor: 'crimson' }),
+                            animate(1000),
+                            useAnimation(bounceOutLeftAnimation)
+                        ])
+                    ])
+                ]
+            })
+        ```
+
