@@ -1,5 +1,5 @@
 import { bounceOutLeftAnimation, fadeInAnimation } from './../animations';
-import { transition, animate, style, trigger, useAnimation } from '@angular/animations';
+import { transition, animate, style, trigger, useAnimation, query } from '@angular/animations';
 import { Component } from '@angular/core';
 import { fade, slide } from '../animations';
 
@@ -10,6 +10,14 @@ import { fade, slide } from '../animations';
   animations: [
     // fade,
     // slide,
+    trigger('todosAnimation', [
+      transition(':enter', [
+        query('h1', [ // CSS selector (#id, .class, elem), or Psuedo-selector
+          style({ transform: 'translateY(-20px) '}),
+          animate(1000)
+        ]) 
+      ])
+    ]),
     trigger('todoAnimation', [
       transition(':enter', [
         useAnimation(fadeInAnimation, {
@@ -41,4 +49,13 @@ export class TodosComponent {
     let index = this.items.indexOf(item);
     this.items.splice(index, 1);
   }
+
+  animationStarted($event: any) {
+    console.log($event);
+  }
+
+  animationDone($event: any) {
+    console.log($event);
+  }
+
 }

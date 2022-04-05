@@ -384,4 +384,80 @@
                 ]
             })
         ```
+* Animation Callbacks
+    * These animations that we apply on our elements have a couple of callback functions that we can use to determine when a particular animation has started and when it has ended. 
+    * We utilise event binding in our template to handle the events raised by the DOM and pass them to methods in our component.
+    * example:
+        ```html
+            <!-- todos.component.html -->
+            <div *ngIf="items" class="list-group" >
+                <button type="button"
+                    @todoAnimation
+                    (@todoAnimation.start)="animationStarted($event)"
+                    (@todoAnimation.done)="animationDone($event)"
+                    ...>
+                    {{ item }}
+                </button>
+            </div> 
+        ```
+        ```typescript
+            // todos.component.ts
+            ...
+            animationStarted($event: any) {
+                console.log($event);
+            }
+
+            animationDone($event: any) {
+                console.log($event);
+            }
+            ...
+        ```
+* Querying Child Elements with ```query()```
+    * In our component, we may have several moving parts which are all part on the same logical animation. Perhaps on load, there are multiple elements that move into position in a myriad of ways.
+        * In order to implement this, it is best practise to define the animation at the component level and query individual child elements.
+            * To do this, we define a new trigger into our component that uses the ```query()``` function to select child elements in our DOM.
+                * ```query()``` takes, as its first argument, a string CSS selector (```.class```, ```#id```, ```elem```), or a Pseudo-selector:
+                    * ```query(":enter")```, ```query(":leave")``` - query a child element as it enters/leaves the DOM.
+                    * ```query(":animating")``` - query a child element that is undergoing an animation
+                    * ```query("@trigger")``` - query child elements with a certain trigger applied on them
+                    * ```query("@*")``` - query child elements with any trigger applied on them
+                    * ```query(":self")``` - reference to the entire container itself
+    * example:
+        ```html
+            <!-- todos.component.html -->
+            <div @todosAnimation>
+                <h1>Todos</h1>
+                <input #itemInput
+                    class="form-control"
+                    (keyup.enter)="addItem(itemInput)">
+
+                <div *ngIf="items" class="list-group" >
+                    <button type="button"
+                        @todoAnimation
+                        (@todoAnimation.start)="animationStarted($event)"
+                        (@todoAnimation.done)="animationDone($event)"
+                        ...
+                    </button>
+                </div> 
+            </div> 
+        ```
+        ```typescript
+            // todos.component.ts
+            @Component({
+                ...
+                animations: [
+                    trigger('todosAnimation', [
+                        transition(':enter', [
+                            query('h1', [ // CSS selector (#id, .class, elem), or Psuedo-selector
+                                style({ transform: 'translateY(-20px) '}),
+                                animate(1000)
+                            ]) 
+                        ])
+                    ]),
+                    trigger('todoAnimation', ...)
+                ]
+                })
+        ```
+        * Note, using this approach, as is, will break the existing fade in trigger for the todo list. That gets fixed with ```animateChild()```.
+* Animating Child Elements with ```animateChild()```
 
