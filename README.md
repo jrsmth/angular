@@ -13,7 +13,8 @@
 * [Routing and Navigation](./content/routing-navigation.md)
 * [Authentication and Authorisation](./content/authenticate-authorise.md)
 * [Deployment](./content/deployment.md)
-* [Building Apps with Firebase](./content/using-firebase.md)
+* ~~[Building Apps with Firebase](./content/using-firebase.md)~~
+* [Animations](animations.md)
 
 <br>
 
