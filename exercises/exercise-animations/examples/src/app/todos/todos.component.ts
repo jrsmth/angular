@@ -1,5 +1,5 @@
 import { bounceOutLeftAnimation, fadeInAnimation } from './../animations';
-import { transition, animate, style, trigger, useAnimation, query } from '@angular/animations';
+import { transition, animate, style, trigger, useAnimation, query, animateChild, group, stagger } from '@angular/animations';
 import { Component } from '@angular/core';
 import { fade, slide } from '../animations';
 
@@ -12,10 +12,14 @@ import { fade, slide } from '../animations';
     // slide,
     trigger('todosAnimation', [
       transition(':enter', [
-        query('h1', [ // CSS selector (#id, .class, elem), or Psuedo-selector
+        group([
+          query('h1', [ // CSS selector (#id, .class, elem), or Psuedo-selector
           style({ transform: 'translateY(-20px) '}),
-          animate(1000)
-        ]) 
+          animate(250)
+        ]),
+        query('@todoAnimation', 
+          stagger(200, animateChild())) 
+        ])
       ])
     ]),
     trigger('todoAnimation', [

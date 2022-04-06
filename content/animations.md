@@ -458,6 +458,246 @@
                 ]
                 })
         ```
-        * Note, using this approach, as is, will break the existing fade in trigger for the todo list. That gets fixed with ```animateChild()```.
 * Animating Child Elements with ```animateChild()```
+    * Note, using this approach above, as is, will break the existing fade-in trigger for the todo list. This is because both triggers rely on the ```:enter``` transition. In our template, we set ```@todosAnimation``` as a parental wrapper around ```@todoAnimation```; as a result the inner animation for ```@todoAnimation``` is not executed. We will fix that with ```animateChild()```.
+        * By calling ```animateChild()```, we tell Angular not to block the child animations.
+    * example:
+        ```typescript
+            // todos.component.ts
+            @Component({
+                ...
+                animations: [
+                    trigger('todosAnimation', [
+                        transition(':enter', [
+                            query('h1', [ 
+                                style({ transform: 'translateY(-20px) '}),
+                                animate(1000)
+                            ]),
+                            query('@todoAnimation', animateChild()) 
+                        ])
+                        ]),
+                    trigger('todoAnimation', [
+                        transition(':enter', [
+                            useAnimation(fadeInAnimation, {
+                            params: {
+                                duration: '500ms'
+                            }
+                            })
+                        ]),
+                        transition(':leave', [
+                            style({ backgroundColor: 'crimson' }),
+                            animate(1000),
+                            useAnimation(bounceOutLeftAnimation)
+                        ])
+                    ])
+                ]
+                })
+        ```
+* Run Parallel Animations with ```group()```
+    * Note, using this approach above, as is, runs the animation in sequence - i.e the heading is animated first and then the list items appear once this has finished. In order to get these to run in parallel, we need to use the ```group()``` function.
+    * example:
+        ```typescript
+            // todos.component.ts
+            @Component({
+                ...,
+                animations: [
+                    trigger('todosAnimation', [
+                    transition(':enter', [
+                        group([
+                            query('h1', [
+                                style({ transform: 'translateY(-20px) '}),
+                                animate(250)
+                            ]),
+                            query('@todoAnimation', animateChild()) 
+                        ])
+                    ])
+                    ]),
+                    trigger('todoAnimation', [
+                    transition(':enter', [
+                        useAnimation(fadeInAnimation, {
+                        params: {
+                            duration: '500ms'
+                        }
+                        })
+                    ]),
+                    transition(':leave', [
+                        style({ backgroundColor: 'crimson' }),
+                        animate(1000),
+                        useAnimation(bounceOutLeftAnimation)
+                    ])
+                    ])
+                ]
+            })
+        ```
+* Staggering Animations with ```stagger()```
+    * When animating mutliple objects togther, like items in a list, we can implement a 'curtain-effect' by staggering the start of each object's animation with the ```stagger()``` function; this can improve the look and feel of our animations.
+    * In the ```stagger()``` function, we supply the period we want to stagger and the animation that we want to execute.
+        * example:
+            ```typescript
+                stagger("0.1s", [
+                    style({ transform: 'translateX(-20px)' }),
+                    animate(1000)
+                ])
+            ```
+    * Using stagger is particularly good for image galleries, so we can curtain-fade each image in; also may be appropriate for other lists of objects.
+    * example:
+        ```html
+            <!-- todos.component.html -->
+            ...
+            <div *ngIf="items" class="list-group" >
+                <button type="button"
+                    @todoAnimation
+                    (@todoAnimation.start)="animationStarted($event)"
+                    (@todoAnimation.done)="animationDone($event)"
+                    *ngFor="let item of items"
+                    (click)="removeItem(item)"
+                    class="list-group-item">
+                    {{ item }}
+                </button>
+            </div> 
 
+        <!-- here we have a list of items that now fade in one by one -->
+            <!-- instead of all fading in at the same time, as a block -->
+        ```
+        ```typescript
+            // todos.component.ts
+            ...
+            trigger('todosAnimation', [
+                transition(':enter', [
+                    group([
+                        query('h1', [
+                            ...
+                        ]),
+                        query('@todoAnimation', 
+                            stagger(200, animateChild())) 
+                    ])
+                ])
+            ])
+    ...
+        ```
+* Working with Custom States
+    * It is likely that if you wish to animate an element that is always on the view, you'll need to define your own custom states. If so, you use the property binding syntax to set the value of the trigger in the template.
+    * example:
+        ```html
+            <!-- zippy.component.html -->
+            <div class="zippy">
+                <div 
+                    class="zippy-heading"
+                    [class.expanded]="isExpanded"
+                    (click)="toggle()">
+                    {{ title }}
+                    <span class="glyphicon"
+                    [ngClass]="{
+                        'glyphicon-chevron-up': isExpanded,
+                        'glyphicon-chevron-down': !isExpanded
+                    }"
+                    ></span>
+                </div>
+                <div 
+                    [@expandCollapse] = "isExpanded ? 'expanded' : 'collapsed'"
+                    class="zippy-body">
+                    <!-- [hidden]="!isExpanded" -->
+                    <!-- no longer need due to transition -->
+                    <ng-content></ng-content>
+                </div>
+            </div>
+        ```
+        ```typescript
+            // zippy.component.ts
+            @Component({
+                selector: 'zippy',
+                templateUrl: './zippy.component.html',
+                styleUrls: ['./zippy.component.css'],
+                animations: [
+                    trigger('expandCollapse', [
+                    state('collapsed', style({
+                        height: 0,
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        opacity: 0,
+                        backgroundColor: 'lightgreen',
+                        overflow: 'hidden'
+                    })),
+
+                    state('expanded', style({
+                        height: '*', // dynamically calculated at runtime
+                        padding: '*',
+                        opacity: 1,
+                        backgroundColor: 'white',
+                        overflow: 'auto'
+                    })), // these are not strictly necessary but highlight what is going on behind the scenes
+
+                    transition('collapsed => expanded', [
+                        animate('300ms ease-out')
+                    ]),
+
+                    transition('expanded => collapsed', [
+                        animate('300ms ease-in')
+                    ])
+                    ])
+                ]
+                })
+                export class ZippyComponent  {
+                @Input('title') title: string = '';
+                isExpanded: boolean = false;
+
+                toggle() { 
+                    this.isExpanded = !this.isExpanded;
+                }
+            }
+        ```
+* Multi-step Animations
+    * We can create smooth, multi-step animations by breaking our transitions into sequential parts.
+    * example:
+        ```typescript
+            // zippy.component.ts
+            @Component({
+                ...,
+                animations: [
+                    trigger('expandCollapse', [
+                        state('collapsed', style({
+                            height: 0,
+                            paddingTop: 0,
+                            paddingBottom: 0,
+                            opacity: 0,
+                            overflow: 'hidden'
+                        })),
+
+                        transition('collapsed => expanded', [
+                            animate('300ms ease-out', style({
+                            height: '*',
+                            paddingTop: '*',
+                            paddingBottom: '*',
+                            backgroundColor: 'white'
+                            })),
+                            animate('1s', style({ opacity: 1 }))
+                        ]),
+
+                        transition('expanded => collapsed', [
+                            animate('300ms ease-in')
+                        ])
+                    ])
+                ]
+            })
+        ```
+* Separation of Concerns
+    * As things stand in this example, we have violated the principle of 'Separation of Concerns'. In our ```zippy``` component, are distracted from the component implementation by all of the animation details.
+    * Like we did previously, we can define our animations in a globally accessible ```animations.ts``` file or we can keep them close to this component (if not to be reused) - in a ```/<COMPONENT>/<COMPONENT>.component.animations.ts``` file.
+    * example:
+        ```typescript
+            // zippy.component.animations.ts
+            export const expandCollapse = trigger('expandCollapse', [
+                state('collapsed', style({
+                    height: 0,
+                    ...
+                ... // trigger definition from before
+            ])
+
+            // zippy.component.ts
+            @Component({
+                selector: 'zippy',
+                templateUrl: './zippy.component.html',
+                styleUrls: ['./zippy.component.css'],
+                animations: [expandCollapse]
+            })
+        ```
