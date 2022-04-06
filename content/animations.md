@@ -573,7 +573,7 @@
                     ])
                 ])
             ])
-    ...
+            ...
         ```
 * Working with Custom States
     * It is likely that if you wish to animate an element that is always on the view, you'll need to define your own custom states. If so, you use the property binding syntax to set the value of the trigger in the template.
