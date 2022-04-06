@@ -15,6 +15,7 @@
 * [Deployment](./content/deployment.md)
 * [Building Apps with Firebase](./content/using-firebase.md)
 * [Animations](./content/animations.md)
+* [Angular Material 2](./content/angular_material2.md)
 
 <br>
 
