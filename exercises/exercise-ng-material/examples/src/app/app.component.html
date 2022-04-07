@@ -68,8 +68,39 @@
     <mat-label>Leave a comment</mat-label>
     <textarea 
       matInput 
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="2"
       placeholder="Ex. It makes me feel...">
     </textarea>
     <mat-hint>Tell us what you really think!</mat-hint>
   </mat-form-field>
+
+  <br>
+  <br>
+  <br>
+  <mat-form-field 
+    appearance="fill">
+    <mat-label>
+      Choose your birthdate
+    </mat-label>
+    <input 
+      (focus)="birthdate.open()"
+      matInput 
+      [min]="minDate"
+      [max]="maxDate"
+      [matDatepicker]="birthdate">
+    <mat-datepicker-toggle
+      matSuffix [for]="birthdate">
+    </mat-datepicker-toggle>
+    <mat-datepicker 
+      #birthdate
+      touchUi="true"> 
+    </mat-datepicker>
+  </mat-form-field>
 </form>
+
+<br>
+<br>
+<br>
+<mat-icon class="add-photo">add_a_photo</mat-icon>

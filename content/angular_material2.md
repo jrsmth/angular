@@ -104,6 +104,7 @@
         ```
 * Inputs
     * The class names 'form-group' and 'form-control' are conventions that we use with bootstrap/regular form building. We drop these when working with Angular Material inputs.
+        * inputs, textareas, date pickers, etc need to be wrapped in a ```<mat-form-field>``` element.
     * example:
         ```css
             /* app.component.css */
@@ -144,14 +145,80 @@
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Leave a comment</mat-label>
                     <textarea 
-                    matInput 
-                    placeholder="Ex. It makes me feel...">
+                        matInput 
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="2"
+                        placeholder="Ex. It makes me feel...">
                     </textarea>
                     <mat-hint>Tell us what you really think!</mat-hint>
                 </mat-form-field>
                 </form>
         ```
 * TextAreas
+    * see the 'Input' section above for an example
+        * note the use of the ```cdkTextareaAutosize``` directive; it auto-scales the textbox size, depending on the content.
+            * Also note that previously, Angular Materials followed a ```md-``` prefix naming convention - currently, it uses a ```mat-``` prefix.
+    * Another [example](https://stackblitz.com/angular/pbadbpbgyog?file=app%2Ftext-field-autosize-textarea-example.html)
+* Date Pickers
+    * At present, you also need to import ```MatNativeDateModule``` into ```app.module.ts```, alongside the standard date picker import - in order to work with native date objects in Angular.
+    * The ```touchUi="true"``` property on the ```<mat-datepicker>``` element improves the user experience on small devices, like mobile phones - I think its less effective (then the default setting) on regular browsers.
+    * We can restrict the valid dates for our input by adding property binding to our ```<input>``` element and binding the 'min' and 'max' properties to fields in our component typescript class.
+    * example:
+        ```typescript
+            // app.component.ts
+            ...
+            minDate = new Date(2017, 0, 1); // 1st Jan 2017
+            maxDate = new Date(2017, 8, 1); // 1st Sept 2017
+            ...
+        ```
+        ```html
+            <!-- app.component.html -->
+            ...
+            <mat-form-field 
+                appearance="fill">
+                <mat-label>
+                    Choose your birthdate
+                </mat-label>
+                <input 
+                    (focus)="birthdate.open()"
+                    matInput 
+                    [min]="minDate"
+                    [max]="maxDate"
+                    [matDatepicker]="birthdate">
+                <mat-datepicker-toggle
+                    matSuffix [for]="birthdate">
+                </mat-datepicker-toggle>
+                <mat-datepicker 
+                    #birthdate
+                    touchUi="true"> 
+                </mat-datepicker>
+            </mat-form-field>
+            </form>
+        ```
+* Icons
+    * Like with Bootstrap, in Angular Materials we can work with a set of professional icons:
+        * https://fonts.google.com/icons?selected=Material+Icons
+    * In order to use this Google fonts set of icons, we need to import the following stylesheet into our global ```styles.css``` file.
+        * ```@import "https://fonts.googleapis.com/icon?family=Material+Icons";```
+            * We then import the ```MatIconModule``` into ```app.module.ts```
+                * ```import {MatIconModule} from '@angular/material/icon'```
+    * To use a specific ```<ICON_NAME>```, we add the following to our template: 
+        * ```<mat-icon><ICON_NAME></mat-icon>```
+    * We can change the colour of an icon by using CSS or our own custom-theme.
+    * example:
+        ```css
+            /* app.component.css */
+            .add-photo {
+                color: cornflowerblue;
+            }
+        ```
+        ```html
+            <!-- app.component.html -->
+            <mat-icon class="add-photo">add_a_photo</mat-icon>            
+        ```
+* Buttons
+    * 
 
 
 <br>

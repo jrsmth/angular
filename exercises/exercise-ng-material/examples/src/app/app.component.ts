@@ -14,6 +14,8 @@ export class AppComponent {
     { id: 2, name: "Blue" }
   ];
   colourIdSelected = 1;
+  minDate = new Date(2017, 0, 1); // 1st Jan 2017
+  maxDate = new Date(2017, 8, 1); // 1st Sept 2017
 
   onColourChange(id: number) {
       this.colourIdSelected = id;

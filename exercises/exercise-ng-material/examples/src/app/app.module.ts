@@ -8,6 +8,10 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatSelectModule} from '@angular/material/select';
 import {MatInputModule} from '@angular/material/input';
+import {TextFieldModule} from '@angular/cdk/text-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import {MatIconModule} from '@angular/material/icon'
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import {MatInputModule} from '@angular/material/input';
     MatRadioModule,
     MatSelectModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    TextFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
