@@ -1,0 +1,75 @@
+<mat-checkbox
+  #showDetails
+  [checked]="isChecked"
+  (change)="onChange($event)">
+  Show details
+</mat-checkbox>
+<div 
+  *ngIf="showDetails.checked"> 
+  Some details... 
+</div>
+
+<br>
+<br>
+<br>
+<mat-radio-group aria-label="Select an option">
+  <mat-radio-button value="1">
+    Male
+  </mat-radio-button>
+  <mat-radio-button value="2">
+    Female
+  </mat-radio-button>
+</mat-radio-group>
+
+<br>
+<br>
+<br>
+<mat-form-field appearance="fill">
+  <mat-label
+    [style.color]="colours[colourIdSelected]">
+    Favorite colour
+  </mat-label>
+  <mat-select
+    [(ngModel)]="colourIdSelected">
+    <mat-option 
+      *ngFor="let colour of colours" 
+      [value]="colour.id">
+      {{ colour.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<br>
+<br>
+<br>
+<form class="example-form">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Favorite food</mat-label>
+    <input matInput placeholder="Ex. Pizza" value="Sushi">
+  </mat-form-field>
+
+  <mat-form-field class="" appearance="fill">
+    <input 
+      ngModel
+      #username="ngModel"
+      name="username"
+      matInput 
+      type="text" 
+      placeholder="username" 
+      required>
+    <span matPrefix>admin.</span>
+    <span matSuffix>@domain.co.uk</span>
+    <mat-error *ngIf="username.invalid && username.errors?.['required']"> 
+      The username is required
+    </mat-error>
+  </mat-form-field> <!-- showcase only, looks dodgey -->
+
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Leave a comment</mat-label>
+    <textarea 
+      matInput 
+      placeholder="Ex. It makes me feel...">
+    </textarea>
+    <mat-hint>Tell us what you really think!</mat-hint>
+  </mat-form-field>
+</form>
