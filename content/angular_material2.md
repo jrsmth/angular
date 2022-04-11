@@ -504,7 +504,7 @@
 
         ```
 * Themes
-    * A Theme is a collection of colour palletes that help to give our application a custom look and feel. 
+    * A Theme is a collection of colour palletes that help to give our application a custom look and feel. Angular Materials took an opinionated approach and defined a set of preselected colours and shades for us to choose from.
     * We can specify which of our predefined colours to apply to a given element by using ```primary```, ```accent``` or ```warn```.
     * Themes very useful when it comes to modifying the colour scheme of our UI - if we decide to change the 'primary' colour, we need only change it in one central place and then all instances where we have referenced ```color="primary"``` will be updated. 
     * There is a tool to help you choose custom theme colours:
@@ -543,18 +543,104 @@
                         }
                     }
                 ```
+        * With SCSS, we can define variables, so we can reuse values (like hexadecimal colour codes) in multiple places.
+        * SCSS also offers us 'mixins' - which are a collection of multiple attributes. This is useful when we have a few attributes common across multiple css selectors and so avoids duplication. 
+            * example:
+                ```scss
+                    /* theme.scss */
+                    @import "another.scss";
 
-<br>
-<br>
-<br>
+                    $primary: #2f6dc9;
 
+                    @mixin soft-border($border-radius) {
+                        border: 1px solid #ccc;
+                        border-radius: $border-radius;
+                        padding: 10px;
+                    }
 
+                    .box {
+                        @include soft-border(5px);
+                    }
+
+                    .box {
+                        @include soft-border(10px);
+                        color: $primary;
+                    }
+                ```
+    * Creating a Custom Theme
+        * First, we import the Angular Materials stylesheet into ```theme.scss``` - this comes with useful colour variables, mixins and other functions.
+        * We also ```@include mat-core();``` mixin to get the consistent look and feel of angular material components.
+        * Next, we defined our colour variables using a palet object generator function.
+        * Finally, we create our theme using the light/dark theme function and add this to the ```angular-material-theme``` mixin.
+            * Note, to change the background colour, we need to apply ```class="mat-app-background"``` to the ```<body>``` element in ```index.html```.
+         * example:
+            ```scss
+                // theme.scss
+                @import "~@angular/material/_theming";
+
+                @include mat-core();
+
+                $app-primary: mat-palette($mat-blue, 600);
+                $app-accent: mat-palette($mat-yellow, 700);
+                $app-warn: mat-palette($mat-red);
+
+                $app-theme: mat-dark-theme($app-primary, $app-accent, $app-warn);
+
+                @include angular-material-theme($app-theme);
+            ```
+            ```html
+                <!-- index.html -->
+                ...
+                <body class="mat-typography mat-app-background">
+                    <app-root></app-root>
+                </body>
+            ```
+* Angular Material Typography
+    * Angular Materials Typography gives us an easy way to define a consistently styled look and feel for the text across our application (colour, size, white-space, etc). 
+    * To make use of Angular Material Typography, we can use the [guide](https://material.angular.io/guide/typography) in the docs.
+        * Import the 'Roboto' type-face from Google fonts into global stylesheet (```styles.css```).
+        * Use one of the in-built CSS class names on a template element (```mat-*```).
+        * example:
+            ```html
+                <!-- app.component.html -->
+                <h1 class="mat-headline">Angular Materials</h1>
+                <p class="mat-body-1">...</p>
+            ```
+    * By using the ```mat-typography``` class in ```index.html```, we automatically apply the right Angular Material Typography class names to the corresponding elements. So can do away with the class names on individual elements.
+        * example:
+            ```html
+                <!-- index.html -->
+                ...
+                <body class="mat-typography mat-app-background">
+                    <app-root></app-root>
+                </body>
+
+                <!-- app.component.html -->
+                <h1>Angular Materials</h1>
+                <p>...</p>
+            ```
+* Customising Typography
+    * We can change the font in our application's theme by importing the font into ```styles.css``` and then defining a new typography in ```theme.scss```.
+        * With this, we can also configure the styles for each of the 'typography levels'; such as ```mat-title```, ```mat-body-1```, etc.
     * example:
-        ```typescript
-            // app.component.ts
+        ```scss
+            // styles.css
+            @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+            ...
 
-        ```
-        ```html
-            <!-- app.component.html -->
-            
+            // theme.scss
+            @import "~@angular/material/_theming";
+
+            @include mat-core();
+
+            // Define Custom Theme
+            ...
+
+            // Define Custom Typography
+            $app-typography: mat-typography-config(
+                $font-family: '"Open Sans", "Helvetica Neue", sans-serif',
+                $headline: mat-typography-level(48px, 32px, 800)
+            );
+
+            @include angular-material-typography($app-typography);
         ```

@@ -12,9 +12,9 @@ export class AppComponent {
   title = 'examples';
   isChecked = true;
   colours = [
-    { id: 0, name: "Red" },
-    { id: 1, name: "Green" },
-    { id: 2, name: "Blue" }
+    { id: 0, name: "LightPink" },
+    { id: 1, name: "LightGreen" },
+    { id: 2, name: "LightBlue" }
   ];
   colourIdSelected = 1;
   minDate = new Date(2017, 0, 1); // 1st Jan 2017
