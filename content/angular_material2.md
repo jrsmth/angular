@@ -453,7 +453,7 @@
         * Note, when we have a non-class/primitive type of constructor parameter (```num```, ```any```, etc.), we need to provide a custom injection token in the ```provider``` section of ```app.module.ts``` - without this you will see errors like: ```This type is not supported as injection token.```
             * We create a custom injection token for a constructor parameter by going to our component Typescript file and exporting a new constant ```InjectionToken('<PARAMETER_NAME>')``` - we also decorate the constructor parameter with ```Inject(PARAMETER_NAME)```, without speech marks. 
             * Next, we register this as a provider in our ```app.module.ts``` - under the providers section: ```{ provide: DIALOG_DATA, useValue: {} }```
-        * Mosh was having us on, you don't need to define a custom injection token, as Angular Materials provides one for you - called: ```MAT_DIALOG_DATA```.
+        * Mosh was having us on, you don't need to define a custom injection token, as Angular Materials provides one for you - called: ```MAT_DIALOG_DATA```. The process above details what is going on behind the scenes.
     * To cut a long story short:
         * We can pass data to a Dialog, by using the second parameter of the ```open()``` method of our ```dialog``` service object.
         * To receive that data in the trigger component, we need to define a parameter in the constructor and decorate it with ```Inject(MAT_DIALOG_DATA)```
@@ -477,6 +477,72 @@
             }
             ...
         ```
+* Creating a Reusable Module
+    * At present, our ```app.module.ts``` module has become very bloated with numerous Angular Material component imports. 
+    * We can make our ```app.module.ts``` more maintainbale and achieve better practise by spitting these imports out into a separate module and importing just that one module into ```app.module.ts```. 
+        * This is good practise as it follows the software engineering principle of 'Cohesion'. That is, related things should be kept together and unrelated things should be kept apart.
+    * We can generate a new module for this using the Angular CLI:
+        * ```ng g module mat-components```
+    * example:
+        ```typescript
+            // app.module.ts
+            ...
+            imports: [
+                ...,
+                MatComponentsModule
+            ],
+
+            // mat-components.module.ts
+            @NgModule({
+                exports: [
+                    MatCheckboxModule,
+                    MatRadioModule,
+                    ...
+                ]
+            })
+            export class MatComponentsModule { }
+
+        ```
+* Themes
+    * A Theme is a collection of colour palletes that help to give our application a custom look and feel. 
+    * We can specify which of our predefined colours to apply to a given element by using ```primary```, ```accent``` or ```warn```.
+    * Themes very useful when it comes to modifying the colour scheme of our UI - if we decide to change the 'primary' colour, we need only change it in one central place and then all instances where we have referenced ```color="primary"``` will be updated. 
+    * There is a tool to help you choose custom theme colours:
+        * https://material.io/design/color/the-color-system.html#tools-for-picking-colors
+    * SASS
+        * Syntactically Awesome Style Sheets (SASS) is a CSS-preprocessor that allows us to write CSS with added features and then converts these features into normal CSS for use in the browser.
+        * The relationship between SASS and CSS is similar to the relationship between TypeScript and JavaScript.
+        * We can define a ```theme.scss``` in the ```/src``` directory of our application.
+            * We also have to register this under the 'styles' section of ```angular.json```
+                ```json
+                    {
+                        "$schema": "...",
+                        "version": 1,
+                        "newProjectRoot": "projects",
+                        "projects": {
+                            "examples": {
+                            "projectType": "application",
+                            "schematics": {
+                                "..."
+                            },
+                            "root": "",
+                            "sourceRoot": "src",
+                            "prefix": "app",
+                            "architect": {
+                                "build": {
+                                "builder": "...",
+                                "options": {
+                                    "..." : "...",
+                                    "styles": [
+                                        "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                                        "src/styles.css",
+                                        "src/theme.scss"
+                                    ],
+                                }
+                            }
+                        }
+                    }
+                ```
 
 <br>
 <br>
