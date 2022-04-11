@@ -104,3 +104,93 @@
 <br>
 <br>
 <mat-icon class="add-photo">add_a_photo</mat-icon>
+
+<br>
+<br>
+<br>
+<button mat-button>Basic Button</button>
+<button mat-raised-button color="primary">Raised Primary</button>
+<button mat-stroked-button color="accent">Stroked Accent</button>
+<button mat-flat-button color="warn">Flat Warn</button>
+<button mat-fab color="primary"><mat-icon>check</mat-icon></button>
+
+<br>
+<br>
+<br>
+<mat-chip-list>
+  <mat-chip 
+    selected="true" 
+    color="accent">
+    One
+  </mat-chip>
+  <mat-chip>
+    Two
+  </mat-chip>
+</mat-chip-list>
+<br>
+<mat-chip-list>
+  <mat-chip 
+    *ngFor="let course of courses"
+    (click)="selectCategory(course)"
+    [selected]="course.selected"
+    id="courses-chip-{{course.id}}">
+    {{ course.name }}
+  </mat-chip>
+</mat-chip-list>
+
+<br>
+<br>
+<br>
+<mat-progress-spinner 
+  mode="determinate" 
+  [value]="progress">
+</mat-progress-spinner>
+<mat-progress-spinner 
+  *ngIf="isLoading"
+  mode="indeterminate">
+</mat-progress-spinner>
+<br><br>
+<button 
+  mat-fab 
+  color="primary" 
+  matTooltip="Click to restart spinners"
+  matTooltipPosition="right"
+  (click)="restartTimer()">
+  <mat-icon>restart_alt</mat-icon>
+</button>
+
+<br>
+<br>
+<br>
+<mat-tab-group
+  animationDuration="0ms">
+  <mat-tab 
+    class="admin"
+    label="Billing">
+    <div class="admin-body">
+      Billing Tab Content
+    </div>
+  </mat-tab>
+  <mat-tab 
+    class="admin"
+    label="Shipping">
+    <div class="admin-body">
+      Shipping Tab Content
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<br>
+<br>
+<br>
+<button
+  (click)="openDialog()"
+  mat-raised-button>
+  Open Dialog
+</button>
+
+
+
+<br>
+<br>
+<br>

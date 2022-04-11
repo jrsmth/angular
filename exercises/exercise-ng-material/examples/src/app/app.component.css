@@ -16,3 +16,11 @@
 .add-photo {
   color: cornflowerblue;
 }
+
+button {
+  margin: 5px;
+}
+
+.admin-body {
+  padding: 20px;
+}

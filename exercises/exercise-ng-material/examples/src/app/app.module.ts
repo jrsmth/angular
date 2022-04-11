@@ -11,11 +11,22 @@ import {MatInputModule} from '@angular/material/input';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatIconModule} from '@angular/material/icon'
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatDialogModule} from '@angular/material/dialog';
+import { EditCourseComponent } from './edit-course/edit-course.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    EditCourseComponent
+  ],
+  entryComponents: [
+    EditCourseComponent
   ],
   imports: [
     BrowserModule,
@@ -28,9 +39,17 @@ import {MatIconModule} from '@angular/material/icon'
     TextFieldModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatTabsModule,
+    MatDialogModule
   ],
-  providers: [],
+  providers: [
+    // { provide: DIALOG_DATA, useValue: {} }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
