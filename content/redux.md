@@ -18,9 +18,12 @@
         * Great tooling - especially debugging.
         * Undo / redo features.
     * When to use Redux:
-        * Independent copies of the same data in multiple places
-        * Multiple views that need to work with the same data and be in-sync
-        * The same data can be updated by multiple users / actions
+        * Scenarios:
+            * Independent copies of the same data in multiple places
+            * Multiple views that need to work with the same data and be in-sync
+            * The same data can be updated by multiple users / actions
+        * According to [this](https://www.stackchief.com/blog/Why%20you%20should%20NEVER%20use%20Redux%20with%20Angular) article, you should avoid using Redux with Angular. This is because it was design to solve problems in React and Angular doesn't need it. 
+            * According to [this](https://blog.angular-university.io/angular-2-redux-ngrx-rxjs/) Angular University blog, Redux is good to use with Angular.
 * Building Blocks of Redux
     * There are three building blocks of Redux
         * Store
@@ -66,11 +69,112 @@
 * Installing Redux
     * My examples for this section can be found in ```../exercises/exercise-redux/examples```
     * Useful resources:
-        * [GitHub install guide](https://github.com/reduxjs/redux)
-        * [Docs](https://redux.js.org/)
+        * https://ngrx.io/guide/store
+
+        <br>
+
+        <img src="../resources/ngrx_lifecyle.png" alt="NGRX Lifecycle" width="500">
+        
+        <br>
+
     * Steps
         * Create an Angular app
             * ```ng new <APP_NAME>```
         * Install Redux
-            * ```npm install @reduxjs/toolkit react-redux```
-        * Create a ```store.ts``` file in ```/src/app```
+            * ```npm install @ngrx/store --save```
+* Working with Actions
+    * When using Redux, we don't modify the state of our application in the component. 
+        * Instead we use an Action, which goes to the Store. The Store knows the right Reducer to call; in the Reducer a new state is returned, depending on the type of the Action. The Store uses this new state to update itself.
+
+    <br>
+
+    <img src="../resources/redux_dataflow.png" alt="Redux Dataflow" width="500">
+    
+    <br>
+
+    * To make a change to the state of our app from our component, we inject a ```Store``` object into our component constructor. This ```Store``` object takes in the an interface for our store object - we can define this in ```store.ts```.
+    * We dispatch Actions from methods on our component by using ```store.dispatch(<METHOD_CALL()>)```; with the ```<METHOD_CALL()>``` being defined in our ```*.actions.ts``` file - from here these Actions are used in the ```*.reducer.ts``` file to return a new state.
+        * I used [this](https://ngrx.io/guide/store) guide as my example
+    * example:
+
+        ```html
+            <!-- counter.component.html -->
+            <p>Current Count: {{ count$ | async }}</p>
+            <button 
+                (click)="increment()"
+                mat-raised-button color="primary">
+                Increment
+            </button>
+            <button 
+                (click)="decrement()"
+                mat-raised-button color="accent">
+                Decrement
+            </button>
+            <button 
+                (click)="reset()"
+                mat-raised-button color="warn">
+                Reset
+            </button>
+        ```
+        ```typescript
+            // counter.component.ts
+            ...
+            export class CounterComponent {
+
+                count$: Observable<number>;
+                
+                constructor(private store: Store<IAppState>) {
+                    // Connect `this.count$` stream to the current store `count` state
+                    this.count$ = store.select('count');
+                }
+
+                increment() {
+                    // Dispatch an increment action
+                    this.store.dispatch(increment());
+
+                    // this.counter++; // typical Angular, without using Redux
+                }
+
+                decrement() {
+                    // Dispatch an decrement action
+                    this.store.dispatch(decrement());
+                }
+                
+                reset() {
+                    // Dispatch a reset action
+                    this.store.dispatch(reset());
+                }
+            }
+
+            // counter.actions.ts
+            export const initialState = 0;
+
+            export const counterReducer = createReducer(
+                initialState,
+                on(increment, (state) => state + 1),
+                on(decrement, (state) => state - 1),
+                on(reset, (state) => 0)
+            );
+
+            // counter.reducer.ts
+            export const increment = createAction('[Counter Component] Increment');
+            export const decrement = createAction('[Counter Component] Decrement');
+            export const reset = createAction('[Counter Component] Reset');
+
+            // app.module.ts
+            @NgModule({
+                ...,
+                imports: [
+                    ...,
+                    StoreModule.forRoot({ count: counterReducer }),
+                ],
+                ...
+            })
+            export class AppModule { }
+
+            // store.ts
+            export interface IAppState {
+                count: number
+            }
+        ```
+* 
