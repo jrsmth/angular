@@ -100,6 +100,8 @@
         ```html
             <!-- counter.component.html -->
             <p>Current Count: {{ count$ | async }}</p>
+            <!-- The 'async' pipe unwraps the Observable for us --> 
+            <!-- Therefore we don't have to explicitly unsubscribe from the Observable, so its easy to avoid memory leaks -->
             <button 
                 (click)="increment()"
                 mat-raised-button color="primary">
@@ -146,17 +148,15 @@
                 }
             }
 
-            // counter.actions.ts
-            export const initialState = 0;
-
+            // counter.reducer.ts
             export const counterReducer = createReducer(
-                initialState,
+                INITIAL_STATE.count,
                 on(increment, (state) => state + 1),
                 on(decrement, (state) => state - 1),
                 on(reset, (state) => 0)
             );
 
-            // counter.reducer.ts
+            // counter.actions.ts
             export const increment = createAction('[Counter Component] Increment');
             export const decrement = createAction('[Counter Component] Decrement');
             export const reset = createAction('[Counter Component] Reset');
@@ -176,5 +176,31 @@
             export interface IAppState {
                 count: number
             }
+
+            export const INITIAL_STATE: IAppState = {
+                count: 0
+            }
         ```
-* 
+* The select() Method
+    * Using ```store.select()``` in our component constructor allows us to access a slice of our store, as an Observable, rather than the whole store itself.
+    * Detailed Stack Overflow [explanation](https://stackoverflow.com/questions/38921239/what-is-store-select-in-ngrx)
+        * " ```select()``` gives you back a slice of data from the application state wrapped into an Observable. "
+* Avoiding State Mutation
+    * We want to ensure that our reducers do not inadvertently mutate the application state in undesired ways. We have a few options to do this:
+        * Using Object.assign()
+            * JavaScript's native ```Object.assign()``` method is used to combine multiple objects into one larger one.
+                * Using ```Object.assign({}, state, { state.counter += 1 })```, we combine our original ```state``` object with the changes in the 3rd argument. 
+                * The only issue with using this approach in our reducer, is that we can introduce properties into state that are not part of the ```IAppState``` that defines our state properties. 
+                    * A type-safe version of ```Object.assign()``` was introduced to solve this issue.
+                        * Install: ```npm i tassign```
+                        * Use: ```tassign(state, { counter: state.counter + 1 })```
+            * It appears the situation above relates to the ```ng2-redux``` library; I don't think this applies to the ```ngrx``` library - at least, I cannot see references in the docs.
+                * Stack Overflow [post](https://stackoverflow.com/questions/49757549/ngrx-store-reducer-payload-validation-protection) on ```ngrx``` and ```tassign```.
+        * Using Unit Tests (2 per Action)
+            * For each Action, we need two tests - one to ensure that the source state is not modified and one to ensure that new properties haven't made their way into the new state.
+        * Using Immutable Objects (Immutable.js)
+            * ```npm install immutable```
+            * Stack Overflow [post](https://stackoverflow.com/questions/50521098/ngrx-with-immutable-js) on ```ngrx``` and ```Immutable.js```.
+            * Mosh doesn't like this approach and neither do I.
+* Exercise
+    * There is an exercise set by Mosh to build a Redux-based todo list and dashboard. 

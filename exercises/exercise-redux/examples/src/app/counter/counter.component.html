@@ -1,5 +1,7 @@
 <br>
 <p>Current Count: {{ count$ | async }}</p>
+<!-- The 'async' pipe unwraps the Observable for us --> 
+<!-- Therefore we don't have to explicitly unsubscribe from the Observable, so its easy to avoid memory leaks -->
 
 <br>
 <button 
