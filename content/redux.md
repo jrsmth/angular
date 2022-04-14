@@ -236,6 +236,31 @@ Build dreevo's app too? separate example?
 
 Another image^
 
+Dreevo's intro:
+* Typically in Angular, we manage data in our components and service; however, as the number of features grows, so do the services and components. Eventually, data becomes spread out everywhere across our application, which becomes hard to maintain. This is why we implement Redux - to get predictable state management for our application. Whilst it is still possible to have a single source of truth for data in a complex application without NGRX, it is very hard to maintain and makes the development process slow.
+    * In NGRX, app data is held in a central Store and this then flows into components via Selectors and out of components via Actions, Reducers and Effects.
+        * The Store is a single, large JS object that holds state. 
+        * An Action is also a JS object with an identifier for the type of Action, as well as an optional payload. 
+        * A Reducer is a JS function that takes in the current state object and an action object, then returns a new modified state for the Store - in an immutable way, without modifying the current state object directly. A Reducer is a Pure Function and must immeadiately update the state using data from the Action; it cannot request data from a service.
+        * To make a backend request we use an Effect, which is also a JS function that receives dispatched Action from components. Instead of updating the Store in an immutable way, we can fetch data from the service layer and then dispatch a new Action that talks to a Reducer - which in turn, updates the Store with data from the backend.
+        * Selectors are functions that we call to return a specific slice of the state - so we can work with it in our component.
+
+Dreevo's example is in ```../exercises/exericse-redux-guitarfy/guitarfyjs```
+* ```ng new <APP-NAME>```
+* ```npm i @ngrx/store @ngrx/effects```
+* set up node app
+    * ```mkdir <APP-NAME>```
+    * ```npm i express```
+    * ```node server```
+
+
+
+maybe don't build Dreevo's, just copy the full source and run it.
+no need to watch the vids again, just reference in notes and make sure it forms the base of mosh's example and J3.
+
+
+
+
 Dreevo's example: 1 reducer
 Have two reducers in Mosh examples
 
@@ -282,6 +307,7 @@ https://www.youtube.com/watch?v=kx0VTgTtSBg
 * In our Reducer, we use an ```on()``` function for each Action, that takes in the current state and optional payload from the Action, and then return a new state that is used to update the Store.
     * We use the 'spread' operator ```...``` to return a new copy of the state, so that we are not modifying the orignal version.
         * Spread Operators [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+        * The ```...``` Spread operator is used to clone an iterable object, amongst other things - good [reference](https://www.javascripttutorial.net/es6/javascript-spread/).
 * In our components, we can inject a ```Store``` object into our constructor. Then we can use this ```Store``` object to dispatch actions and also to select slices of the state pull in the data that we want to use.
     * To do this, we use ```this.store.select(<SELECTOR_FUNCTION>)``` method to return a stream of data from our Store - whenever the state gets updated, this stream in our component is also updated. We don't have to worry about processing an Observable here, if we use the ```async``` pipe in our template.
         * The ```<SELECTOR_FUNCTION>``` is defined in our selectors file using the ```createSelector()``` method and details which parts of the state we wish to retrieve from the Store.
@@ -314,3 +340,6 @@ POMO discipline
 J3 - see Josh Morony's example for using side effects and making backend calls (ESSENTIAL for J3). Make J3 NGRX a combination of Josh M's and Dreevo's. Rewatch Josh M's vid again to understand his code (essential).
 
 Potential future upskill - rewrite tyche and delaunay triangulation better.
+
+
+Buy the lake art on Tuesday from the BTC.

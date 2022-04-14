@@ -1,0 +1,11 @@
+<main>
+  <section class="banners">
+    <div *ngFor="let index of bannersIndex">
+      <img [src]="'/assets/images/banner' + index + '.jpg'" alt="banner" />
+    </div>
+  </section>
+  <!-- guitars list section -->
+  <section>
+    <app-guitars-list [guitars]="items"></app-guitars-list>
+  </section>
+</main>
