@@ -225,7 +225,7 @@ npm i @ngrx/store-devtools...
 	* Exercise proper
 	* Document proper (make it detailed and consistent)
 
-
+When I redo mosh's example, I should use a combo of both Josh M and Dreevo.
 
 MUST GET REDUX FINISHED PROPERLY BY EO-THU.
 
@@ -275,19 +275,42 @@ https://www.youtube.com/watch?v=kx0VTgTtSBg
         * Like a Reducer, an Effect can listen out for all Actions dispatched from components. However, unlike a Reducer, an Effect can have side effects - such as calling a method in a service to make a backend request for data.
         * When the data is received by the Effect, a new Action is dispatched to the Reducer, now that we have all of the data on-hand to update the Store.
 
+* You create an action using the ```createAction(<ACTION_NAME>, props{})``` method; where ```<ACTION_NAME>``` is a string that takes the form:
+    * ```[Feature/Entity/Source of Action] Action Name```.
+        * This is an optional best practise convention that makes things easier to debug and maintain, especially when we have multiple features with similar actions.
+    * The ```props`` parameter contains an optional payload that we can use in our Reducer to modify state.
+* In our Reducer, we use an ```on()``` function for each Action, that takes in the current state and optional payload from the Action, and then return a new state that is used to update the Store.
+    * We use the 'spread' operator ```...``` to return a new copy of the state, so that we are not modifying the orignal version.
+        * Spread Operators [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)
+* In our components, we can inject a ```Store``` object into our constructor. Then we can use this ```Store``` object to dispatch actions and also to select slices of the state pull in the data that we want to use.
+    * To do this, we use ```this.store.select(<SELECTOR_FUNCTION>)``` method to return a stream of data from our Store - whenever the state gets updated, this stream in our component is also updated. We don't have to worry about processing an Observable here, if we use the ```async``` pipe in our template.
+        * The ```<SELECTOR_FUNCTION>``` is defined in our selectors file using the ```createSelector()``` method and details which parts of the state we wish to retrieve from the Store.
+* Alongside our Reducer, we have an Effects listening for Actions being dispatched. Once we determine which type of Action has been dispatched we can call our service layer, get the data and dispatch a new Action to the Reducer to update the Store.
 
 
+<br>
 There are different ways of organising our NGRX/Redux code in our app - see article (like by /state or per feature) - Josh's Todo example uses /state.
 * See ```../exercises/exercise-redux-todos/ngrx-ionic-example``` for Josh M's Todo example.
 
 
+With Ng2-redux we had to manually worry about immutability of state, how do we handle this in our reducers, for NGRX?
+
+
+<br>
 // TODO by EOD
-* watch Josh M's vid - don't build just save... and make notes
 * rewatch dreevo's into and make notes
 * build dreevo's app (new example)
 * rebuild mosh's app (two reducers)
-refactor documentation of this redux page 
-clean up this redux page
+* refactor documentation of this redux page 
+* clean up this redux page (inc transfer J3 notes to notes.md)
 * finish Mosh's lectures on redux
+* sort out securtiy vuln on the angular repo
+* time sheet for week
 
 POMO discipline
+
+
+
+J3 - see Josh Morony's example for using side effects and making backend calls (ESSENTIAL for J3). Make J3 NGRX a combination of Josh M's and Dreevo's. Rewatch Josh M's vid again to understand his code (essential).
+
+Potential future upskill - rewrite tyche and delaunay triangulation better.
