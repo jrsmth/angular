@@ -203,4 +203,91 @@
             * Stack Overflow [post](https://stackoverflow.com/questions/50521098/ngrx-with-immutable-js) on ```ngrx``` and ```Immutable.js```.
             * Mosh doesn't like this approach and neither do I.
 * Exercise
-    * There is an exercise set by Mosh to build a Redux-based todo list and dashboard. 
+    * There is an exercise set by Mosh to build a Redux-based todo list and dashboard. I have added it to the example in ```../exercises/exercise-redux/examples```
+    * Notes
+        * Remember: to use a service you need to register it in the ```providers``` section of ```app.module.ts```
+        * Remember: to use ```[(ngModel)]=""``` two-way binding on an input field, you need to import ```FormsModule``` into ```app.module.ts```
+        * An [article](https://www.pluralsight.com/guides/how-to-organize-your-react-+-redux-codebase) comparing different ways of organising your Angular & Redux codebase.
+            * For this exercise, I chose to use the 'View-State' split and store my Redux-code in ```/src/app/state```.
+
+
+
+It takes as long as it f*cking takes
+
+* learn about NGRX, finish the exercise, made all code consistent, made Redux notes consistent, finish the section
+* move on to unit testing.
+
+npm i @ngrx/store-devtools...
+
+
+* Thursday 14th: FINISH REDUX
+	* Learn proper
+	* Exercise proper
+	* Document proper (make it detailed and consistent)
+
+
+
+MUST GET REDUX FINISHED PROPERLY BY EO-THU.
+
+
+https://www.youtube.com/watch?v=VIje9vLlQ3c
+NGRX image - plus rewatch vid^ again to document concepts
+Build dreevo's app too? separate example?
+
+Another image^
+
+Dreevo's example: 1 reducer
+Have two reducers in Mosh examples
+
+
+Should I use NGRX as practise in J3 - yes.
+* Keep Node JS and microservice architecture.
+Frontend - angular
+Userservice - spring
+BoardService - spring
+TodoService - node JS
+Database - MySQL
+Eureka - spring
+Zuul - spring
+
+Eureka, Zuul - Angular talks to Zuul, which talks to Eureka
+* https://stackoverflow.com/questions/47077380/spring-cloud-services-eureka
+
+Use of BEM: http://getbem.com/introduction/
+
+Go through all of Dreevo's videos (JWT, Spring, Angular) and implement it all for J3. There is gold in his channel, absorb all his tutorials.
+
+Holidays: 1 week off in June (last week, final push on SPRING UPSKILL) - 100% focused on completing J3?
+
+
+State in Redux is Immutable? Is it? Why? Does this mean that we always create a new state and replace the old state, rather than modifying the original one directly?
+
+
+https://www.youtube.com/watch?v=kx0VTgTtSBg
+> THIS explains the diagram on the NGRX docs
+* When using NGRX properly, our components do not have to worry about how to manage the state of our application when 'something' happens. They don't need to know which services to inject or methods to call to update the state - they simply dispatch an Action to indicate that something happened.
+    * For example, if a delete button is clicked, the component dispatches an action to signal 'the delete button was clicked', it doesn't worry about actually deleting that item from state.
+    * It is the responsibilty of Reducers to detect which action was dispatched and to modify the state accordingly. We can pass an optional payload, alongside our Actions, that the Reducers can use to create a new state.
+        * We have a Reducer for each feature/entity in our application: such as a separate Reducer for Auth, Todos, Articles, etc. 
+    * Reducers takes the current state from the Store, and replace it with a new modified state. The Store is a single JSON object that holds all of the state, globally across our application.
+    * When a component wants to use some of the state from the Store, it uses a Selector to pull in only the slice of state that it requires.
+    * Reducers, the functions that take in an action and create a new state, are Pure Functions - this means that the output should always be the same, for the a given input; also that it should have no side effects, i.e it should not change anything anywhere else in the app. When an Action is dispatched, it needs to be immeadiately handled by the Reducer and the state will be changed using only the data that is immeadiately available to that Action - therefore when we dispacth an Action from our component, we need to give it all of the data that the Reducer needs to immeadiately create a new state. We can't make an async call to a server and then update the state using this data, as it violates the Pure Function condition. This is okay for simple tasks, like incrementing a value on button click or removing a todo from a locally-held list, because we have all the data on-hand to send to the Reducer, in order to modify the store; but it is not good enough when we want to load data into the application and add it to the store. This is where Effects come into play.
+        * Like a Reducer, an Effect can listen out for all Actions dispatched from components. However, unlike a Reducer, an Effect can have side effects - such as calling a method in a service to make a backend request for data.
+        * When the data is received by the Effect, a new Action is dispatched to the Reducer, now that we have all of the data on-hand to update the Store.
+
+
+
+There are different ways of organising our NGRX/Redux code in our app - see article (like by /state or per feature) - Josh's Todo example uses /state.
+* See ```../exercises/exercise-redux-todos/ngrx-ionic-example``` for Josh M's Todo example.
+
+
+// TODO by EOD
+* watch Josh M's vid - don't build just save... and make notes
+* rewatch dreevo's into and make notes
+* build dreevo's app (new example)
+* rebuild mosh's app (two reducers)
+refactor documentation of this redux page 
+clean up this redux page
+* finish Mosh's lectures on redux
+
+POMO discipline

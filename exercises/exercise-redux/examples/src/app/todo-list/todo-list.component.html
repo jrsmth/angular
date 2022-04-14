@@ -1,1 +1,49 @@
-<p>todo-list works!</p>
+
+<h2>Todo List</h2>
+
+<mat-form-field 
+    class="example-form-field" 
+    appearance="outline">
+    <mat-label>Add Todo</mat-label>
+    <input 
+        matInput
+        #title
+        (keyup.enter)="addTodo(title)"
+        autocomplete="off">
+</mat-form-field>
+<button 
+    type="button" 
+    mat-mini-fab
+    color="primary"
+    (click)="addTodo(title)"
+    matSuffix>
+    <mat-icon>add</mat-icon>
+</button>
+
+<div 
+    class="example-list">
+    <div 
+        *ngFor="let t of service.getTodos()"
+        (click)="toggleTodo(t)" 
+        class="todo-content">
+        <span
+            class="todo-text"
+            [class.completed]="t.isCompleted">
+            {{ t.title }}
+        </span> 
+        <button
+            *ngIf="!t.isCompleted"
+            mat-mini-fab
+            color="warn"
+            (click)="removeTodo(t)">
+            <mat-icon>close</mat-icon>
+        </button>
+        <button
+            *ngIf="t.isCompleted"
+            mat-mini-fab
+            class="btn-complete"
+            (click)="removeTodo(t)">
+        <mat-icon>check</mat-icon>
+    </button>
+    </div>
+</div>

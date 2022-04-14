@@ -1,1 +1,16 @@
-<p>todo-dashboard works!</p>
+
+<h2>Dashboard</h2>
+<p>
+  <!-- Last Update: {{ lastUpdate$ | async | date:'mediumTime' }} -->
+</p>
+<p>
+  Total items: {{ (todos$ | async)?.length }}
+</p>
+<p>
+  <button
+    mat-raised-button
+    color="warn"
+    (click)="clearTodos()">
+    Delete All
+</button>
+</p>

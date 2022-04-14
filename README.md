@@ -20,18 +20,21 @@
 
 <br>
 
-## Further Learning Ideas
-* Complete further Angular tutorials ([blog.angular-university.io](https://blog.angular-university.io/), etc)
-    * particularly on parts of the course that have changed:
-        * rxjs, Observables, HTTP best practise
-* Get familiar with the Angular [docs](https://angular.io/docs)
-* Use Angular on personal projects
-* Get some project experience using Angular
+## Notes
+* Further Learning Ideas
+    * Complete further Angular tutorials ([blog.angular-university.io](https://blog.angular-university.io/), etc)
+        * particularly on parts of the course that have changed:
+            * rxjs, Observables, HTTP best practise, Redux
+    * Get familiar with the Angular [docs](https://angular.io/docs)
+    * Use Angular on personal projects
+    * Get some project experience using Angular
+* Sources
+    * [sources.md](./resources/sources.md)
+* Exercises & Projects
+    * To run applications for the first time
+        * ```npm i```
+        * ```ng serve```
 
-<br>
-
-## Sources
-* [sources.md](./resources/sources.md)
 
 
 

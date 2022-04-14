@@ -1,0 +1,48 @@
+
+button {
+    display: inline-block;
+    margin: 0px 10px;
+}
+
+.example-form-field {
+    width: 200px;
+}
+
+.example-list {
+    width: 270px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.completed {
+    color: #36B37E;
+}
+
+.mat-list-item {
+    width: 100%;
+}
+
+.todo-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.todo-content:hover {
+    background-color: #353535;
+    border-radius: 10px;
+}
+
+.todo-text {
+    font-size: 16px;
+    padding: 10px;
+    text-align: left;
+}
+
+.btn-complete {
+    background-color:#36B37E;
+    color: #FFF;
+}
