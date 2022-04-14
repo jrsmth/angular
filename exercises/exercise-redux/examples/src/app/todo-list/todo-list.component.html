@@ -23,13 +23,13 @@
 <div 
     class="example-list">
     <div 
-        *ngFor="let t of service.getTodos()"
+        *ngFor="let t of todos$ | async"
         (click)="toggleTodo(t)" 
         class="todo-content">
         <span
             class="todo-text"
             [class.completed]="t.isCompleted">
-            {{ t.title }}
+            {{ t.content }}
         </span> 
         <button
             *ngIf="!t.isCompleted"

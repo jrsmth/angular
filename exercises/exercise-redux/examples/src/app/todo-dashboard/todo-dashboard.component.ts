@@ -3,7 +3,10 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TodoService } from '../services/todo.service';
 import { Store } from '@ngrx/store';
-import { IAppState } from '../state/store';
+import { AppState } from '../state/app.state';
+import { TodoState } from '../state/todo/todo.reducer';
+import { selectedLastUpdate, selectedTodos } from '../state/todo/todo.selectors';
+import { Todo } from '../models/todo.model';
 
 @Component({
   selector: 'todo-dashboard',
@@ -42,12 +45,12 @@ export class TodoDashboardComponent {
   //   this.service.clearTodos();
   // }
 
-  todos$: Observable<any[]>;
-  // lastUpdate$: Observable<Date>;
- 
-  constructor(private store: Store<IAppState>) {
-    this.todos$ = store.select('todos');
-    // this.lastUpdate$ = store.select('lastUpdate');
+  todos$: Observable<Todo[]>;
+  lastUpdate$: Observable<Date>;
+
+  constructor(private store: Store<AppState>) {
+    this.todos$ = store.select(selectedTodos);
+    this.lastUpdate$ = store.select(selectedLastUpdate);
   }
 
   clearTodos() {

@@ -1,9 +1,12 @@
+import { remove_todo, toggle_todo } from './../state/todo/todo.actions';
+import { selectedTodos } from './../state/todo/todo.selectors';
 import { Store } from '@ngrx/store';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TodoService } from '../services/todo.service';
-import { IAppState } from '../state/store';
+import { AppState } from '../state/app.state';
 import { add_todo } from '../state/todo/todo.actions';
+import { Todo } from '../models/todo.model';
 
 @Component({
   selector: 'todo-list',
@@ -12,14 +15,14 @@ import { add_todo } from '../state/todo/todo.actions';
 })
 export class TodoListComponent {
 
-  todos$: Observable<any>;
+  todos$: Observable<Todo[]>;
   // lastUpdate$: Observable<Date>;
 
   // Read the comment in TodoService
   // constructor(public service: TodoService) { }
  
-  constructor(private store: Store<IAppState>, public service: TodoService) {
-    this.todos$ = store.select('todos');
+  constructor(private store: Store<AppState>, public service: TodoService) {
+    this.todos$ = store.select(selectedTodos);
     // this.lastUpdate$ = store.select('lastUpdate');
   }
 
@@ -27,21 +30,20 @@ export class TodoListComponent {
     // Reject empty inputs
     if (!input.value) return; 
 
-    alert('hit');
-
     // this.service.addTodo(input.value);
-    this.store.dispatch(add_todo({ title: input.value }));
+    this.store.dispatch(add_todo({ content: input.value }));
 
     // reset form
     input.value = '';
     input.focus();
   }
 
-  toggleTodo(todo: any) {
+  toggleTodo(todo: Todo) {
     // this.service.toggleTodo(todo);
+    this.store.dispatch(toggle_todo({ todo: todo }));
   }
 
-  removeTodo(todo: any) {
-    // this.service.removeTodo(todo);
+  removeTodo(todo: Todo) {
+    this.store.dispatch(remove_todo({ id: todo.id }));
   }
 }

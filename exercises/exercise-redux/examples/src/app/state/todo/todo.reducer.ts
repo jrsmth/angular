@@ -1,37 +1,42 @@
 import { createReducer, on } from '@ngrx/store';
-import { INITIAL_STATE } from '../store';
-import { add_todo, remove_todo, toggle_todo } from "./todo.actions"
+import { Todo } from 'src/app/models/todo.model';
+import { add_todo, remove_todo, toggle_todo, clear_todos } from "./todo.actions"
+
+export interface TodoState {
+  todos: Todo[];
+  lastUpdate: Date; 
+}
+
+export const initialState: TodoState = {
+  todos: [],
+  lastUpdate: new Date()
+};
 
 export const todoReducer = createReducer(
-  INITIAL_STATE.todos,
-  on(add_todo, (state, { title }) => (state.concat({ id: state.length + 1, title: title }))),
-  on(toggle_todo, (state, { id }) => toggleTodo(state, id)),
-  on(remove_todo, (state, { id }) => removeTodo(state, id)),
-  // on(clear-todos, (state) => ({ todos: [] , lastUpdate: new Date(), count: state.count }))
+  initialState,
+  on(add_todo, (state, { content }) => ({
+    ...state,
+    todos: [...state.todos, { id: Date.now().toString(), content: content, isCompleted: false}],
+    lastUpdate: new Date()
+  })),
+  on(toggle_todo, (state, { todo }) => ({
+    ...state,
+    todos: [
+      ...state.todos.slice(0, state.todos.indexOf(todo)), // get the todos before this one
+      { id: todo.id, content: todo.content, isCompleted: !todo.isCompleted}, // update this todo
+      ...state.todos.slice(state.todos.indexOf(todo) + 1) // get the todos after this one
+    ], 
+    lastUpdate: new Date()
+  })),
+  on(remove_todo, (state, { id }) => ({
+    ...state,
+    todos: [...state.todos.filter(t => t.id !== id)],
+    lastUpdate: new Date()
+  })),
+  on(clear_todos, (state) => ({
+    ...state,
+    todos: [],
+    lastUpdate: new Date()  
+  }))
 )
 
-function addTodo(state: any, title: string) {
-  var newTodo = { id: state.todos.length + 1, title: title };
-
-  // Instead of the push() method, we use the concat() method because the former mutates
-  // the original array, whereas the latter returns a new array. 
-  state.todos = state.todos.concat({ id: state.todos.length + 1, title: title }),
-  state.lastUpdate = new Date()
-
-  return state;
-}
-
-function toggleTodo(state: any, id: string) {
-  return state;
-}
-
-function removeTodo(state: any, id: string) {
-  return state;
-}
-
-function clearTodos(state: any) {
-  state.todos = [],
-  state.lastUpdate = new Date()
-
-  return state;
-}

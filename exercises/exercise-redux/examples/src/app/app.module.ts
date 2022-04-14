@@ -11,9 +11,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatComponentsModule } from './mat-components/mat-components.module';
 import { CounterComponent } from './counter/counter.component';
 import { TodoDashboardComponent } from './todo-dashboard/todo-dashboard.component';
-import { TodoListComponent } from './todo-list/todo-list.component';
 import { todoReducer } from './state/todo/todo.reducer';
 import { environment } from 'src/environments/environment';
+import { TodoListComponent } from './todo-list/todo-list.component';
 
 @NgModule({
   declarations: [

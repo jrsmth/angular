@@ -1,6 +1,7 @@
+import { CounterState } from './../state/counter/counter.reducer';
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IAppState } from '../state/store';
+import { AppState } from '../state/app.state';
 import { Store } from '@ngrx/store';
 import { decrement, increment, reset } from '../state/counter/counter.actions';
 
@@ -11,10 +12,10 @@ import { decrement, increment, reset } from '../state/counter/counter.actions';
 })
 export class CounterComponent {
 
-  count$: Observable<number>;
+  count$: Observable<CounterState>;
   // counter = 0;
  
-  constructor(private store: Store<IAppState>) {
+  constructor(private store: Store<AppState>) {
     // Connect `this.count$` stream to the current store `count` state
     this.count$ = store.select('count');
   }

@@ -1,22 +1,18 @@
 import { createAction, props } from '@ngrx/store';
+import { Todo } from 'src/app/models/todo.model';
 
 export const add_todo = createAction(
-    '',
-    props<{ title: string }>()
+    '[Todo] Add Todo',
+    props<{ content: string }>()
 );
 export const toggle_todo = createAction(
-    '',
-    props<{ id: string }>()
+    '[Todo] Toggle Todo',
+    props<{ todo: Todo }>()
 );
 export const remove_todo = createAction(
-    '',
+    '[Todo] Remove Todo',
     props<{ id: string }>()
 );
 export const clear_todos = createAction(
-    '',
+    '[Todo] Clear Todos',
 ); 
-
-
-export const homeScore = createAction('[Scoreboard Page] Home Score');
-export const awayScore = createAction('[Scoreboard Page] Away Score');
-export const resetScore = createAction('[Scoreboard Page] Score Reset');
