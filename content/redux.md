@@ -226,7 +226,7 @@
             2. [Josh Morony - Todo List](https://www.youtube.com/watch?v=kx0VTgTtSBg)
                 * See ```../exercises/exercise-redux-todos/ngrx-ionic-example``` for Josh M's Todo example.
                 * There are different ways of organising our NGRX/Redux code in our app - such as by in a cental ```/state``` directory or per feature - Josh's Todo example uses ```/state```.
-* NGRX
+* NGRX (from Dreevo's video)
     * Typically in Angular, we manage data in our components and service; however, as the number of features grows, so do the services and components. Eventually, data becomes spread out everywhere across our application, which becomes hard to maintain. This is why we implement Redux - to get predictable state management for our application. Whilst it is still possible to have a single source of truth for data in a complex application without NGRX, it is very hard to maintain and makes the development process slow.
         * In NGRX, app data is held in a central Store and this then flows into components via Selectors and out of components via Actions, Reducers and Effects.
             * The Store is a single, large JS object that holds state. 
@@ -234,7 +234,7 @@
             * A Reducer is a JS function that takes in the current state object and an action object, then returns a new modified state for the Store - in an immutable way, without modifying the current state object directly. A Reducer is a Pure Function and must immeadiately update the state using data from the Action; it cannot request data from a service.
             * To make a backend request we use an Effect, which is also a JS function that receives dispatched Action from components. Instead of updating the Store in an immutable way, we can fetch data from the service layer and then dispatch a new Action that talks to a Reducer - which in turn, updates the Store with data from the backend.
             * Selectors are functions that we call to return a specific slice of the state - so we can work with it in our component.
-* NGRX part 2
+* NGRX (from Josh Mornony's video)
     * When using NGRX properly, our components do not have to worry about how to manage the state of our application when 'something' happens. They don't need to know which services to inject or methods to call to update the state - they simply dispatch an Action to indicate that something happened.
         * For example, if a delete button is clicked, the component dispatches an action to signal 'the delete button was clicked', it doesn't worry about actually deleting that item from state.
         * It is the responsibilty of Reducers to detect which action was dispatched and to modify the state accordingly. We can pass an optional payload, alongside our Actions, that the Reducers can use to create a new state.
@@ -254,6 +254,50 @@
             * The ```...``` Spread operator is used to clone an iterable object, amongst other things - good [reference](https://www.javascripttutorial.net/es6/javascript-spread/).
     * In our components, we can inject a ```Store``` object into our constructor. Then we can use this ```Store``` object to dispatch actions and also to select slices of the state pull in the data that we want to use.
         * To do this, we use ```this.store.select(<SELECTOR_FUNCTION>)``` method to return a stream of data from our Store - whenever the state gets updated, this stream in our component is also updated. We don't have to worry about processing an Observable here, if we use the ```async``` pipe in our template.
-            * The ```<SELECTOR_FUNCTION>``` is defined in our selectors file using the ```createSelector()``` method and details which parts of the state we wish to retrieve from the Store.
+            * The ```<SELECTOR_FUNCTION>``` is defined in our selectors file, using the ```createSelector()``` method and details which parts of the state we wish to retrieve from the Store.
     * Alongside our Reducer, we have an Effects listening for Actions being dispatched. Once we determine which type of Action has been dispatched we can call our service layer, get the data and dispatch a new Action to the Reducer to update the Store.
-* Debugger, etc...
+* Redux DevTools
+    * In Chrome, we can add the 'Redux DevTools' browser extension; when we use this in conjunction with the Redux DevTools module in our Angular app, we get a very powerful debugging experience.
+    * Enabling DevTools in our app
+        ```typescript
+        ...
+        import { StoreModule } from '@ngrx/store';
+        import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
+        @NgModule({
+            declarations: [
+                ...
+            ],
+            imports: [
+                ...,
+                StoreModule.forRoot({ count: counterReducer ,  todo: todoReducer }),
+                StoreDevtoolsModule.instrument({
+                    maxAge: 25, // Retains last 25 states
+                    logOnly: environment.production, // Restrict extension to log-only mode
+                    autoPause: true, // Pauses recording actions and state changes when the extension window is not open
+                })
+            ],
+            providers: [
+                ...
+            ],
+            bootstrap: [AppComponent]
+        })
+        export class AppModule { }
+        ```
+    * The Redux DevTools show us the current state of the Store. It also allows 'Time Travel' debugging, where we can step through each Action and see the changes that were made to Store at each step.
+        * This is very useful and entirely necessary because logical errors can be otherwise hard to spot in Redux.
+        * Another extremely useful feature of the Redux DevTools is the ability to export the current application state as a JSON file and then import it for use later on.
+            * This is particularly useful when there is a bug to fix - you can pass the state that causes the bug to another developer - so they can work on the issue, without recreating it from scratch.
+        * We can also persist the state across browser refreshes too.
+* Calling Backend APIs
+    * We use Effects in NGRX to listen out for Actions and then perform corresponding tasks, other than updating the state - this includes making backend calls to server APIs, namely fetching (GET) or sending data (POST).
+    * Best Practise:
+        * When we want to use an Effect to communicate with the server, we should follow these steps:
+            * Raise an action, with a name along the lines of ```FETCH_TODO_REQUEST```.
+            * Both a Reducer and an Effect should listen out for this Action.
+                * The Effect should make the backend call
+                * The Reducer should set an ```isFetchingTodo``` boolean to ```true``` in the Store - which in turn displays a spinner for the user.
+            * The Effect should complete the request and then raise one of two Actions.
+                * ```FETCH_TODO_SUCCESS``` with the payload from the backend, if the request succeeds.
+                    * Or, ```FETCH_TODO_ERROR``` with the error message, if the request fails.
+            * The Reducer listens out for this second Action and updates the state accordingly - including removing the spinner (```isFetchingTodo``` is now false).

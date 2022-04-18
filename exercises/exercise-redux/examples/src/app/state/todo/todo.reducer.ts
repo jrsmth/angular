@@ -38,5 +38,5 @@ export const todoReducer = createReducer(
     todos: [],
     lastUpdate: new Date()  
   }))
-)
-
+) // this is not very clean/clear, perhaps I could a TodoActions class with methods that handle each of these actions
+// Like Mosh...
