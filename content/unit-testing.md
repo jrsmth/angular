@@ -256,15 +256,111 @@
     * Note:
         * Great Stack Overflow [post](https://stackoverflow.com/questions/66941972/argument-of-type-null-is-not-assignable-to-parameter-of-type-httpclient-on-a) on mocking a ```HttpClient``` dependency for unit testing.
 * Interaction Testing
-    * 
-
-
-
-<br>
-<br>
+    * Note:
+        * ```empty()``` from ```rxjs``` has been deprecated in favour of the ```EMPTY``` constant
+            * [rxjs docs](https://rxjs.dev/api/index/const/EMPTY)
     * example:
+        * carrying on with the ```todo.component.ts``` testing: ```add()``` method
         ```typescript
-            //
+            // todo.component.ts
+            ...
+            add() { 
+                var newTodo = { title: '... ' };
+                this.service.add(newTodo).subscribe(
+                (t: any) => this.todos.push(t),
+                (err: any) => this.message = err);
+            }
+            ...
+
+            // todo.component.spec.ts
+            ...
+            let component: TodosComponent;
+            let service: TodoService;
+
+            beforeEach(() => {
+                const spy = jasmine.createSpyObj('HttpClient', { post: of({}), get: of({}) })
+                service = new TodoService(spy);
+
+                component = new TodosComponent(service);
+            });
+            ...
+            it('should call the server to save the changes when a new todo item is added', () => {
+                let spy = spyOn(service, 'add').and.callFake(t => {
+                return EMPTY; // we don't care about what is returned in this test
+                })
+
+                component.add();
+
+                expect(spy).toHaveBeenCalled();
+            })
+
+            it('should add the new todo returned from server', () => {
+                let todo = { id: 1 };
+                spyOn(service, 'add')
+                .and.returnValue(from([todo]));
+
+                component.add();
+
+                expect(component.todos.indexOf(todo))
+                .toBeGreaterThan(-1);
+            })
+
+            it('should set the message property if server returns an error when adding a new todo', () => {
+                let error = 'error from the server';
+                spyOn(service, 'add')
+                .and.returnValue(throwError(error));
+
+                component.add();
+
+                expect(component.message).toBe(error);
+            })
         ```
+* Working with Confirmation Boxes
+    * example:
+        * carrying on with the ```todo.component.ts``` testing: ```delete()``` method
+        ```typescript
+            // todo.component.ts
+            ...
+            delete(id: number) {
+                if (confirm('Are you sure?'))
+                    this.service.delete(id).subscribe();
+            }  
 
+            // todo.component.spec.ts
+            ...
+            it('should call the server to delete a todo item if the user confirms', () => {
+                let id: number = 1;
 
+                spyOn(window, 'confirm').and.returnValue(true);
+                let spy = spyOn(service, 'delete').and.returnValue(EMPTY);
+
+                component.delete(id);
+
+                expect(spy).toHaveBeenCalledWith(id);
+            })
+
+            it('should NOT call the server to delete a todo item if the user cancels', () => {
+                let id: number = 1;
+
+                spyOn(window, 'confirm').and.returnValue(false);
+                let spy = spyOn(service, 'delete').and.returnValue(EMPTY);
+
+                component.delete(id);
+
+                expect(spy).not.toHaveBeenCalled();
+            })
+        ```
+* The Limitations of Unit Testing
+    * So far in this section, we have covered unit testing for several common patterns in Angular apps:
+        * State Changes (client-side only)
+        * Forms
+        * Events (Output Properties)
+        * Interacting with Services
+    * You cannot use the techniques discussed in this section to test Routers or Template Bindings - to do these, you need to use Integration Testing.
+* Code Coverage
+    * When we run ```ng test --code-coverage```, we get a ```/coverage``` directory that contains a report of our testing coverage, broken down per file.
+        * To open this report: go to the ```index.html``` page; right-click and select 'reveal in finder' (mac); and then double-click to open in the browser.
+    * Note:
+        * Prepending an 'x' to an ```it()``` function disables the test - just like the ```@Disabled``` annotation in Spring. This also applied to ```describe()```.
+            * ```xit()``` or ```xdescribe()```
+    * We should get our code coverage as high as possible, ideally 100% but at least 70%.
