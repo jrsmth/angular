@@ -123,9 +123,140 @@
                 });
             });
         ```
+* Working with Forms
+    * When it comes to testing Model-driven/Reactive Forms in Angular, we would typically want to test two things:
+        * The presence of the desired Form Controls
+        * The use of the desired validation on a certain Form Control
+     * example:
+        ```typescript
+            // todo-form.component.ts
+            export class TodoFormComponent { 
+                form: FormGroup; 
 
+                constructor(fb: FormBuilder) {
+                    this.form = fb.group({
+                    name: ['', Validators.required],
+                    email: [''],
+                    });
+                }
+            }
 
+            // todo-form.component.spec.ts
+            describe('TodoFormComponent', () => {
+                var component: TodoFormComponent; 
 
+                beforeEach(() => {
+                    component = new TodoFormComponent(new FormBuilder);
+                });
+
+                it('should create a form with 2 controls', () => {
+                    expect(component.form.contains('name')).toBeTruthy();
+                    expect(component.form.contains('email')).toBeTruthy();
+                });
+
+                it('should make the name control required', () => {
+                    let control = component.form.get('name');
+
+                    control?.setValue('');
+                    
+                    expect(control?.valid).toBeFalsy();
+                });
+            });
+        ```    
+* Working with Event Emitters
+    * We can test when an event is raised by a component method by calling the method under test and then subscribing to the Event Emitter for that event.
+    * example:
+        ```typescript
+            // vote.component.ts
+            export class VoteComponent { 
+                totalVotes = 0; 
+                voteChanged = new EventEmitter();
+
+                upVote() { 
+                    this.totalVotes++;
+                    this.voteChanged.emit(this.totalVotes);
+                }
+            }
+
+            // vote.component.spec.ts
+            import { VoteComponent } from './vote.component'; 
+
+            describe('VoteComponent', () => {
+                var component: VoteComponent; 
+
+                beforeEach(() => {
+                    component = new VoteComponent();
+                });
+
+                it('it should raise voteChanged event when up-voted', () => {
+                    let totalVotes: any = null;
+                    component.voteChanged.subscribe(tv => totalVotes = tv);
+
+                    component.upVote();
+
+                    // expect(totalVotes).not.toBeNull();
+                    expect(totalVotes).toBe(1);
+                });
+            });
+        ```
+    * Note: we chain our ```toBe...()```, ```toContain()```, etc functions to ```.not```, if we wish to negate the expected result.
+        * ```expect(actual_result).not.toBeNull(expected_result);```
+            * Stack Overflow [post](https://stackoverflow.com/questions/44542743/what-is-the-alternative-for-tonotequal-in-jasmine)
+* Working with Spies
+    * We would typically use Spies when our component relies on a service that makes calls to the backend.
+    * We use the ```spyOn(object, 'methodName')``` method to put a spy on a method in a class.
+        * This allows us to check if a particular method has been called and change the implementation of that method, change the return value, throw and error, etc.
+        * A Spy gives us control over a method in a class.
+    * Fantastic Stack Overflow [post](https://stackoverflow.com/questions/44074764/mock-vs-spy-in-angular#:~:text=Spies%20are%20stubs%20that%20also,they%20are%20expected%20to%20receive.) about Mocks vs Spies in Angular
+        * TLDR:
+            * Dummy objects 
+                * are passed around but never actually used. Usually they are just used to fill parameter lists.
+            * Stubs 
+                * provide canned answers to calls made during the test
+            * Spies 
+                * are stubs that also record some information based on how they were called
+            * Mocks 
+                * objects pre-programmed with expectations which form a specification of the calls they are expected to receive.
+    * example:
+        ```typescript
+            // todos.component.ts
+            ...
+            ngOnInit() { 
+                this.service.getTodos().subscribe((t: any) => this.todos = t);
+            }
+
+            // todos.component.spec.ts
+            describe('TodosComponent', () => {
+                let component: TodosComponent;
+                let service: TodoService;
+
+                beforeEach(() => {
+                    const spy = jasmine.createSpyObj('HttpClient', { post: of({}), get: of({}) })
+                    service = new TodoService(spy);
+
+                    component = new TodosComponent(service);
+                });
+
+                it('should set todos property with items returned from the server', () => {
+                    let todos = [1,2,3,4];
+
+                    // Arrange
+                    spyOn(service, 'getTodos').and.callFake(() => {
+                    return of(todos)
+                    })
+
+                    // Act
+                    component.ngOnInit();
+
+                    // Assert
+                    expect(component.todos).toBe(todos);
+                });
+            });
+        ```
+    * Note:
+        * Great Stack Overflow [post](https://stackoverflow.com/questions/66941972/argument-of-type-null-is-not-assignable-to-parameter-of-type-httpclient-on-a) on mocking a ```HttpClient``` dependency for unit testing.
+* Interaction Testing
+    * 
 
 
 
