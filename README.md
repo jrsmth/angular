@@ -18,6 +18,7 @@
 * [Angular Material 2](./content/angular-material2.md)
 * [Redux](./content/redux.md)
 * [Unit Testing](./content/unit-testing.md)
+* [Integration Testing](./content/integration-testing.md)
 
 <br>
 
