@@ -1,11 +1,9 @@
 import { HttpClientModule } from '@angular/common/http';
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
 import { TodosComponent } from './todos.component';
 import { TodoService } from './todo.service';
+import { of } from 'rxjs';
 
 //NOTE: I've deliberately excluded this suite from running
 // because the test will fail. This is because we have not 
@@ -30,10 +28,22 @@ describe('TodosComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TodosComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    // fixture.detectChanges(); 
+      // ^we need to remove this
+        // as ngOnInit is triggered here
+          // and so our spy in the test will be too late to have an effect
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should load todos from the server', () => {
+    let service = TestBed.inject(TodoService);
+    spyOn(service, 'getTodos').and.returnValue(of([ 1, 2, 3 ]));
+
+    fixture.detectChanges();
+
+    expect(component.todos.length).toBe(3);
   });
 });
