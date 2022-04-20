@@ -238,6 +238,9 @@
         * I believe this is a safety feature in newer versions of TypeScript because it works for Mosh. 
             * I tried to add to an Observable using different ```rxjs``` functions but to no avail.
             * I will document what Mosh suggested but if I need to integration test route params in the future, I will need to do some proper research into it.
+                * Ideas for further investigation:
+                    * Stack Overflow [post 1](https://stackoverflow.com/questions/42052225/how-to-unit-test-angular-2-routing-params)
+                    * Stack Overflow [post 2](https://stackoverflow.com/questions/58089326/can-i-add-pipes-to-an-existing-observable)
     * example:
         ```typescript
             // user-details.component.spec.ts
@@ -279,7 +282,7 @@
             });
         ```
 * Testing RouterOutlet Components
-    * 
+    * This and that
 
 
 
