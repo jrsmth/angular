@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { TodosComponent } from './todos.component';
 import { TodoService } from './todo.service';
 import { of } from 'rxjs';
@@ -38,7 +38,7 @@ describe('TodosComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load todos from the server', () => {
+  xit('should load todos from the server', () => {
     let service = TestBed.inject(TodoService);
     spyOn(service, 'getTodos').and.returnValue(of([ 1, 2, 3 ]));
 
@@ -46,4 +46,25 @@ describe('TodosComponent', () => {
 
     expect(component.todos.length).toBe(3);
   });
+
+  it('should load todos from the server, using async()', async(() => {
+    let service = TestBed.inject(TodoService);
+    spyOn(service, 'getTodosPromise').and.returnValue(Promise.resolve([ 1, 2, 3 ]));
+
+    fixture.detectChanges();
+
+    fixture.whenStable().then(() => {
+      expect(component.todos.length).toBe(3);
+    })
+  }));
+
+  it('should load todos from the server, using fakeAsync()', fakeAsync(() => {
+    let service = TestBed.inject(TodoService);
+    spyOn(service, 'getTodosPromise').and.returnValue(Promise.resolve([ 1, 2, 3 ]));
+
+    fixture.detectChanges();
+
+    tick();
+    expect(component.todos.length).toBe(3);
+  }));
 });

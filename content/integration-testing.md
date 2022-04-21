@@ -282,19 +282,131 @@
             });
         ```
 * Testing RouterOutlet Components
-    * This and that
-
-
-
-
-
-MUST FINISH INT TESTING and Firebase by EOD-THU
-> start project?
-
-<br>
-<br>
-
+    * When testing components that use a router outlet, we should write two tests:
+        * one to see if the ```<router-outlet>``` has been added to the template and another to check that each link in the navigation bar has been set up correctly.
+            * Note, we need to import the ```RouterTestingModule``` into our ```TestBed``` Testing Module.
+    * Note, it is good practise to purposefully break your test when writting it to make sure that it is testing the part of the system that you want it to.
+        * In this example, we can comment out the ```<router-outlet>``` directive in our tempate and this will break our ```'should have a router outlet'``` test - if it doesn't, we know our test is not testing the right thing.
     * example:
         ```typescript
-            // 
+            // app.component.spec.ts
+            describe('AppComponent', () => {
+                let component: AppComponent;
+                let fixture: ComponentFixture<AppComponent>;
+
+                beforeEach(async () => {
+                    await TestBed.configureTestingModule({
+                    imports: [
+                        RouterTestingModule
+                    ],
+                    ...
+                });
+
+                it('should have a router outlet', () => {
+                    let de = fixture.debugElement.query(By.directive(RouterOutlet));
+
+                    expect(de).not.toBeNull();
+                })
+
+                it('should have a link to todos page', () => {
+                    let debugElements = fixture.debugElement.queryAll(By.directive(RouterLinkWithHref));
+                    
+                    // let index = debugElements.findIndex(de => de.properties['href'] === '/todos'); 
+                    // ^ Mosh suggests looking at .properties['href'] but it appears to be blank
+                        // I wonder if things have changed in Angular since then
+                    let index = debugElements.findIndex(de => de.attributes['routerLink'] === 'todos'); 
+
+                    expect(index).toBeGreaterThan(-1);
+                })
+            });
+        ```
+* Shallow Component Tests
+    * We use components to create encapsulated, reusable views; if we decide to extract our ```<nav>``` element from ```app.component.html```, into a ```NavBarComponent```, we get an error:
+        * ```ERROR: 'NG0304: 'nav-bar' is not a known element```
+            * We have two options to deal this this:
+                1. Add NavBar in the 'declarations' of our ```TestBed``` Testing Module
+                2. Ignore unknown elements by adding a 'schema' to our ```TestBed``` Testing Module
+                    * ```schemas: [ NO_ERRORS_SCHEMA ]```
+                    * You would use this if you have a very complex template with lots of child components.
+        * In this situation, I moved the nav-specific tests into ```nav-bar.component.spec.ts``` and added ```NavBarComponent``` to the ```declarations: []``` in ```app.component.spec.ts```.
+        * Who tests the tester?
+            * I spent a fair chunk of time debugging an empty array ```[]``` from ```let debugElements = fixture.debugElement.queryAll(By.directive(RouterLinkWithHref));```
+                * It turns out I had forgotten to import ```RouterTestingModule``` in my ```nav-bar.component.spec.ts```'s ```TestBed``` - instead of throwing an error, I just got an empty array ```[]```. Without this module imported, the directive will not be executed.
+                    * Be careful out there.
+* Testing Attribute Directives
+    * When testing attribute directives, we should create a ```DirectiveHostComponent``` in our 'spec' file to test the various different usages of our attribute.
+    * Remember to add both the directive component and the host directive component to the testing module's ```declarations: []``` - without these the directives will not be applied, as Angular will ignore attribute directives that it doesn't recognise.
+    * example:
+        ```typescript
+            // highlight.directive.spec.ts
+            @Component({
+                template: `
+                    <p highlight="cyan">First</p>
+                    <p highlight>Second</p>
+                `
+            })
+            class DirectiveHostComponent { }
+
+            describe('HighlightDirective', () => {
+                let fixture: ComponentFixture<DirectiveHostComponent>;
+                
+                beforeEach(async(() => {
+                    TestBed.configureTestingModule({
+                    declarations: [ DirectiveHostComponent, HighlightDirective ]
+                    })
+                    .compileComponents();
+                }));
+
+                ...
+
+                it('should highlight the first element with cyan', () => {
+                    let de = fixture.debugElement.queryAll(By.css('p'))[0];
+
+                    expect(de.nativeElement.style.backgroundColor).toBe('cyan');
+                });
+
+                it('should highlight the first element with the default colour', () => {
+                    let de = fixture.debugElement.queryAll(By.css('p'))[1];
+                    let directive = de.injector.get(HighlightDirective);
+                    
+                    expect(de.nativeElement.style.backgroundColor).toBe(directive.defaultColor);
+                });
+            });
+        ```
+* Dealing with Asynchronous Operations
+    * What is a Promise?
+        * A Promise is an object that represents the eventual completion of an async operation and its resulting value.
+        * MDN [docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+    * When we read a Promise using ```then```, the JS execution engine puts that task in a queue to be performed once the current execution thread has finished. For our tests, this means that Promise's will not be opened when before we run ```fixture.detectChanges();``` - unlike Observables, which are.
+        * We have two options to fix this:
+            1. Wrap the test function with ```async()``` and then wrap our ```expect()``` assertion inside a ```fixture.whenStable().then({ })``` block
+            2. Wrap the test function with ```fakeAsync()``` and use ```tick();```
+        * I am not sure which one is best practise but #2 looks neater. 
+    * example:
+        ```typescript
+            // todos.component.spec.ts
+            describe('TodosComponent', () => {
+                ...
+
+                it('should load todos from the server, using async()', async(() => {
+                    let service = TestBed.inject(TodoService);
+                    spyOn(service, 'getTodosPromise').and.returnValue(Promise.resolve([ 1, 2, 3 ]));
+
+                    fixture.detectChanges();
+
+                    fixture.whenStable().then(() => {
+                        expect(component.todos.length).toBe(3);
+                    })
+                }));
+
+                it('should load todos from the server, using fakeAsync()', fakeAsync(() => {
+                    let service = TestBed.inject(TodoService);
+                    spyOn(service, 'getTodosPromise').and.returnValue(Promise.resolve([ 1, 2, 3 ]));
+
+                    fixture.detectChanges();
+
+                    tick();
+                    expect(component.todos.length).toBe(3);
+                }));
+            });
         ```
