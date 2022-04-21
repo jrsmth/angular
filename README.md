@@ -13,7 +13,7 @@
 * [Routing and Navigation](./content/routing-navigation.md)
 * [Authentication and Authorisation](./content/authenticate-authorise.md)
 * [Deployment](./content/deployment.md)
-* [Building Apps with Firebase](./content/using-firebase.md)
+* [Building Apps with Firebase](./content/firebase.md)
 * [Animations](./content/animations.md)
 * [Angular Material 2](./content/angular-material2.md)
 * [Redux](./content/redux.md)
