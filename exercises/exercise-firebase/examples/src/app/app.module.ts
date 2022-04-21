@@ -1,3 +1,4 @@
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -8,6 +9,7 @@ import { environment } from '../environments/environment';
 import { provideAuth,getAuth } from '@angular/fire/auth';
 import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { AngularFireModule } from '@angular/fire/compat';
 
 @NgModule({
   declarations: [
@@ -16,10 +18,13 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    // provideFirebaseApp(() => initializeApp(environment.firebase)),
+    // ^auto-generated import
+      // incompatible with AngularFireDatabase from '@angular/fire/compat/database'
+    AngularFireModule.initializeApp(environment.firebase),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
   ],
   providers: [],
   bootstrap: [AppComponent]
