@@ -30,5 +30,25 @@
         * NoSQL (non-relational, non-tabular, document)
             * A NoSQL database (like MongoDB, CouchDB or Firebase) doesn't have a schema; it is tree of nodes - each node being a key:value pair. The value can be a primitive value or a complex object.
     * We can very easily create a Real-time Database in Firebase by going to the 'Realtime Database' section. It it straightforward to add records into our database.
-        * Note, because Firebase is NoSQL (schema-less), our objects do not have follow any kind of structure or be consistent with nested siblings.
+        * Note, because Firebase is NoSQL (schema-less), our objects do not have to follow any kind of structure or be consistent with nested siblings.
+            * SQL databases are optimised for reporting, we can run complex queries against multiple tables to retrieve data. Whereas, NoSQL is quick and flexible but doesn't allow us to query at the same level.
+
+        <br>
+
+        <img src="../resources/realtime_db.png" alt="Realtime Database" width="500">
+
+        <br>
+
+* Installing Firebase (Angular)
+    * In this section, my examples can be found in ```../exercises/exercise-firebase/examples```
+    * Steps:
+        * ```npm i firebase```
+        * ```ng add @angular/fire```
+            * https://github.com/angular/angularfire
+            * I selected these setup features: 
+                * ng deploy -- hosting
+                * Authentication
+                * Firestore
+                * Realtime Database
+            * This will automatically import the right modules into ```app.module.ts``` and point the ```environment.ts``` at our Firebase project in the cloud.
 

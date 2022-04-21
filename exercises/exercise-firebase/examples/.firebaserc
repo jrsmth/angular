@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fir-demo-7f3e1": {
+      "hosting": {
+        "examples": [
+          "fir-demo-7f3e1"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fir-demo-7f3e1"
+  }
+}
