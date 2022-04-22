@@ -3,7 +3,7 @@
 
 <br>
 
-<img src="../../resources/hermes.jpeg" alt="500" width="300">
+<img src="../../resources/hermes.jpeg" alt="Hermes" width="500">
 
 > Hermes is the Greek God of Commerce
 
