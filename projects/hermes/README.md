@@ -3,13 +3,14 @@
 
 <br>
 
-<img src="../../resources/hermes.jpeg" alt="300" width="300">
+<img src="../../resources/hermes.jpeg" alt="500" width="300">
 
 > Hermes is the Greek God of Commerce
 
 <br>
+<br>
 
-<img width="1200" alt="Hermes Screenshot" src="">
+<img width="500" alt="Hermes Screenshot" src="">
 
 > A Beautiful Screenshot
 
