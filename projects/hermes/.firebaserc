@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "hermes-c4663": {
+      "hosting": {
+        "hermes": [
+          "hermes-c4663"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "hermes-c4663"
+  }
+}

@@ -33,6 +33,6 @@
 * Test the application locally
     * ```ng test --code-coverage```
 * Access the application on Firebase
-    * ...
+    * https://hermes-c4663.web.app
 
 

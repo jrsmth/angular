@@ -103,6 +103,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "hermes:build:production",
+            "firebaseProject": "hermes-c4663",
+            "firebaseHostingSite": "hermes-c4663"
+          }
         }
       }
     }
