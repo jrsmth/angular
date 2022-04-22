@@ -17,8 +17,7 @@
 <br>
 
 ## Overview
-* This e-commerce site (Hermes) is the final project of ```The Complete Angular Course: Beginner to Advanced```, by Mosh Hamedani. 
-    * It encapsulates of all of the Angular concepts that I have been learning for the past month.
+* This e-commerce site (Hermes) is my attempt at ```The Complete Angular Course``` final project.
 * Useful Links:
     * [Technical References](./technicalreferences.md)
     * [Udemy Videos](https://www.udemy.com/course/the-complete-angular-master-class/learn/lecture/7750398#notes)
