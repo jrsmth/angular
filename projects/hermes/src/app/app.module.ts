@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideDatabase,getDatabase } from '@angular/fire/database';
 import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
@@ -18,6 +17,7 @@ import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.componen
 import { LoginComponent } from './login/login.component';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AngularFireModule } from '@angular/fire/compat';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    AngularFireModule.initializeApp(environment.firebase),
     provideDatabase(() => getDatabase()),
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
