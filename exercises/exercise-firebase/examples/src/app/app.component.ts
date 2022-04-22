@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from '@angular/fire/compat/database';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +9,16 @@ import { Subscription, Observable } from 'rxjs';
 })
 export class AppComponent implements OnDestroy {
   title = 'examples';
-  courses: any[] = [];
+  courses2: any[] = [];
   subscription: Subscription;
   courses$: Observable<any>; // the $-suffix is used to denote an Observable
   course1$: Observable<any>;
   course4$: Observable<any>;
+
+  // PROPER way of doing things (according to docs)
+    // https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md
+  coursesRef: AngularFireList<any>;
+  courses: Observable<any[]>;
 
   constructor(private db: AngularFireDatabase) {
     this.courses$ = db.list('/Courses').valueChanges();
@@ -21,9 +26,19 @@ export class AppComponent implements OnDestroy {
     this.course4$ = db.object('/Courses/4').valueChanges();
 
     this.subscription = db.list('/Courses').valueChanges().subscribe(courses => {
-      this.courses = courses;
-      console.log(this.courses);
-    })
+      this.courses2 = courses;
+      console.log(this.courses2);
+    });
+
+    // PROPER way of doing things (according to docs)
+      // https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md
+    this.coursesRef = db.list('Courses');
+    // Use snapshotChanges().map() to store the key
+    this.courses = this.coursesRef.snapshotChanges().pipe(
+      map(changes => 
+        changes.map(c => ({ key: c.payload.key, value: c.payload.val() }))
+      )
+    );
   }
 
   add(course: HTMLInputElement){
@@ -42,15 +57,32 @@ export class AppComponent implements OnDestroy {
   }
 
   update(course: any) {
-    const coursesRef = this.db.list('/Courses');
-
-    // .set(): replaces
-    coursesRef.set('1', course + ' UPDATED');
-    // get the index of the course in the List
-      // example: https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md
+    // .set(): replaces entirely
+    this.coursesRef.set(course.key, {
+      title: course.value.name + ' UPDATED',
+      price: 149.99
+    });
   
-    // .update(): updates
+    // .update(): updates only
+    this.db.object('/Courses/'+course.key).update({
+      title: course.value.name + ' UPDATED2',
+      price: 1499.99
+    })
 
+  }
+
+  delete(course: any) {
+    this.coursesRef.remove(course.key)
+      .then(() => console.log("Deleted: " + course.key));
+        // returns a Promise, so we use .then()
+
+    // this.coursesRef.remove(course.id); 
+      // ^ this will deleteAll b.c course.id is undefined!
+  }
+
+  deleteAll(course: any) {
+    this.coursesRef.remove();
+    // dangerous, v.easy to drop your entire node tree...
   }
 
   ngOnDestroy() {

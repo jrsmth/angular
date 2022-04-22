@@ -21,7 +21,7 @@
 <br>
 
 <!-- BEFORE -->
-<h3> Without as</h3>
+<h3>Without as</h3>
 <ul>
   <li> {{ (course4$ | async)?.author }} </li>
   <li> {{ (course4$ | async)?.name }} </li>
@@ -30,7 +30,7 @@
 </ul>
 
 <!-- AFTER -->
-<h3> With as</h3>
+<h3>With as</h3>
 <ul *ngIf="course4$ | async as course4">
   <li> {{ course4.author }} </li>
   <li> {{ course4.name }} </li>
@@ -40,22 +40,26 @@
 
 <br>
 
-<h3> With async Pipe</h3>
+<h3>With async Pipe</h3>
 <ul>
-  <li *ngFor="let course of courses$ | async">
-    {{ course }}
+  <li *ngFor="let course of courses | async">
+    {{ course.value.name || course.value }}
     <button
       (click)="update(course)">
       Update
+    </button>
+    <button
+      (click)="delete(course)">
+      Delete
     </button>
   </li>
 </ul>
 
 <br>
 
-<h3> Without async Pipe</h3>
+<h3>Without async Pipe</h3>
 <ul>
-  <li *ngFor="let course of courses">
+  <li *ngFor="let course of courses2 ">
     {{ course }}
   </li>
 </ul>

@@ -293,21 +293,87 @@
             <input type="text" (keyup.enter)="add(course)" #course>
         ```
 * Updating an Object
-    * rewatch the vid, get it right - PROPER.
-    * document accordingly.
-
-
-
-<br>
-<br>
+    * As with Adding Objects, we update an Object using the  ```.set('key', value)``` or ```.update('key', value)``` methods on ```db.list()```.
+        * Note, we can also update using these methods on ```db.object()``` and just provide the ```value``` to ```.set(value)``` and ```.update(value)```, if pass the direct path to the find the Object
+            * ex: ```db.object('/Courses/4')```
+    * ```.set()``` vs ```.update()```
+        * ```.update(...)``` - only updates the properties that are specified here; if those properties do not exist, they are added.
+            * We would want to use ```.update()``` when working with large complex objects; if we didn't, we would have to laboriously pass every single field into the function - else, risk losing data.
+        * ```.set(...)``` - replaces the whole record with what is specified here; if properties existed previously but are not specified, they are lost in the replacement.
+             * ```.set()``` is fine to use when the objects are small and we can easily pass all of the fields into the method.
     * example:
         ```typescript
             // app.component.ts
+            export class AppComponent {
+                ...
 
+                // PROPER way of doing things (according to docs)
+                    // https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md
+                coursesRef: AngularFireList<any>;
+                courses: Observable<any[]>;
+
+                constructor(private db: AngularFireDatabase) {
+                    ...
+
+                    // PROPER way of doing things (according to docs)
+                        // https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md
+                    this.coursesRef = db.list('Courses');
+                    // Use snapshotChanges().map() to store the key
+                    this.courses = this.coursesRef.snapshotChanges().pipe(
+                        map(changes => 
+                            changes.map(c => ({ key: c.payload.key, value: c.payload.val() }))
+                        )
+                    );
+                }
+
+                update(course: any) {
+                    // .set(): replaces entirely
+                    this.coursesRef.set(course.key, {
+                        title: course.value.name + ' UPDATED',
+                        price: 149.99
+                    });
+                
+                    // .update(): updates only
+                    this.db.object('/Courses/'+course.key).update({
+                        title: course.value.name + ' UPDATED2',
+                        price: 1499.99
+                    })
+
+                }
+            }
         ```
         ```html
             <!-- app.component.html -->
-            
+            <h3>With async Pipe</h3>
+            <ul>
+                <li *ngFor="let course of courses | async">
+                    {{ course.value.name || course.value }}
+                    <button
+                        (click)="update(course)">
+                        Update
+                    </button>
+                </li>
+            </ul>
         ```
- 
+* Removing an Object
+    * We remove an Object using the ```.remove()``` method
+        * We can supply the 'key' of the Object to remove; or leave the argument empty and this will remove the whole node tree (very dangerous).
+            * Be careful: even passing a 'key' that doesn't exist will drop the whole node tree - absolutely nuts...
+     * example:
+        ```typescript
+            // app.component.ts
+            ...
+            delete(course: any) {
+                this.coursesRef.remove(course.key)
+                .then(() => console.log("Deleted: " + course.key));
+                    // returns a Promise, so we use .then()
 
+                // this.coursesRef.remove(course.id); 
+                // ^ this will deleteAll b.c course.id is undefined!
+            }
+
+            deleteAll(course: any) {
+                this.coursesRef.remove();
+                // dangerous, v.easy to drop your entire node tree...
+            }
+        ```
