@@ -1,3 +1,5 @@
+import { UserService } from './services/user.service';
+import { AuthService } from './../../../../exercises/exercise-authenticate-authorise/examples/src/app/services/auth.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -18,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AuthGuard } from './services/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -39,19 +42,28 @@ import { AngularFireModule } from '@angular/fire/compat';
     AngularFireModule.initializeApp(environment.firebase),
     provideDatabase(() => getDatabase()),
     RouterModule.forRoot([
+      // Anonymous
       { path: '', component: HomeComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
-      { path: 'checkout', component: CheckoutComponent },
-      { path: 'my-orders', component: MyOrdersComponent },
-      { path: 'order-success', component: OrderSuccessComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'admin/products', component: AdminProductsComponent },
-      { path: 'admin/orders', component: AdminOrdersComponent }
+
+      // Users
+      { path: 'checkout', component: CheckoutComponent, canActivate: [ AuthGuard ] },
+      { path: 'my-orders', component: MyOrdersComponent, canActivate: [ AuthGuard ] },
+      { path: 'order-success', component: OrderSuccessComponent, canActivate: [ AuthGuard ] },
+
+      // Admins
+      { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard ] },
+      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard ] }
     ]),
     NgbModule
   ],
-  providers: [],
+  providers: [ 
+    AuthService,
+    AuthGuard,
+    UserService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

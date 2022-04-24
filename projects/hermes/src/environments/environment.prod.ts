@@ -6,6 +6,7 @@ export const environment = {
     apiKey: 'AIzaSyBNuQlSMmL9LaySeaNBZCRc7Egmg1Iwknk',
     authDomain: 'hermes-c4663.firebaseapp.com',
     messagingSenderId: '635989445872',
+    databaseURL: "https://hermes-c4663-default-rtdb.europe-west1.firebasedatabase.app"
   },
   production: true
 };

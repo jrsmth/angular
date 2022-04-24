@@ -52,5 +52,16 @@
 <br>
 
 ## Overcoming Obstacles
-* **Issue**
-    * Solution
+* **@firebase/database: FIREBASE WARNING: Database lives in a different region. Please change your database URL to "..."**
+    * Add *this* to ```environement.ts``` and ```environment.prod.ts```
+        ```typescript
+            export const environment = {
+                firebase: {
+                    ...,
+                    databaseURL: "https://hermes-c4663-default-rtdb.europe-west1.firebasedatabase.app"
+                    // ^my firebase URL
+                },
+                production: ...
+            };
+        ```
+    * source: Stack Overflow [post](https://stackoverflow.com/questions/50501333/angular-firebasedatabase-error-cannot-read-property-databaseurl-of-undefined)

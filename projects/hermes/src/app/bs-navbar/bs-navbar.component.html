@@ -28,7 +28,7 @@
             </ng-template>
             <li 
                 ngbDropdown 
-                *ngIf="user$ | async as user; else anonymousUser"
+                *ngIf="service.user$ | async as user; else anonymousUser"
                 class="nav-item dropdown">
                 <a 
                     ngbDropdownToggle 

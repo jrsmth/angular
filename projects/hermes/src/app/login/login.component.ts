@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import firebase from 'firebase/compat/app';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'login',
@@ -9,12 +8,11 @@ import firebase from 'firebase/compat/app';
 })
 export class LoginComponent  {
 
-  constructor(private auth: AngularFireAuth) {}
+  constructor(private service: AuthService) {}
 
   login(){
-    this.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    // docs for Firebase Authentication
-      // https://github.com/angular/angularfire/blob/master/docs/auth/getting-started.md
+    this.service.login();
+      // Single Resposibility / Separation of Concerns: we should not have firebase mechanics on our component
   }
 
 }
