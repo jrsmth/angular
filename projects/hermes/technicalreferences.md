@@ -47,6 +47,12 @@
             * SASS (Syntactically Awesome StyleSheets) has two syntaxes:
                 * ```.scss``` (Sassy CSS) - newer
                 * ```.sass``` - orignal
+* **Firebase Arrays**
+    * The Firebase Realtime Database doesn't support arrays
+        * source: Firebase blog [post](https://firebase.blog/posts/2014/04/best-practices-arrays-in-firebase)
+* **Firebase Authentication Route Guard**
+    * Stack Overflow [post](https://stackoverflow.com/questions/52473504/working-with-angularfireobject-and-switchmap/52483642#52483642) for working with ```AngularFireObjects``` and ```switchMap```
+    * Official [docs](https://github.com/angular/angularfire/blob/master/docs/auth/router-guards.md) for the updated way to apply route guards with Firebase (not used in this app)
 
 
 <br>
@@ -59,7 +65,7 @@
                 firebase: {
                     ...,
                     databaseURL: "https://hermes-c4663-default-rtdb.europe-west1.firebasedatabase.app"
-                    // ^my firebase URL
+                    // ^your firebase URL
                 },
                 production: ...
             };

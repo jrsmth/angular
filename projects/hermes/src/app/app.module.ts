@@ -1,5 +1,4 @@
 import { UserService } from './services/user.service';
-import { AuthService } from './../../../../exercises/exercise-authenticate-authorise/examples/src/app/services/auth.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -21,6 +20,8 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AuthGuard } from './services/auth-guard.service';
+import { AuthService } from './services/auth.service';
+import { AdminAuthGuard } from './services/admin-auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -54,15 +55,16 @@ import { AuthGuard } from './services/auth-guard.service';
       { path: 'order-success', component: OrderSuccessComponent, canActivate: [ AuthGuard ] },
 
       // Admins
-      { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard ] },
-      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard ] }
+      { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
+      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard, AdminAuthGuard ] }
     ]),
     NgbModule
   ],
   providers: [ 
     AuthService,
+    UserService,
     AuthGuard,
-    UserService
+    AdminAuthGuard
   ],
   bootstrap: [AppComponent]
 })
