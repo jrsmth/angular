@@ -54,7 +54,6 @@
     * Stack Overflow [post](https://stackoverflow.com/questions/52473504/working-with-angularfireobject-and-switchmap/52483642#52483642) for working with ```AngularFireObjects``` and ```switchMap```
     * Official [docs](https://github.com/angular/angularfire/blob/master/docs/auth/router-guards.md) for the updated way to apply route guards with Firebase (not used in this app)
 
-
 <br>
 
 ## Overcoming Obstacles
@@ -71,3 +70,7 @@
             };
         ```
     * source: Stack Overflow [post](https://stackoverflow.com/questions/50501333/angular-firebasedatabase-error-cannot-read-property-databaseurl-of-undefined)
+* **Rxjs switchMap operator (nested Observables) and async pipe infinite loop**
+    * We can enter an infinite loop when we use an ```async |``` in our templates that unwraps an Observable that uses ```switchMap```.
+        * The ```async |``` marks the template for change detection everytime there is a new value in the Observable being unwrapped. If we have nested Observables, we enter an infinite loop and the template will not be rendered properly.
+        * The solution is to unwrap the Observable directly, in the component typescript class.

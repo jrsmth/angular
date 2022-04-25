@@ -22,6 +22,7 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { AdminAuthGuard } from './services/admin-auth-guard.service';
     MyOrdersComponent,
     AdminProductsComponent,
     AdminOrdersComponent,
-    LoginComponent
+    LoginComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,10 @@ import { AdminAuthGuard } from './services/admin-auth-guard.service';
 
       // Admins
       { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
-      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard, AdminAuthGuard ] }
+      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
+
+      // Not Found
+      { path: '**', component: NotFoundComponent }
     ]),
     NgbModule
   ],
