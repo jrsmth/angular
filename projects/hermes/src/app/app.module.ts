@@ -1,3 +1,7 @@
+import { ProductService } from './services/product.service';
+import { FormsModule } from '@angular/forms';
+import { CategoryService } from './services/category.service';
+import { AdminProductFormComponent } from './admin/admin-product-form/admin-product-form.component';
 import { UserService } from './services/user.service';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,6 +27,7 @@ import { AuthGuard } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { CustomFormsModule } from 'ng2-validation';
 
 @NgModule({
   declarations: [
@@ -37,9 +42,12 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AdminProductsComponent,
     AdminOrdersComponent,
     LoginComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    AdminProductFormComponent
   ],
   imports: [
+    FormsModule,
+    CustomFormsModule,
     BrowserModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
@@ -58,6 +66,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
       // Admins
       { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
+      { path: 'admin/products/add', component: AdminProductFormComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
       { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
 
       // Not Found
@@ -67,6 +76,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
   ],
   providers: [ 
     AuthService,
+    CategoryService,
+    ProductService,
     UserService,
     AuthGuard,
     AdminAuthGuard

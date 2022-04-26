@@ -31,7 +31,15 @@
 <br>
 
 ## Further Documentation
-* **Install Bootstrap4**
+* **Official Docs**
+    * **AngularFire docs**
+        * https://github.com/angular/angularfire/tree/master/docs
+    * **Bootstrap 4.3 docs**
+        * https://getbootstrap.com/docs/4.3/getting-started/introduction/
+    * **ng2-validation docs (Custom Form Validators)**
+        * https://www.npmjs.com/package/ng2-validation
+        * https://github.com/yuyang041060120/ng2-validation#readme
+* **Install Bootstrap4.3**
     * ```npm i bootstrap@4.3```
     * Import ```bootstrap.css``` into global stylesheet (```styles.css```)
         * ```@import "~bootstrap/dist/css/bootstrap.css";```
@@ -53,6 +61,19 @@
 * **Firebase Authentication Route Guard**
     * Stack Overflow [post](https://stackoverflow.com/questions/52473504/working-with-angularfireobject-and-switchmap/52483642#52483642) for working with ```AngularFireObjects``` and ```switchMap```
     * Official [docs](https://github.com/angular/angularfire/blob/master/docs/auth/router-guards.md) for the updated way to apply route guards with Firebase (not used in this app)
+* **Firebase Database: valueChanges() vs snapshotChanges()**
+    * Use ```snapshotChanges()``` when we need to access the object's key.
+        * example: 
+            ```html
+                 <option 
+                    *ngFor="let c of categories$ | async"
+                    [value]="c.payload.key">
+                    {{ c.payload.val().name }}
+                </option>
+            ```
+    * Otherwise, use ```valueChanges()```. 
+        * It is simpler to retrieve the object values with this method, as they aren't wrapped in metadata inside the Observable - unlike ```snapshotChanges()```.
+    * Source: AngularFire [docs](https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md)
 
 <br>
 
