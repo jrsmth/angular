@@ -9,7 +9,7 @@
                 </label>
                 <input
                     #title="ngModel"
-                    ngModel
+                    [(ngModel)]="product.title"
                     name="title" 
                     id="title"
                     type="text" 
@@ -32,12 +32,10 @@
                       </div>
                     <input
                         #price="ngModel"             
-                        ngModel
+                        [(ngModel)]="product.price"
                         name="price" 
                         id="price" 
                         type="number"
-                        [class.valid]="price?.touched && price?.valid"
-                        [class.invalid]="price?.touched && price?.invalid"
                         class="form-control"
                         [min]="0"
                         required>
@@ -59,7 +57,7 @@
                 </label>
                 <select  
                     #category="ngModel"                       
-                    ngModel
+                    [(ngModel)]="product.category"
                     name="category" 
                     id="category" 
                     class="form-control"
@@ -83,7 +81,7 @@
                 </label>
                 <input
                     #imageUrl="ngModel"                                  
-                    ngModel
+                    [(ngModel)]="product.imageUrl"
                     name="imageUrl" 
                     id="imageUrl" 
                     type="text" 
@@ -101,10 +99,15 @@
                     </div>        
                 </div>
             </div>
-            <button class="btn btn-primary">
+            <button 
+                type="submit"
+                class="btn btn-primary">
                 Save
             </button>
-            <button class="btn btn-danger">
+            <button 
+                (click)="delete()"
+                type="button"
+                class="btn btn-danger">
                 Delete
             </button>
         </form>
@@ -114,11 +117,11 @@
             class="card" 
             style="width: 24rem;">
             <img 
-                [src]="imageUrl.value" 
+                [src]="product.imageUrl" 
                 class="card-img-top">
             <div class="card-body">
-              <h5 class="card-title">{{ title.value }}</h5>
-              <p class="card-text">{{ price.value | currency:'GBP':true }}</p>
+              <h5 class="card-title">{{ product.title }}</h5>
+              <p class="card-text">{{ product.price | currency:'GBP' }}</p>
             </div>
         </div>
         <!-- https://getbootstrap.com/docs/4.3/components/card/ -->

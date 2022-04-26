@@ -71,8 +71,18 @@
                     {{ c.payload.val().name }}
                 </option>
             ```
+            * Make sure to strongly type the field in the component, else errors occur at runtime.
+                ```typescript
+                    error TS2571: Object is of type 'unknown'.
+                    
+                    
+                    categories$: Observable<any>;
+                ```
     * Otherwise, use ```valueChanges()```. 
         * It is simpler to retrieve the object values with this method, as they aren't wrapped in metadata inside the Observable - unlike ```snapshotChanges()```.
+    * Should I delegate the decision to the component or the service layer?
+        * On one hand, putting this logic in the component increases complexity and begins to violate separation of concerns. However, on the other hand, putting it in the service layer reduces flexibility and means have to make a decision early about whether to use ```valueChanges()``` or ```snapshotChanges()``` in all components that require this service - ideally, we should defer decision making as long as possible (keep our options open).
+            * As Mosh says, building software is about trade-offs. Based on the above, I believe this decision should be delegated to the component. Not a perfect solution but delivering value is the highest aim.
     * Source: AngularFire [docs](https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md)
 
 <br>
@@ -95,3 +105,25 @@
     * We can enter an infinite loop when we use an ```async |``` in our templates that unwraps an Observable that uses ```switchMap```.
         * The ```async |``` marks the template for change detection everytime there is a new value in the Observable being unwrapped. If we have nested Observables, we enter an infinite loop and the template will not be rendered properly.
         * The solution is to unwrap the Observable directly, in the component typescript class.
+* **error TS2571: Object is of type 'unknown'.**
+    * This error occured for me when unwrapping an Observable in a template with the ```async |``` and accessing the properties inside ```*ngFor=""```.
+        ```html
+            <!-- admin-product.component.html -->
+            <tr *ngFor="let p of products$ | async">
+                <td>{{ p.payload.val().title }}</td>
+                <td>{{ p.payload.val().price }}</td>
+                <td>
+                    <a [routerLink]="['/admin/products/', p.payload.key]">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        ```
+    * I solved the problem by strongly typing the field in the component
+        ```typescript
+            // admin-product.component.ts
+            products$: Observable<any>;
+
+            //BEFORE
+            products$;
+        ```

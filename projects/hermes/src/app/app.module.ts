@@ -55,9 +55,9 @@ import { CustomFormsModule } from 'ng2-validation';
     RouterModule.forRoot([
       // Anonymous
       { path: '', component: HomeComponent },
+      { path: 'login', component: LoginComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
-      { path: 'login', component: LoginComponent },
 
       // Users
       { path: 'checkout', component: CheckoutComponent, canActivate: [ AuthGuard ] },
@@ -65,8 +65,9 @@ import { CustomFormsModule } from 'ng2-validation';
       { path: 'order-success', component: OrderSuccessComponent, canActivate: [ AuthGuard ] },
 
       // Admins
-      { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
       { path: 'admin/products/add', component: AdminProductFormComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
+      { path: 'admin/products/:id', component: AdminProductFormComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
+      { path: 'admin/products', component: AdminProductsComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
       { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
 
       // Not Found
