@@ -1,3 +1,4 @@
+import { Risk } from './../../../../../../dev/TradEd/ed-carrier-portal-webapp/src/app/core/model/risk/risk';
 import { ProductService } from './services/product.service';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
@@ -28,6 +29,8 @@ import { AuthService } from './services/auth.service';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { CustomFormsModule } from 'ng2-validation';
+import { DataTableModule } from 'angular-4-data-table';
+import { resourceUsage } from 'process';
 
 @NgModule({
   declarations: [
@@ -47,6 +50,7 @@ import { CustomFormsModule } from 'ng2-validation';
   ],
   imports: [
     FormsModule,
+    DataTableModule,
     CustomFormsModule,
     BrowserModule,
     AppRoutingModule,

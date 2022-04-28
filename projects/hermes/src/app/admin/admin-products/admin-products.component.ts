@@ -9,7 +9,7 @@ import { Product } from 'src/app/models/product';
   styleUrls: ['./admin-products.component.scss']
 })
 export class AdminProductsComponent implements OnDestroy {
-  products: any[] = [];
+  products: any[] = []; // should clean up services and README, to use the products interface and do things properly (by EO-section)
   filteredProducts: any[] = [];
   subscription: Subscription;
 

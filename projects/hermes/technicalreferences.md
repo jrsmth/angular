@@ -39,6 +39,10 @@
     * **ng2-validation docs (Custom Form Validators)**
         * https://www.npmjs.com/package/ng2-validation
         * https://github.com/yuyang041060120/ng2-validation#readme
+    * **angular-4-data-table**
+        * https://github.com/MIt9/angular-4-data-table
+        * https://github.com/ggmod/angular-2-data-table
+            * https://ggmod.github.io/angular-2-data-table-demo/
 * **Install Bootstrap4.3**
     * ```npm i bootstrap@4.3```
     * Import ```bootstrap.css``` into global stylesheet (```styles.css```)
