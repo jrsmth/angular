@@ -13,12 +13,26 @@ export class AppComponent {
 
   constructor(private userService: UserService, private auth: AuthService, router: Router) {
     auth.user$.subscribe(user => {
-      if (user) {
-        userService.save(user); // note, we save the user everytime they log in - a bit unusual but necessary for this firebase app (Google details might change, no registraion section)
+      // if (user) {
+        // userService.save(user); // note, we save the user everytime they log in - a bit unusual but necessary for this firebase app (Google details might change, no registraion section)
 
-        let returnUrl = localStorage.getItem('returnUrl') || '/';
-        router.navigateByUrl(returnUrl);
-      }
+      //   let returnUrl = localStorage.getItem('returnUrl');
+      //   if (returnUrl) {
+      //     localStorage.removeItem('returnUrl');
+      //     router.navigateByUrl(returnUrl);
+      //   }
+      // }
+
+      //^ note, we can refactor this nested if block by reversing the conditions and using 'return;'
+      if (!user) return;
+
+      userService.save(user);
+
+      let returnUrl = localStorage.getItem('returnUrl');
+      if (!returnUrl) return;
+
+      localStorage.removeItem('returnUrl');
+      router.navigateByUrl(returnUrl);
     })
   } 
   /* 

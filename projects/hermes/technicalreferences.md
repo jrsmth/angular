@@ -131,3 +131,10 @@
             //BEFORE
             products$;
         ```
+* **(```ng serve```) TypeError: Cannot read properties of null (reading 'fileName')**
+    * I cannot compile the app with ```ng serve```, since adding ```angular-4-data-table```.
+    * I believe that this is the result of incompatability issues between my version of Angular (```v13```) and the ```angular-4-data-table``` dependency.
+    * Due to time constraints, I decided to remove the library, using:
+        *  ```npm uninstall angular-4-data-table```
+        * This means I will skip the sorting and pagination features for the product table but this won't affect the overall architecture for the app. 
+            * Perhaps in the future I/someone else will implement this features using more modern Angular libraries.
