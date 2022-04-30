@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+import { ProductService } from './../services/product.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -5,11 +7,11 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent {
+  products$: Observable<any>;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(productService: ProductService) { 
+    this.products$ = productService.getAll().snapshotChanges();
   }
 
 }

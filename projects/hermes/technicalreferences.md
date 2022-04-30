@@ -36,6 +36,8 @@
         * https://github.com/angular/angularfire/tree/master/docs
     * **Bootstrap 4.3 docs**
         * https://getbootstrap.com/docs/4.3/getting-started/introduction/
+            * Bootstrap [card](https://getbootstrap.com/docs/4.3/components/card/)
+            * Bootstrap [grid](https://getbootstrap.com/docs/4.3/layout/grid/#equal-width-multi-row)
     * **ng2-validation docs (Custom Form Validators)**
         * https://www.npmjs.com/package/ng2-validation
         * https://github.com/yuyang041060120/ng2-validation#readme
@@ -88,6 +90,10 @@
         * On one hand, putting this logic in the component increases complexity and begins to violate separation of concerns. However, on the other hand, putting it in the service layer reduces flexibility and means have to make a decision early about whether to use ```valueChanges()``` or ```snapshotChanges()``` in all components that require this service - ideally, we should defer decision making as long as possible (keep our options open).
             * As Mosh says, building software is about trade-offs. Based on the above, I believe this decision should be delegated to the component. Not a perfect solution but delivering value is the highest aim.
     * Source: AngularFire [docs](https://github.com/angular/angularfire/blob/master/docs/rtdb/lists.md)
+* **Node Version Manager (nvm)**
+    * Very useful when switching between projects that have different node/npm versions.
+        * [docs](https://npm.github.io/installation-setup-docs/installing/using-a-node-version-manager.html)
+        *  ```nvm install <NODE_VERSION>```
 
 <br>
 
