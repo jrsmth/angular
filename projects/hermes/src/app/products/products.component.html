@@ -1,33 +1,46 @@
 
 <div class="row">
-    <ng-container
-        *ngFor="let p of products$ | async; let i = index">
-        <div class="col">
-            <div 
-                class="card" 
-                style="width: 15rem;">
-                <img
-                    [src]="p.payload.val().imageUrl" 
-                    class="card-img-top">
-                <div 
-                    class="card-body">
-                    <h5 
-                        class="card-title">
-                        {{ p.payload.val().title }}
-                    </h5>
-                    <p 
-                        class="card-text">
-                        {{ p.payload.val().price | currency:'GBP' }}
-                    </p>
-                    <a 
-                        href="#" 
-                        class="btn btn-primary">
-                        Add to Cart
-                    </a>
+    <div class="col-3"> <!-- Boostrap divides the page into 12 coluumns, col-3 is 25% of the width -->
+        <ul class="list-group">
+            <li 
+                *ngFor="let c of categories$ | async"
+                class="list-group-item">
+                {{ c.payload.val().name }}
+            </li>
+        </ul>
+    </div>
+    <div class="col">
+        <div class="row">
+            <ng-container
+                *ngFor="let p of products$ | async; let i = index">
+                <div class="col">
+                    <div 
+                        class="card" 
+                        style="width: 15rem;">
+                        <img
+                            [src]="p.payload.val().imageUrl" 
+                            class="card-img-top">
+                        <div 
+                            class="card-body">
+                            <h5 
+                                class="card-title">
+                                {{ p.payload.val().title }}
+                            </h5>
+                            <p 
+                                class="card-text">
+                                {{ p.payload.val().price | currency:'GBP' }}
+                            </p>
+                            <a 
+                                href="#" 
+                                class="btn btn-primary">
+                                Add to Cart
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div *ngIf="(i+1) % 2 === 0" class="w-100"></div>
+                <!-- I think the layout looks better as 4-cols, so I removed the line break above^ -->
+            </ng-container>
         </div>
-        <!-- <div *ngIf="(i+1) % 2 === 0" class="w-100"></div> -->
-        <!-- I think the layout looks better as 4-cols, so I removed the line break above^ -->
-    </ng-container>
+    </div>
 </div>

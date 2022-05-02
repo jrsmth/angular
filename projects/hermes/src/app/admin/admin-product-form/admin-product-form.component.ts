@@ -21,7 +21,7 @@ export class AdminProductFormComponent {
     private route: ActivatedRoute,
     private categoryService: CategoryService, 
     private productService: ProductService) { 
-    this.categories$ = categoryService.getCategories().snapshotChanges();
+    this.categories$ = categoryService.getAll().snapshotChanges();
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id) {
