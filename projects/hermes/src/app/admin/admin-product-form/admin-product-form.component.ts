@@ -7,7 +7,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-admin-product-form',
+  selector: 'admin-product-form',
   templateUrl: './admin-product-form.component.html',
   styleUrls: ['./admin-product-form.component.scss']
 })

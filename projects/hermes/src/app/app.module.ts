@@ -28,6 +28,8 @@ import { AuthService } from './services/auth.service';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { CustomFormsModule } from 'ng2-validation';
+import { ProductFilterComponent } from './products/product-filter/product-filter.component';
+import { ProductCardComponent } from './product-card/product-card.component';
 // import { DataTableModule } from 'angular-4-data-table';
 
 @NgModule({
@@ -44,7 +46,9 @@ import { CustomFormsModule } from 'ng2-validation';
     AdminOrdersComponent,
     LoginComponent,
     NotFoundComponent,
-    AdminProductFormComponent
+    AdminProductFormComponent,
+    ProductFilterComponent,
+    ProductCardComponent
   ],
   imports: [
     FormsModule,

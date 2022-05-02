@@ -1,7 +1,7 @@
-import { CategoryService } from './../services/category.service';
-import { Observable } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs';
 import { ProductService } from './../services/product.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-products',
@@ -9,12 +9,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent {
-  products$: Observable<any>;
-  categories$: Observable<any>;
+  products: any[] = []; // should clean up services and README, to use the products interface and do things properly (by EO-section)
+    // ^^ acutally don't bother, this is not production code and there isn't time to perfect it
+  filteredProducts: any[] = [];
+  categorySelected: string | null = '';
 
-  constructor(productService: ProductService, categoryService: CategoryService) { 
-    this.products$ = productService.getAll().snapshotChanges();
-    this.categories$ = categoryService.getAll().snapshotChanges();
+  constructor(
+    route: ActivatedRoute,
+    productService: ProductService) { 
+    productService.getAll().snapshotChanges().pipe(
+      switchMap((products: any) => {
+        this.products = products;
+        return route.queryParamMap;
+      })
+    ).subscribe(params => {
+        this.categorySelected = params.get('category');
+
+        this.filteredProducts = (this.categorySelected) ? 
+          this.products.filter(p => p.payload.val().category === this.categorySelected) :
+          this.products;
+      });
   }
 
 }

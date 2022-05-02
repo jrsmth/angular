@@ -113,18 +113,10 @@
         </form>
     </div>
     <div class="col-md-6">
-        <div 
-            *ngIf="product.title != ''"
-            class="card" 
-            style="width: 24rem;">
-            <img 
-                [src]="product.imageUrl" 
-                class="card-img-top">
-            <div class="card-body">
-              <h5 class="card-title">{{ product.title }}</h5>
-              <p class="card-text">{{ product.price | currency:'GBP' }}</p>
-            </div>
-        </div>
-        <!-- https://getbootstrap.com/docs/4.3/components/card/ -->
+        <product-card 
+            [product]="product"
+            [show-actions]="false">
+            <!-- TODO: need to refactor the Products[] implementation to get this consistent, ATM this expect the snapShot() obj not Product int...-->
+        </product-card>
     </div>
 </div>
