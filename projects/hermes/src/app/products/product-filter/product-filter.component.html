@@ -1,16 +1,18 @@
-<ul class="list-group">
-    <a 
-        routerLink="/" 
-        [class.active]="!categorySelected"
-        class="list-group-item list-group-item-action">
-        All Categories
-    </a>
-    <a 
-        *ngFor="let c of categories$ | async"
-        routerLink="/"
-        [queryParams]="{ category: c.payload.key }"
-        [class.active]="categorySelected === c.payload.key"
-        class="list-group-item list-group-item-action">
-        {{ c.payload.val().name }}
-    </a>
-</ul>
+<div class="sticky-top">
+    <ul class="list-group">
+        <a 
+            routerLink="/" 
+            [class.active]="!categorySelected"
+            class="list-group-item list-group-item-action">
+            All Categories
+        </a>
+        <a 
+            *ngFor="let c of categories$ | async"
+            routerLink="/"
+            [queryParams]="{ category: c.payload.key }"
+            [class.active]="categorySelected === c.payload.key"
+            class="list-group-item list-group-item-action">
+            {{ c.payload.val().name }}
+        </a>
+    </ul>
+</div>

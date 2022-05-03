@@ -15,10 +15,12 @@
             class="card-text">
             {{ product.payload.val().price | currency:'GBP' }}
         </p>
+    </div>
+    <div class="card-footer">
         <a 
             *ngIf="showActions"
             href="#" 
-            class="btn btn-primary">
+            class="btn btn-primary btn-block">
             Add to Cart
         </a>
     </div>
