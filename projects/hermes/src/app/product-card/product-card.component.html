@@ -17,12 +17,12 @@
         </p>
     </div>
     <div class="card-footer">
-        <a 
+        <button 
             *ngIf="showActions"
-            href="#" 
+            (click)="addToCart(product)"
             class="btn btn-primary btn-block">
             Add to Cart
-        </a>
+        </button>
     </div>
 </div>
 <!-- https://getbootstrap.com/docs/4.3/components/card/ -->

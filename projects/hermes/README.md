@@ -22,6 +22,8 @@
     * [Technical References](./technicalreferences.md)
     * [Udemy Videos](https://www.udemy.com/course/the-complete-angular-master-class/learn/lecture/7750398#notes)
     * [Mosh's Repo](https://github.com/mosh-hamedani/organic-shop)
+* Note:
+    * Due to time constraints, I got this project working but did not spend the time to refactor it (make it beautiful).
 * Test coverage:
     * ```0%```
 

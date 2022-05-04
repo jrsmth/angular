@@ -1,3 +1,4 @@
+import { ShoppingCartService } from './services/shopping-cart.service';
 import { ProductService } from './services/product.service';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from './services/category.service';
@@ -85,6 +86,7 @@ import { ProductCardComponent } from './product-card/product-card.component';
     AuthService,
     CategoryService,
     ProductService,
+    ShoppingCartService,
     UserService,
     AuthGuard,
     AdminAuthGuard
