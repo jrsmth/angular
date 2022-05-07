@@ -10,9 +10,9 @@
 <br>
 <br>
 
-<img src="" alt="Hermes Screenshot" width="800">
+<img src="../../resources/hermes_screen.png" alt="Hermes Screenshot" width="800">
 
-> A Beautiful Screenshot
+> Hermes Products Screen
 
 <br>
 

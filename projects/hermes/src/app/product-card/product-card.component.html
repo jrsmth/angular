@@ -16,13 +16,36 @@
             {{ product.payload.val().price | currency:'GBP' }}
         </p>
     </div>
-    <div class="card-footer">
+    <div 
+        *ngIf="showActions"
+        class="card-footer">
         <button 
-            *ngIf="showActions"
-            (click)="addToCart(product)"
+            *ngIf="getQuantity() === 0; else updateQuantity"
+            (click)="addToCart()"
             class="btn btn-primary btn-block">
             Add to Cart
         </button>
+        <ng-template #updateQuantity>
+            <div class="row no-gutters">
+                <div class="col-2">
+                    <button 
+                        (click)="removeFromCart()"
+                        class="btn btn-danger btn-block">
+                        -
+                    </button>
+                </div>
+                <div class="col text-center">
+                    {{ getQuantity() }}
+                </div>
+                <div class="col-2">
+                    <button 
+                        (click)="addToCart()"
+                        class="btn btn-success btn-block">
+                        +
+                    </button>
+                </div>
+            </div>
+        </ng-template>
     </div>
 </div>
 <!-- https://getbootstrap.com/docs/4.3/components/card/ -->

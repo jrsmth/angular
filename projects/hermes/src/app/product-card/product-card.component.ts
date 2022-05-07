@@ -10,11 +10,23 @@ import { Component, Input } from '@angular/core';
 export class ProductCardComponent {
   @Input('product') product: any;
   @Input('show-actions') showActions = true;
+  @Input('shopping-cart') shoppingCart: any;
 
   constructor(private shoppingCartService: ShoppingCartService) { }
 
-  addToCart(product: any) {
-    this.shoppingCartService.addToCart(product);
+  addToCart() {
+    this.shoppingCartService.addToCart(this.product);
+  }
+
+  removeFromCart() {
+    this.shoppingCartService.removeFromCart(this.product);
+  }
+
+  getQuantity() {
+    if (!this.shoppingCart) return 0;
+
+    let item = this.shoppingCart.items[this.product.payload.key];
+    return item ? item.quantity : 0;
   }
 
 }
