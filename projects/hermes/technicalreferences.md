@@ -94,6 +94,9 @@
     * Very useful when switching between projects that have different node/npm versions.
         * [docs](https://npm.github.io/installation-setup-docs/installing/using-a-node-version-manager.html)
         *  ```nvm install <NODE_VERSION>```
+* **Using `this.FIELD` in your markup**
+    * In your component template, you can reference a TypeScript field using both `this.FIELD` (as you would in your component TS class) or simply with `FIELD`.
+        * You should use the latter, `FIELD`, to reduce noise in your markup.
 
 <br>
 

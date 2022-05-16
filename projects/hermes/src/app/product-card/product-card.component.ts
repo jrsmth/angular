@@ -21,12 +21,4 @@ export class ProductCardComponent {
   removeFromCart() {
     this.shoppingCartService.removeFromCart(this.product);
   }
-
-  getQuantity() {
-    if (!this.shoppingCart) return 0;
-
-    let item = this.shoppingCart.items[this.product.payload.key];
-    return item ? item.quantity : 0;
-  }
-
 }

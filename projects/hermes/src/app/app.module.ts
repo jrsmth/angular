@@ -1,3 +1,4 @@
+import { ProductQuantityComponent } from './products/product-quantity/product-quantity.component';
 import { ShoppingCartService } from './services/shopping-cart.service';
 import { ProductService } from './services/product.service';
 import { FormsModule } from '@angular/forms';
@@ -49,7 +50,8 @@ import { ProductCardComponent } from './product-card/product-card.component';
     NotFoundComponent,
     AdminProductFormComponent,
     ProductFilterComponent,
-    ProductCardComponent
+    ProductCardComponent,
+    ProductQuantityComponent
   ],
   imports: [
     FormsModule,

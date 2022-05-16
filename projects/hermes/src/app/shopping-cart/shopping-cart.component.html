@@ -10,19 +10,39 @@
             <tr>
                 <th>Product</th>
                 <th>Quantity</th>
-                <th></th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let productId of cart.productIds">
+            <!-- <tr *ngFor="let productId of cart.productIds"> -->
+            <tr *ngFor="let item of cart.items">
                 <td>
-                    {{ cart.items[productId].product.title }}
+                    <!-- {{ cart.items[productId].product.title }} -->
+                    {{ item.product.title }}
                 </td>
                 <td>
-                    {{ cart.items[productId].quantity }}
+                    <!-- {{ cart.items[productId].quantity }} -->
+                    <!-- {{ item.quantity }} -->
+                    <product-quantity
+                        [product]="item.product"
+                        [shopping-cart]="cart">
+                    </product-quantity>
                 </td>
-                <td></td>
+                <td>
+                    <!-- {{ item.product.price * item.quantity }}  -->
+                    <!-- ^avoid writting expressions in your template, create properties in your typescript class -->
+                    {{ item.totalPrice | currency:'GBP' }}
+                </td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <th>
+                    {{ cart.totalPrice | currency:'GBP' }}
+                </th>
+            </tr>
+        </tfoot>
     </table>
 </ng-container>
