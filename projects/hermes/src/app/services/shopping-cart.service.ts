@@ -23,6 +23,19 @@ export class ShoppingCartService {
       .valueChanges().pipe(map((x: any) => new ShoppingCart(x.items)));
   }
 
+  async addToCart(product: any) {
+    this.updateItem(product, +1);
+  }
+
+  async removeFromCart(product: any) {
+    this.updateItem(product, -1);
+  }
+
+  async clearCart() {
+    let cartId = await this.getOrCreateCartId();
+    this.db.object('/shopping-carts/'+cartId+'/items').remove();
+  }
+
   private getItem(cartId: string, productId: string) {
     return this.db.object('shopping-carts/' + cartId + '/items/' + productId);
   }
@@ -66,14 +79,6 @@ export class ShoppingCartService {
     //     console.log({ quantity: item.payload.val().quantity + quantityChange });
     //   }
     // });
-  }
-
-  async addToCart(product: any) {
-    this.updateItem(product, +1);
-  }
-
-  async removeFromCart(product: any) {
-    this.updateItem(product, -1);
   }
 
 }
