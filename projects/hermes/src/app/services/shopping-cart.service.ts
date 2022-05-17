@@ -36,31 +36,44 @@ export class ShoppingCartService {
     return result.key!;
   }
 
-  private async updateItemQuantity(product: any, quantityChange: number) {
-    let cartId = await this.getOrCreateCartId();
+  private async updateItem(product: any, quantityChange: number) {
     console.log(product);
-    let item$ = this.getItem(cartId, product.payload.key);
+    let cartId = await this.getOrCreateCartId();
+  
+    // :product can be flat shopping cart item or nested native product
+    let productId = (product.payload?.key || product.key);
+    let title = (product.payload?.val().title || product.title);
+    let imageUrl = (product.payload?.val().imageUrl || product.imageUrl)
+    let price = (product.payload?.val().price || product.price)
 
+    let item$ = this.getItem(cartId, productId);
     item$.snapshotChanges().pipe(take(1)).subscribe((item: any) => {
-      if(item.key === null){
-        // if item deosn't exist (null), set new item
-        item$.set({ product: product.payload.val(), quantity: 1 });
-        console.log({ product: product.payload.val(), quantity: 1 });
+      item$.update({
+        title: title,
+        imageUrl: imageUrl,
+        price: price,
+        quantity: (item.payload.val()?.quantity || 0) + quantityChange
+      })
+    });
 
-      } else {
-        item$.update({ quantity: item.payload.val().quantity + quantityChange }); 
-        console.log({ quantity: item.payload.val().quantity + quantityChange });
-
-      }
-    })
+    // item$.snapshotChanges().pipe(take(1)).subscribe((item: any) => {
+    //   if(item.key === null){
+    //     // if item deosn't exist (null), set new item
+    //     item$.set({ product: product.payload.val(), quantity: 1 });
+    //     console.log({ product: product.payload.val(), quantity: 1 });
+    //   } else {
+    //     item$.update({ quantity: item.payload.val().quantity + quantityChange }); 
+    //     console.log({ quantity: item.payload.val().quantity + quantityChange });
+    //   }
+    // });
   }
 
   async addToCart(product: any) {
-    this.updateItemQuantity(product, +1);
+    this.updateItem(product, +1);
   }
 
   async removeFromCart(product: any) {
-    this.updateItemQuantity(product, -1);
+    this.updateItem(product, -1);
   }
 
 }
