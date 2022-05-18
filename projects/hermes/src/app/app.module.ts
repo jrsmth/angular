@@ -1,3 +1,4 @@
+import { OrderService } from './services/order.service';
 import { ProductQuantityComponent } from './products/product-quantity/product-quantity.component';
 import { ShoppingCartService } from './services/shopping-cart.service';
 import { ProductService } from './services/product.service';
@@ -87,6 +88,7 @@ import { ProductCardComponent } from './product-card/product-card.component';
   providers: [ 
     AuthService,
     CategoryService,
+    OrderService,
     ProductService,
     ShoppingCartService,
     UserService,

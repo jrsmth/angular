@@ -6,6 +6,14 @@
 <!-- <ng-container/div> is used so we can unwrap the observable once and use 'cart' across multiple elements -->
     <p style="color: grey">
         You have {{ cart.totalItemsCount }} items in your shopping cart
+        <br>
+        <br>
+        <button 
+            *ngIf="cart.items.length"
+            (click)="clearCart()"
+            class="btn btn-light btn-sm">
+            Clear Cart
+        </button>
     </p>
     <br>
     <br>
@@ -69,8 +77,9 @@
         </tfoot>
     </table>
     <button 
-        (click)="clearCart()"
-        class="btn btn-danger btn-sm">
-        Clear Cart
+        *ngIf="cart.items.length"
+        routerLink="/checkout"
+        class="btn btn-primary">
+        Check Out
     </button>
 </div>
