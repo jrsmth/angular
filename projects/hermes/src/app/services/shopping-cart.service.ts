@@ -61,11 +61,13 @@ export class ShoppingCartService {
 
     let item$ = this.getItem(cartId, productId);
     item$.snapshotChanges().pipe(take(1)).subscribe((item: any) => {
-      item$.update({
+      let quantity = (item.payload.val()?.quantity || 0) + quantityChange
+      if (quantity === 0) item$.remove();
+      else item$.update({
         title: title,
         imageUrl: imageUrl,
         price: price,
-        quantity: (item.payload.val()?.quantity || 0) + quantityChange
+        quantity: quantity
       })
     });
 

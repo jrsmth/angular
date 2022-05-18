@@ -1,21 +1,43 @@
 <h1>Shopping Cart</h1>
-<ng-container *ngIf="cart$ | async as cart"> 
-<!-- <ng-container> is used so we can unwrap the observable once and use 'cart' across multiple elements -->
+<!-- <ng-container *ngIf="cart$ | async as cart">  -->
+<div 
+    class="row col-10"
+    *ngIf="cart$ | async as cart"> 
+<!-- <ng-container/div> is used so we can unwrap the observable once and use 'cart' across multiple elements -->
     <p style="color: grey">
         You have {{ cart.totalItemsCount }} items in your shopping cart
     </p>
     <br>
+    <br>
+    <br>
     <table class="table">
         <thead>
             <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
+                <th></th>
+                <th>
+                    Product
+                </th>
+                <th
+                    class="text-center"
+                    width="230px">
+                    Quantity
+                </th>
+                <th
+                    class="text-right"
+                    width="200px">
+                    Price
+                </th>
             </tr>
         </thead>
         <tbody>
             <!-- <tr *ngFor="let productId of cart.productIds"> -->
             <tr *ngFor="let item of cart.items">
+                <td>
+                    <div 
+                        [style.backgroundImage]="'url(' + item.imageUrl + ')'"
+                        class="thumbnail">
+                    </div>
+                </td>
                 <td>
                     <!-- {{ cart.items[productId].product.title }} -->
                     {{ item.title }}
@@ -28,7 +50,7 @@
                         [shopping-cart]="cart">
                     </product-quantity>
                 </td>
-                <td>
+                <td class="text-right">
                     <!-- {{ item.product.price * item.quantity }}  -->
                     <!-- ^avoid writting expressions in your template, create properties in your typescript class -->
                     {{ item.totalPrice | currency:'GBP' }}
@@ -39,7 +61,8 @@
             <tr>
                 <td></td>
                 <td></td>
-                <th>
+                <td></td>
+                <th class="text-right">
                     {{ cart.totalPrice | currency:'GBP' }}
                 </th>
             </tr>
@@ -50,4 +73,4 @@
         class="btn btn-danger btn-sm">
         Clear Cart
     </button>
-</ng-container>
+</div>
