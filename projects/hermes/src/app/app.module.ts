@@ -33,6 +33,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { CustomFormsModule } from 'ng2-validation';
 import { ProductFilterComponent } from './products/product-filter/product-filter.component';
 import { ProductCardComponent } from './product-card/product-card.component';
+import { ShoppingCartSummaryComponent } from './shopping-cart-summary/shopping-cart-summary.component';
+import { ShippingFormComponent } from './shipping-form/shipping-form.component';
 // import { DataTableModule } from 'angular-4-data-table';
 
 @NgModule({
@@ -52,7 +54,9 @@ import { ProductCardComponent } from './product-card/product-card.component';
     AdminProductFormComponent,
     ProductFilterComponent,
     ProductCardComponent,
-    ProductQuantityComponent
+    ProductQuantityComponent,
+    ShoppingCartSummaryComponent,
+    ShippingFormComponent
   ],
   imports: [
     FormsModule,
@@ -72,7 +76,7 @@ import { ProductCardComponent } from './product-card/product-card.component';
       // Users
       { path: 'checkout', component: CheckoutComponent, canActivate: [ AuthGuard ] },
       { path: 'my-orders', component: MyOrdersComponent, canActivate: [ AuthGuard ] },
-      { path: 'order-success', component: OrderSuccessComponent, canActivate: [ AuthGuard ] },
+      { path: 'order-success/:id', component: OrderSuccessComponent, canActivate: [ AuthGuard ] },
 
       // Admins
       { path: 'admin/products/add', component: AdminProductFormComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
