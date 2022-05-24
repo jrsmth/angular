@@ -29,6 +29,7 @@
     </div>
     <br>
     <button 
+        [disabled]="!f.valid"
         (click)="placeOrder()"
         class="btn btn-primary">
         Place Order

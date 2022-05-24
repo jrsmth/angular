@@ -101,6 +101,13 @@
 * **HTML Hacks**
     1. Use Emmet Abbreviations to generate markup quickly ([docs](https://docs.emmet.io/cheat-sheet/))
     2. In VS Code, when copying large chunks of markup, collapse the parent element and copy that.
+* **Useful TypeScript Plugins for VSCode**
+    * ```Move TS```
+        * automatically updates import statements when we move files around (think refactoring modules)
+    * ```TypeScript Hero```
+        * automatically removes unused import statements and arranges them alphabetically
+* **Avoiding ./../../... import statements**
+    * We can avoid ugly import statements by defining aliases in ```./tsconfig.json``` (see file for example).
 
 <br>
 
