@@ -106,8 +106,12 @@
         * automatically updates import statements when we move files around (think refactoring modules)
     * ```TypeScript Hero```
         * automatically removes unused import statements and arranges them alphabetically
+    * use ```clt-option(alt)-o``` to organise import statements alphabetically
 * **Avoiding ./../../... import statements**
     * We can avoid ugly import statements by defining aliases in ```./tsconfig.json``` (see file for example).
+* **Modularisation**
+    * Where possible, we should split our Angular apps into different modules, such as 'core', 'shared', etc
+        * We should keep these modules lightweight and avoid circular dependencies (importing a module into a module that depends on it)
 
 <br>
 

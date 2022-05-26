@@ -28,5 +28,11 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
+  },
+  "baseUrl": "./src",
+  "paths": {
+    "shared/*": [
+      "app/shared/"
+    ]
   }
 }
