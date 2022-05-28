@@ -112,6 +112,8 @@
 * **Modularisation**
     * Where possible, we should split our Angular apps into different modules, such as 'core', 'shared', etc
         * We should keep these modules lightweight and avoid circular dependencies (importing a module into a module that depends on it)
+    * If multiple modules depend on a conistent set of modules, you can import that set into the 'shared' module and then export them again
+        * That way, you can simply import 'shared' module to replace that set of modules
 
 <br>
 

@@ -19,11 +19,8 @@ import { AuthGuard } from '../shared/services/auth-guard.service';
     AdminProductFormComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
     SharedModule,
     ShoppingModule,
-    AppRoutingModule,
     RouterModule.forChild([ // forRoot is for App Module only
       { path: 'admin/products/add', component: AdminProductFormComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },
       { path: 'admin/products/:id', component: AdminProductFormComponent, canActivate: [ AuthGuard, AdminAuthGuard ] },

@@ -29,10 +29,7 @@ import { AppRoutingModule } from '../app-routing.module';
     ShippingFormComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
     SharedModule,
-    AppRoutingModule,
     RouterModule.forChild([ // forRoot is for App Module only
       // Anonymous
       { path: 'products', component: ProductsComponent },

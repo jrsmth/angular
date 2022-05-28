@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -15,7 +16,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     NotFoundComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     RouterModule.forChild([]) // this import is required, even though no routes are specified here
   ],
   exports: [

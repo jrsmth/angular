@@ -25,6 +25,7 @@
     "@popperjs/core": "^2.10.2",
     "bootstrap": "4.3",
     "firebase": "^9.7.0",
+    "font-awesome": "^4.7.0",
     "ng2-validation": "^4.2.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
