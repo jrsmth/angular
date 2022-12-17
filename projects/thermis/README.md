@@ -9,5 +9,24 @@
 
 <br>
 
+## Fundementals Refresher
+* Official testing (documentation)[https://angular.io/guide/testing]
+* Karma is the Angular test runner
+* Jasmine is the framework that tests are written in
+* Protactor is an E2E testing framework for Angular
+    * Similar to Selenium, which is also a browser automation tool (but not Angular specific)
+* `ng test` is used to run tests
+
+<br>
+
 ## Showcase
-* This and that
+* Unit testing:
+    * Testing a component (@link)
+    * Testing a service (@link)
+    * Testing a directive (@link) - unit or not?
+* Integration testing:
+    * Testing templates (@link)
+    * Testing directives (@link)
+    * Testing navigation (@link)
+* End to end testing (Protractor):
+    * ?
