@@ -4,4 +4,4 @@
 <br>
 
 <img src="../../resources/thermis.jpeg" alt="Thermis" width="300">
-* Thermis is the Greek Goddess of Justice
+> Thermis is the Greek Goddess of Justice
