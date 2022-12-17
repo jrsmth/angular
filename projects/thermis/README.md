@@ -15,6 +15,7 @@
 * Jasmine is the framework that tests are written in
 * Protactor is an E2E testing framework for Angular
     * Similar to Selenium, which is also a browser automation tool (but not Angular specific)
+        * Protractor has been deprecated in favour of Cypress
 * `ng test` is used to run tests
 
 <br>
@@ -28,5 +29,5 @@
     * Testing templates (@link)
     * Testing directives (@link)
     * Testing navigation (@link)
-* End to end testing (Protractor):
+* End to end testing (Cypress):
     * ?
