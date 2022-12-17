@@ -22,6 +22,12 @@
 
 <br>
 
+## Projects
+* [Hermes :: showcase](./projects/hermes)
+* [Thermis :: testing](./projects/thermis)
+
+<br>
+
 ## Notes
 * Further Learning Ideas
     * Complete further Angular tutorials ([blog.angular-university.io](https://blog.angular-university.io/), etc)
