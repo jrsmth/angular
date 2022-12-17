@@ -23,8 +23,8 @@
 <br>
 
 ## Projects
-* [Hermes :: showcase](./projects/hermes)
-* [Thermis :: testing](./projects/thermis)
+* [Hermes (showcase)](./projects/hermes)
+* [Thermis (testing)](./projects/thermis)
 
 <br>
 
