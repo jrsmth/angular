@@ -14,20 +14,20 @@
 * Karma is the Angular test runner
 * Jasmine is the framework that tests are written in
 * Protactor is an E2E testing framework for Angular
-    * Similar to Selenium, which is also a browser automation tool (but not Angular specific)
-        * Protractor has been deprecated in favour of Cypress
-* `ng test` is used to run tests
+    * Uses Selenium under the covers, which is also a browser automation tool (but not Angular specific)
+        * Protractor has been deprecated in favour of Cypress (who have their own architecture instead of using Selenium)
+            * Good Cypress [video](https://www.youtube.com/watch?v=wGiU4qdFL6U)
+* Commands:
+    * `ng test` is used to run Jasmine tests
+    * `npm run cypress:open` is used to run Cypress tests
 
 <br>
 
-## Showcase
-* Unit testing:
-    * Testing a component (@link)
-    * Testing a service (@link)
-    * Testing a directive (@link) - unit or not?
-* Integration testing:
-    * Testing templates (@link)
-    * Testing directives (@link)
-    * Testing navigation (@link)
-* End to end testing (Cypress):
-    * ?
+## Write Up
+
+> I chose not to implement a new demo project for testing, in favour of testing Mr Eastwell's [app](https://github.com/JRSmiffy/owen-wowson-app)
+
+* Jasmine unit and integration tests are not pragmatic
+    * They are hard to write and don't seem to offer much
+* Sack them off and stick with Cypress e2e testing for the time being
+    * Experiment and get proficient, perhaps over time incoperate Cypress component testing
