@@ -10,7 +10,7 @@
 <br>
 
 ## Fundementals Refresher
-* Official testing (documentation)[https://angular.io/guide/testing]
+* Official testing [documentation](https://angular.io/guide/testing)
 * Karma is the Angular test runner
 * Jasmine is the framework that tests are written in
 * Protactor is an E2E testing framework for Angular
